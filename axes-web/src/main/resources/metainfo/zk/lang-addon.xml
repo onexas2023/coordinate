@@ -1,0 +1,69 @@
+<language-addon>
+	<addon-name>axes</addon-name>
+	<version>
+		<zk-version>8.6.0</zk-version><!-- or later -->
+	</version>
+
+	<!-- update this version , zk will change it js loading url -->
+	<javascript-module name="axeswgt" version="0.0.0.XASHUB-DEV-SNAPSHOT" />
+
+	<language-name>xul/html</language-name>
+	<component>
+		<component-name>i</component-name>
+		<component-class>onexas.axes.web.zk.component.I</component-class>
+		<widget-class>axeswgt.I</widget-class>
+		<mold>
+			<mold-name>default</mold-name>
+			<mold-uri>mold/i.js</mold-uri>
+		</mold>
+	</component>
+	<component>
+		<component-name>singletabbox</component-name>
+		<component-class>onexas.axes.web.zk.component.SingleTabbox</component-class>
+		<extends>tabbox</extends>
+	</component>
+	<component>
+		<component-name>singletabpanel</component-name>
+		<component-class>onexas.axes.web.zk.component.SingleTabpanel</component-class>
+		<extends>tabpanel</extends>
+	</component>
+
+	<component>
+		<component-name>xterm</component-name>
+		<component-class>onexas.axes.web.zk.component.Xterm</component-class>
+		<extends>div</extends>
+		<widget-class>axeswgt.xterm.Xterm</widget-class>
+		<mold>
+			<mold-name>default</mold-name>
+			<css-uri>xterm.css.dsp</css-uri>
+		</mold>
+	</component>
+
+	<!-- extends -->
+	<component>
+		<component-name>button</component-name>
+		<extends>button</extends>
+		<property>
+			<property-name>autodisable</property-name>
+			<property-value>self</property-value>
+		</property>
+	</component>
+	<component>
+		<component-name>toolbarbutton</component-name>
+		<extends>toolbarbutton</extends>
+		<property>
+			<property-name>autodisable</property-name>
+			<property-value>self</property-value>
+		</property>
+	</component>
+	<language-addon>
+		<component>
+			<component-name>menuitem</component-name>
+			<extends>menuitem</extends>
+			<property>
+				<property-name>autodisable</property-name>
+				<property-value>self</property-value>
+			</property>
+		</component>
+	</language-addon>
+</language-addon>

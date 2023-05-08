@@ -1,0 +1,14 @@
+# ldap domain config yaml 
+server: "ldap.hostname"
+port: 389
+ssl: false
+bind-dn: "uid=admin,ou=system"
+password: "secret"
+# password-secret: "secret-code-ldap"
+search-base-dn: "dc=your,dc=com"
+authenticator-filter: "(&(objectClass=person)(uid={}))"
+search-criteria-filter: "(&(objectClass=person)(|(cn=*{}*)(uid=*{}*)))"
+search-no-criteria-filter: "(&(objectClass=person))"
+user-account-attr: "uid"
+user-display-name-attr: "cn"
+user-email-attr: "mail"

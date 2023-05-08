@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>onexas.coordinate</groupId>
+		<artifactId>coordinate-root</artifactId>
+		<version>0.0.0.XASHUB-DEV-SNAPSHOT</version>
+		<relativePath>../coordinate-root/pom.xml</relativePath>
+	</parent>
+	<artifactId>axes-web</artifactId>
+	<name>axes-web</name>
+	<description>Axes-Web project for Coordinate</description>
+	<packaging>jar</packaging>
+
+	<properties>
+		<zk.version>8.6.0.1</zk.version>
+	</properties>
+	
+	<repositories>
+		<repository>
+			<id>ZK CE</id>
+			<name>ZK CE Repository</name>
+			<url>http://mavensync.zkoss.org/maven2</url>
+		</repository>
+	</repositories>
+	
+	<dependencies>
+		<dependency>
+			<groupId>onexas.coordinate</groupId>
+			<artifactId>coordinate-common</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>onexas.coordinate</groupId>
+			<artifactId>coordinate-data</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>onexas.coordinate</groupId>
+			<artifactId>coordinate-web</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>onexas.coordinate</groupId>
+			<artifactId>coordinate-api-sdk</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-web</artifactId>
+		</dependency>
+		
+		<dependency>
+			<groupId>org.zkoss.zk</groupId>
+			<artifactId>zul</artifactId>
+			<version>${zk.version}</version>
+			<exclusions>
+				<!-- sorry we use log4j, have to ignore it or it will be add to war or ear -->
+				<exclusion>
+					<groupId>org.slf4j</groupId>
+					<artifactId>slf4j-jdk14</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+
+		<!-- for test-cases dependency -->
+		<dependency>
+			<groupId>onexas.coordinate</groupId>
+			<artifactId>coordinate-common</artifactId>
+			<version>${project.version}</version>
+			<scope>test</scope>
+			<classifier>tests</classifier>
+		</dependency>
+		<dependency>
+			<groupId>onexas.coordinate</groupId>
+			<artifactId>coordinate-web</artifactId>
+			<version>${project.version}</version>
+			<scope>test</scope>
+			<classifier>tests</classifier>
+		</dependency>
+	</dependencies>
+
+</project>

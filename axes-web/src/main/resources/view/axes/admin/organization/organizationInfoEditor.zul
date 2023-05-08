@@ -1,0 +1,41 @@
+<vlayout apply="onexas.axes.web.zk.ctrl.admin.organization.OrganizationInfoEditorCtrl" vflex="1" hflex="1"
+	sclass="form-layout">
+	<grid forward="onOK=mainComp.onSave" vflex="1" hflex="1" sclass="form-grid">
+		<columns>
+			<column align="right" hflex="min" label="-" />
+			<column hflex="1" label="-" />
+		</columns>
+		<rows>
+			<row>
+				<label sclass="form-title" value="${x:l('axes.uid')}" />
+				<cell>
+					<label id="vuid" sclass="form-input fullwidth" />
+				</cell>
+			</row>		
+			<row>
+				<label sclass="form-title" value="${x:l('axes.code')}" />
+				<cell>
+					<label id="vcode" />
+				</cell>
+			</row>
+			<row>
+				<label sclass="form-title-require" value="${x:l('axes.name')}" />
+				<cell>
+					<textbox id="vname" sclass="form-input fullwidth" />
+				</cell>
+			</row>
+			<row>
+				<label sclass="form-title" value="${x:l('axes.description')}" />
+				<cell>
+					<textbox id="vdescription" sclass="form-input  fullwidth" hflex="1" />
+				</cell>
+			</row>
+		</rows>
+	</grid>
+	<hlayout hflex="1" sclass="form-btn-box">
+		<div hflex="1" />
+		<button label="${x:l('axes.delete')}" forward="onClick=mainComp.onDelete" sclass="slave"
+			iconSclass="fas fa-trash-alt" />
+		<button label="${x:l('axes.save')}" forward="onClick=mainComp.onSave" />
+	</hlayout>
+</vlayout>

@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>onexas.coordinate</groupId>
+		<artifactId>coordinate-root</artifactId>
+		<version>0.0.0.XASHUB-DEV-SNAPSHOT</version>
+		<relativePath>../coordinate-root/pom.xml</relativePath>
+	</parent>
+	<artifactId>coordinate-web</artifactId>
+	<name>coordinate-web</name>
+	<description>Web project for Coordinate</description>
+	<packaging>jar</packaging>
+
+	<properties>
+	</properties>
+
+	<dependencies>
+		<dependency>
+			<groupId>onexas.coordinate</groupId>
+			<artifactId>coordinate-common</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-web</artifactId>
+		</dependency>
+
+		<!-- themeleaf for general error pages -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-thymeleaf</artifactId>
+		</dependency>
+
+		<!-- open-api -->
+		<dependency>
+			<groupId>org.springdoc</groupId>
+			<artifactId>springdoc-openapi-ui</artifactId>
+			<version>${springdoc.version}</version>
+		</dependency>
+
+		<dependency>
+		    <groupId>commons-fileupload</groupId>
+		    <artifactId>commons-fileupload</artifactId>
+		    <version>${commons-fileupload.version}</version>
+		</dependency>
+
+		<!-- for test-cases dependency -->
+		<dependency>
+			<groupId>onexas.coordinate</groupId>
+			<artifactId>coordinate-common</artifactId>
+			<version>${project.version}</version>
+			<scope>test</scope>
+			<classifier>tests</classifier>
+		</dependency>
+	</dependencies>
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-jar-plugin</artifactId>
+			</plugin>
+		</plugins>
+	</build>
+
+</project>

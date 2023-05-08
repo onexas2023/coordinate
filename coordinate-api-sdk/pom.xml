@@ -1,0 +1,238 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>onexas.coordinate</groupId>
+		<artifactId>coordinate-root</artifactId>
+		<version>0.0.0.XASHUB-DEV-SNAPSHOT</version>
+		<relativePath>../coordinate-root/pom.xml</relativePath>
+	</parent>
+	<artifactId>coordinate-api-sdk</artifactId>
+	<name>coordinate-api-sdk</name>
+	<description>Api-SDK project for Coordinate</description>
+	<packaging>jar</packaging>
+
+	<properties>
+
+		<sdk.invoker.package>onexas.api.invoker</sdk.invoker.package>
+		<sdk.package>onexas.coordinate.api.v1.sdk</sdk.package>
+
+		<!-- for generate source -->
+		<swagger-core.version>1.5.22</swagger-core.version>
+		<gson-fire.version>1.8.3</gson-fire.version>
+		<threetenbp.version>1.3.8</threetenbp.version>
+	</properties>
+
+	<dependencies>
+
+		<!-- for generate source -->
+		<dependency>
+			<groupId>io.swagger</groupId>
+			<artifactId>swagger-annotations</artifactId>
+			<version>${swagger-core.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.squareup.okhttp3</groupId>
+			<artifactId>okhttp</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.squareup.okhttp3</groupId>
+			<artifactId>logging-interceptor</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.google.code.gson</groupId>
+			<artifactId>gson</artifactId>
+			<scope>compile</scope>
+		</dependency>
+		<dependency>
+			<groupId>io.gsonfire</groupId>
+			<artifactId>gson-fire</artifactId>
+			<version>${gson-fire.version}</version>
+			<scope>compile</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.threeten</groupId>
+			<artifactId>threetenbp</artifactId>
+			<version>${threetenbp.version}</version>
+			<scope>compile</scope>
+		</dependency>
+
+		<!-- @Nullable annotation -->
+		<dependency>
+			<groupId>com.google.code.findbugs</groupId>
+			<artifactId>jsr305</artifactId>
+			<version>3.0.2</version>
+		</dependency>
+
+		<!-- test -->
+		<dependency>
+			<groupId>com.h2database</groupId>
+			<artifactId>h2</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.session</groupId>
+			<artifactId>spring-session-jdbc</artifactId>
+			<scope>test</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>onexas.coordinate</groupId>
+			<artifactId>coordinate-app</artifactId>
+			<version>${project.version}</version>
+			<scope>test</scope>
+		</dependency>
+
+		<!-- for test-cases dependency -->
+		<dependency>
+			<groupId>onexas.coordinate</groupId>
+			<artifactId>coordinate-data</artifactId>
+			<version>${project.version}</version>
+			<scope>test</scope>
+			<classifier>tests</classifier>
+		</dependency>
+		<dependency>
+			<groupId>onexas.coordinate</groupId>
+			<artifactId>coordinate-impl</artifactId>
+			<version>${project.version}</version>
+			<scope>test</scope>
+			<classifier>tests</classifier>
+		</dependency>
+		<dependency>
+			<groupId>onexas.coordinate</groupId>
+			<artifactId>coordinate-app</artifactId>
+			<version>${project.version}</version>
+			<scope>test</scope>
+			<classifier>tests</classifier>
+		</dependency>
+	</dependencies>
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>build-helper-maven-plugin</artifactId>
+				<executions>
+					<execution>
+						<phase>generate-sources</phase>
+						<goals>
+							<goal>add-source</goal>
+						</goals>
+						<configuration>
+							<sources>
+								<source>generated-sources/src/gen/java</source>
+							</sources>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<artifactId>maven-clean-plugin</artifactId>
+				<configuration>
+					<filesets>
+						<fileset>
+							<directory>${project.basedir}/generated-sources</directory>
+							<includes>
+								<include>**/*</include>
+							</includes>
+							<excludes>
+								<exclude>src/gen/java/keep.md</exclude>
+							</excludes>
+							<followSymlinks>false</followSymlinks>
+						</fileset>
+					</filesets>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.openapitools</groupId>
+				<artifactId>openapi-generator-maven-plugin</artifactId>
+				<version>${openapi-generator.version}</version>
+
+				<dependencies>
+					<dependency>
+						<groupId>onexas.coordinate</groupId>
+						<artifactId>coordinate-api-generator</artifactId>
+						<version>0.0.0.XASHUB-DEV-SNAPSHOT</version>
+					</dependency>
+				</dependencies>
+
+				<executions>
+					<execution>
+						<goals>
+							<goal>generate</goal>
+						</goals>
+						<configuration>
+							<inputSpec>${project.basedir}/../coordinate-app/api/definition.json</inputSpec>
+							<generatorName>onexas.coordinate.api.generator.JavaClientCodegen</generatorName>
+							<library>okhttp-gson</library>
+							<configOptions>
+								<sourceFolder>src/gen/java</sourceFolder>
+								<useRuntimeException>true</useRuntimeException>
+							</configOptions>
+							<output>${project.basedir}/generated-sources</output>
+							<apiPackage>${sdk.package}</apiPackage>
+							<modelPackage>${sdk.package}.model</modelPackage>
+							<invokerPackage>${sdk.invoker.package}</invokerPackage>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-javadoc-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>attach-javadocs</id>
+						<goals>
+							<goal>jar</goal>
+						</goals>
+					</execution>
+				</executions>
+				<configuration>
+					<tags>
+						<tag>
+							<name>http.response.details</name>
+							<placement>a</placement>
+							<head>Http Response Details:</head>
+						</tag>
+					</tags>
+				</configuration>
+			</plugin>
+		</plugins>
+		<pluginManagement>
+			<plugins>
+				<!--This plugin's configuration is used to store Eclipse m2e settings 
+					only. It has no influence on the Maven build itself. -->
+				<plugin>
+					<groupId>org.eclipse.m2e</groupId>
+					<artifactId>lifecycle-mapping</artifactId>
+					<version>1.0.0</version>
+					<configuration>
+						<lifecycleMappingMetadata>
+							<pluginExecutions>
+								<pluginExecution>
+									<pluginExecutionFilter>
+										<groupId>org.openapitools</groupId>
+										<artifactId>openapi-generator-maven-plugin</artifactId>
+										<versionRange>
+											[3.0.11,)
+										</versionRange>
+										<goals>
+											<goal>generate</goal>
+										</goals>
+									</pluginExecutionFilter>
+									<action>
+										<ignore></ignore>
+									</action>
+								</pluginExecution>
+							</pluginExecutions>
+						</lifecycleMappingMetadata>
+					</configuration>
+				</plugin>
+			</plugins>
+		</pluginManagement>
+	</build>
+
+</project>

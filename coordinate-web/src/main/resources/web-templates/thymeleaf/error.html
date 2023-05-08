@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<link type="text/css" href="/thymeleaf/error.css" rel="stylesheet" />
+</head>
+<body>
+	<h1 class="header">
+		Something went wrong! Get <span class="status-code" th:text="${statusCode}">Status Code</span>
+	</h1>
+	<p />
+	<p class="error-message" th:text="${errorMessage}">Error Message</p>
+	<p />
+	<p class="navigation">
+		<a href="/">Go Home</a>
+	</p>
+</body>
+</html>

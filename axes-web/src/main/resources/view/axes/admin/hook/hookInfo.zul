@@ -1,0 +1,74 @@
+<vlayout hflex="1" vflex="1"
+	apply="onexas.axes.web.zk.ctrl.admin.hook.HookInfoCtrl"
+	spacing="0">
+	<grid id="vinfo" vflex="1" hflex="1" sclass="form-grid">
+		<columns>
+			<column align="right" hflex="min" label="-" />
+			<column hflex="1" label="-" />
+		</columns>
+		<rows>
+			<row>
+				<label sclass="form-title"
+					value="${x:l('axes.uid')}" />
+				<label id="vuid" />
+			</row>
+			<row>
+				<label sclass="form-title"
+					value="${x:l('axes.description')}" />
+				<label id="vdescription" />
+			</row>
+
+			<row>
+				<label sclass="form-title"
+					value="${x:l('axes.hook.data')}" />
+				<label id="vdata" multiline="true" />
+			</row>
+			<row>
+				<label sclass="form-title"
+					value="${x:l('axes.hook.zone')}" />
+				<label id="vzone" />
+			</row>
+			<row>
+				<label sclass="form-title"
+					value="${x:l('axes.hook.ownerUid')}" />
+				<label id="vownerUid" />
+			</row>
+			<row>
+				<label sclass="form-title"
+					value="${x:l('axes.hook.ownerType')}" />
+				<label id="vownerType" />
+			</row>
+			<row>
+				<label sclass="form-title"
+					value="${x:l('axes.hook.subjectUid')}" />
+				<label id="vsubjectUid" />
+			</row>
+			<row>
+				<label sclass="form-title"
+					value="${x:l('axes.hook.subjectType')}" />
+				<label id="vsubjectType" />
+			</row>
+			<row>
+				<label sclass="form-title"
+					value="${x:l('axes.createdDateTime')}" />
+				<label id="vcreatedDateTime" />
+			</row>
+			<row>
+				<label sclass="form-title"
+					value="${x:l('axes.hook.trigger')}" />
+				<label id="vtrigger" />
+			</row>
+			<row>
+				<label sclass="form-title"
+					value="${x:l('axes.url')}" />
+				<label id="vurl" />
+			</row>
+		</rows>
+	</grid>
+	<hlayout hflex="1" sclass="form-btn-box">
+		<div hflex="1" />
+		<button label="${x:l('axes.hook.trigger')}" forward="onClick=mainComp.onTrigger" />
+		<button label="${x:l('axes.delete')}" forward="onClick=mainComp.onDelete" sclass="slave"
+			iconSclass="fas fa-trash-alt" />
+	</hlayout>	
+</vlayout>

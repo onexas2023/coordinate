@@ -1,0 +1,43 @@
+<vlayout hflex="1" vflex="1"
+	apply="onexas.axes.web.zk.ctrl.admin.job.JobListCtrl"
+	spacing="0">
+	<listbox id="vjobs" hflex="1" vflex="1"
+		forward="onSelect=mainComp.onSelect"
+		emptyMessage="${x:l('axes.msg.emptyList')}">
+		<listhead>
+			<listheader hflex="2" label="${x:l('axes.job.node')}"></listheader>
+			<listheader hflex="4" label="${x:l('axes.subject')}"></listheader>
+			<listheader hflex="3"
+				label="${x:l('axes.startedDateTime')}" sclass="sortable"
+				forward="onClick=mainComp.onColumnSort(startedDateTime)">
+			</listheader>
+			<listheader hflex="3"
+				label="${x:l('axes.finishedDateTime')}" sclass="sortable"
+				forward="onClick=mainComp.onColumnSort(finishedDateTime)">
+			</listheader>
+			<listheader hflex="2" label="${x:l('axes.state')}"></listheader>
+			<listheader hflex="min" label="${x:l('axes.error')}"></listheader>
+		</listhead>
+		<template name="model">
+			<listitem>
+				<listcell label="${each.node}" sclass="ellipsis-txt"></listcell>
+				<listcell label="${each.subject}"
+					sclass="ellipsis-txt">
+				</listcell>
+				<listcell
+					label="${mainCtrl.getDateTimeInfo(each.startedDateTime)}"
+					sclass="ellipsis-txt">
+				</listcell>
+				<listcell
+					label="${mainCtrl.getDateTimeInfo(each.finishedDateTime)}"
+					sclass="ellipsis-txt">
+				</listcell>
+				<listcell label="${each.state}" sclass="ellipsis-txt"></listcell>
+				<listcell sclass="iconCell">
+					<i sclass="${mainCtrl.getErrorIconSclass(each)}" />
+				</listcell>
+			</listitem>
+		</template>
+	</listbox>
+	<paging id="vpaging" hflex="1" forward="onPaging=mainComp.onPaging" />
+</vlayout>

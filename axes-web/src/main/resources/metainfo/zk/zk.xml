@@ -1,0 +1,43 @@
+<zk>
+	<config-name>axes</config-name>
+	<system-config>
+		<ui-factory-class>org.zkoss.zk.ui.http.SerializableUiFactory</ui-factory-class>
+		<cache-provider-class>onexas.axes.web.zk.core.ZkDesktopCacheProvider</cache-provider-class>
+	</system-config>
+	<listener>
+		<listener-class>onexas.axes.web.zk.core.WebAppInitCleanupListener</listener-class>
+	</listener>
+	<listener>
+		<listener-class>onexas.axes.web.zk.core.SecurityListener</listener-class>
+	</listener>
+
+	<!-- to enable http 304 cache etag -->
+	<library-property>
+		<name>org.zkoss.web.classWebResource.cache</name>
+		<value>true</value>
+	</library-property>
+	<library-property>
+		<name>org.zkoss.web.classWebResource.cache.etag</name>
+		<value>true</value>
+	</library-property>
+
+	<session-config>
+		<max-desktops-per-session>10</max-desktops-per-session>
+		<max-requests-per-session>10</max-requests-per-session>
+		<max-pushes-per-session>10</max-pushes-per-session>
+		<timeout-message>label:axes.msg.sessionTimeout</timeout-message>
+	</session-config>
+
+	<client-config>
+		<debug-js>false</debug-js>
+	</client-config>
+
+	<error-page>
+		<exception-type>onexas.coordinate.common.err.NoPermissionException</exception-type>
+		<location>~@/axes/err/exception2msg.zul</location>
+	</error-page>
+	<error-page>
+		<exception-type>java.lang.Exception</exception-type>
+		<location>~@/axes/err/exception2alert.zul</location>
+	</error-page>
+</zk>

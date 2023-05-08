@@ -1,0 +1,54 @@
+<vlayout hflex="1" vflex="1" apply="onexas.axes.web.zk.ctrl.admin.job.JobInfoCtrl" spacing="0">
+	<grid id="vinfo" vflex="1" hflex="1" sclass="form-grid">
+		<columns>
+			<column align="right" hflex="min" label="-"/>
+			<column hflex="1" label="-"/>
+			<column align="right" hflex="min" label="-"/>
+			<column hflex="1" label="-"/>
+		</columns>
+		<rows>
+			<row>
+				<label sclass="form-title" value="${x:l('axes.job.node')}" />
+				<cell colspan="3">
+					<label id="vnode"/>
+				</cell>
+			</row>
+			<row>
+				<label sclass="form-title" value="${x:l('axes.subject')}" />
+				<cell colspan="3">
+					<label id="vsubject" />
+				</cell>
+			</row>
+			<row>
+				<label sclass="form-title" value="${x:l('axes.startedDateTime')}" />
+				<label id="vstartedDateTime" />
+				<label sclass="form-title" value="${x:l('axes.finishedDateTime')}" />
+				<label id="vfinishedDateTime" />
+			</row>
+			<row>
+				<label sclass="form-title" value="${x:l('axes.createdDateTime')}" />
+				<cell colspan="3">
+					<label id="vcreatedDateTime" />
+				</cell>
+			</row>
+			<row>
+				<label sclass="form-title" value="${x:l('axes.state')}" />
+				<label id="vstate" />
+				<label sclass="form-title" value="${x:l('axes.error')}" />
+				<label id="verror"/>
+			</row>
+			<row>
+				<label sclass="form-title" value="${x:l('axes.message')}" />
+				<cell colspan="3">
+					<label id="vmessage"/>
+				</cell>
+			</row>
+			<row>
+				<label sclass="form-title" value="${x:l('axes.job.resultJson')}" />
+				<cell colspan="3">
+					<label id="vresultJson" multiline="true" />
+				</cell>
+			</row>
+		</rows>
+	</grid>
+</vlayout>

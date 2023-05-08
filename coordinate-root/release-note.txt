@@ -1,0 +1,21 @@
+-------------------------------------------
+ OneXas - Coordinate Release Notes
+-------------------------------------------
+ 1.0.0-beta
+ --------
+ * New Features
+   * Support User, Domain & Relation Services & APIs
+   * Support User, Role & Relation Services & APIs
+   * Support User, Organization & Service & APIs
+   * Support Role, Permission & Relation Services & APIs
+   * Support Axes, a general console UI.  
+       
+ * Improvements
+          
+ * Fixed Bugs
+         
+ * Upgrade Notes
+
+-------------------------------------------
+ History
+-------------------------------------------

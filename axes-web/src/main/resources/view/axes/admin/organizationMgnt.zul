@@ -1,0 +1,16 @@
+<borderlayout apply="onexas.axes.web.zk.ctrl.admin.OrganizationMgntCtrl" hflex="1" vflex="1" sclass="classic1">
+	<north splittable="false" collapsible="false">
+		<toolbar hflex="1" sclass="classic1">
+			<label value="${x:l('axes.page.organizationMgnt')}" sclass="h1" />
+			<separator/>
+			<toolbarbutton iconSclass="fas fa-plus" tooltiptext="${x:l('axes.create')}" 
+				forward="onClick=mainComp.onNew" />
+		</toolbar>
+	</north>
+	<west size="30%" vflex="true" minsize="250" splittable="true" collapsible="true">
+		<include src="~@/axes/admin/organization/organizationList.zul"></include>
+	</west>
+	<center>
+		<include id="veditorInc" src="~@/axes/admin/organization/organizationEditor.zul"></include>
+	</center>
+</borderlayout>

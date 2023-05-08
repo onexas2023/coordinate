@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<package name="axeswgt" language="xul/html" depends="zul,zul.wgt,zul.wnd" >
+	<widget name="I" />
+</package>

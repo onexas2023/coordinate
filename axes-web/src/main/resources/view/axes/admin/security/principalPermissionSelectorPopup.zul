@@ -1,0 +1,44 @@
+<vlayout hflex="1" vflex="1"
+	apply="onexas.axes.web.zk.ctrl.admin.security.PrincipalPermissionSelectorPopupCtrl"
+	spacing="0">
+	<toolbar hflex="1" sclass="classic2">
+		<hlayout sclass="z-valign-middle">
+			<div >
+				<textbox id="vkeyword" sclass="form-input"
+					forward="onChange=mainComp.onSearch,onOK=mainComp.onSearch" />
+				<i sclass="fas fa-search float-hint" />
+			</div>
+		</hlayout>
+	</toolbar>
+	<listbox id="vpermissions" hflex="1" vflex="1"
+		forward="onSelect=mainComp.onSelect"
+		emptyMessage="${x:l('axes.msg.emptyList')}">
+		<listhead>
+			<listheader hflex="2"
+				label="${x:l('axes.permission.target')}" sclass="sortable"
+				forward="onClick=mainComp.onColumnSort(target)">
+			</listheader>
+			<listheader hflex="1"
+				label="${x:l('axes.permission.action')}" sclass="sortable"
+				forward="onClick=mainComp.onColumnSort(action)">
+			</listheader>
+		</listhead>
+		<template name="model">
+			<listitem forward="onDoubleClick=mainComp.onSelectOK">
+				<listcell label="${each.target}"></listcell>
+				<listcell label="${each.action}"></listcell>
+			</listitem>
+		</template>
+	</listbox>
+	<div sclass="space1"/>
+	<div id="vchosen" sclass="chosen-box"
+		style="height:100px;overflow-y:auto">
+	</div>
+	<hlayout hflex="1" sclass="form-btn-box">
+		<div hflex="1" />
+		<button label="${x:l('axes.ok')}"
+			forward="onClick=mainComp.onSelectOK" />
+		<button label="${x:l('axes.cancel')}"
+			forward="onClick=mainComp.onSelectCancel" sclass="slave" />
+	</hlayout>
+</vlayout>

@@ -1,0 +1,12 @@
+<vlayout vflex="1" hflex="1">
+	<singletabbox id="vtabbox" sclass="classic1" vflex="1" hflex="1">
+		<tabs>
+			<tab label="${x:l('axes.myProfile')}" ></tab>
+			<tab label="${x:l('axes.myPassword')}" ></tab>
+		</tabs>
+		<tabpanels>
+			<singletabpanel id="vmyprofile" src="~@/axes/my/myProfile.zul"></singletabpanel>
+			<singletabpanel id="vmypassword" src="~@/axes/my/myPassword.zul"></singletabpanel>
+		</tabpanels>
+	</singletabbox>
+</vlayout>

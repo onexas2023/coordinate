@@ -1,0 +1,89 @@
+######################################################################## 
+##  This is the general config file of coordinate base application         ## 
+########################################################################
+
+###
+## Sets profiles
+###
+spring.profiles.active: ${COORDINATE_PROFILES:queue, timer-node, job-node, api-node, api-doc}
+
+###
+## Define node name
+###
+coordinate.node: ${COORDINATE_NODE_NAME:coordinate-node1}
+
+###  
+## Define web server
+###
+
+## the web type, sets none if you are running job-node only
+## possible value none, servlet, reactive
+#spring.main.web-application-type: none
+
+server:
+  port: ${COORDINATE_SERVER_PORT:8088}
+  servlet.session.timeout: ${COORDINATE_SERVER_SESSION_TIMEOUT:30m}
+  ssl:
+    enabled: ${COORDINATE_SERVER_SSL_ENABLED:false}
+    key-store-type: ${COORDINATE_SERVER_SSL_KEY_STORE_TYPE:null}
+    key-store: ${COORDINATE_SERVER_SSL_KEY_STORE_FILE:null}
+    key-store-password: ${COORDINATE_SERVER_SSL_KEY_STORE_PASSWORD:null}
+    key-alias: ${COORDINATE_SERVER_SSL_KEY_STORE_KEY_ALIAS:null}  
+
+coordinate-web.api.cors.allowedOrigins: ${COORDINATE_API_CORS_ALLOWED_ORIGIN:*}
+
+###
+## Define default datasource for common usage, such as http session store.
+### 
+spring.datasource:
+  jdbc-url: ${COORDINATE_JDBC_URL:jdbc:mariadb://localhost:3306/coordinate}
+  driver-class-name: ${COORDINATE_JDBC_DRIVER:org.mariadb.jdbc.Driver}
+  username: ${COORDINATE_JDBC_USER:db-account}
+  password: ${COORDINATE_JDBC_PASSWORD:db-password}
+  connectionTimeout: ${COORDINATE_JDBC_CONNECTION_TIMEOUT:30000}
+  maxLifetime: ${COORDINATE_JDBC_MAX_LIFETIME:540000}
+  maximumPoolSize: ${COORDINATE_JDBC_MAX_POOL_SIZE:10}
+
+spring.session.jdbc:
+  initialize-schema: ${COORDINATE_SESSION_JDBC_INITIALIZE_SCHEMA:always}
+  schema: ${COORDINATE_SESSION_JDBC_SCHEMA:classpath:schema/coordinate-web-session-init-mariadb.sql}
+  table-name: ${COORDINATE_SESSION_JDBC_TABLE_NAME:COW_SESSION}
+
+
+###
+## Define coordinate datasource
+###
+coordinate.datasource:
+  jdbc-url: ${COORDINATE_JDBC_URL:jdbc:mariadb://localhost:3306/coordinate}
+  driver-class-name: ${COORDINATE_JDBC_DRIVER:org.mariadb.jdbc.Driver}
+  username: ${COORDINATE_JDBC_USER:db-account}
+  password: ${COORDINATE_JDBC_PASSWORD:db-password}
+  connectionTimeout: ${COORDINATE_JDBC_CONNECTION_TIMEOUT:30000}
+  maxLifetime: ${COORDINATE_JDBC_MAX_LIFETIME:540000}
+  maximumPoolSize: ${COORDINATE_JDBC_MAX_POOL_SIZE:10}
+###
+## Define active mq
+###
+spring.activemq:
+  broker-url: ${COORDINATE_ACTIVE_MQ_URL:vm://embedded?broker.persistent=false&broker.useShutdownHook=false}
+  user: ${COORDINATE_ACTIVE_MQ_USER:queue-account}
+  password: ${COORDINATE_ACTIVE_MQ_PASSWORD:queue-password}
+  in-memory: ${COORDINATE_ACTIVE_MQ_INMEMORY:false}
+  pool.enabled: true
+  pool.max-connections: ${COORDINATE_ACTIVE_MQ_POOL_MAX_CONNECTIONS:50}
+
+###
+## Define jpa
+###
+coordinate-data.schema.migration.baseline.coordinate: ${COORDINATE_DATA_SCHEMA_BASELINE_COORDINATE:0.0.0}
+coordinate-data.schema.migration.enabled: ${COORDINATE_DATA_SCHEMA_AUTO_MIGRATION:true}
+spring.jpa.properties:
+  hibernate.format_sql: false
+  hibernate.hbm2ddl.auto: ${COORDINATE_DATA_SCHEMA_HBM2DDL_AUTO:validate}
+
+###
+## logger
+###
+#logging.level:
+#  org.hibernate.SQL: DEBUG
+#  org.hibernate.type.descriptor.sql.BasicBinder: TRACE

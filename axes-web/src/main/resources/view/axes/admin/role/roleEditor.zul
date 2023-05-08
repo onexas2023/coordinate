@@ -1,0 +1,19 @@
+<vlayout apply="onexas.axes.web.zk.ctrl.admin.role.RoleEditorCtrl" vflex="1" hflex="1">
+	<div id="vhintbox" sclass="form-layout">
+		<div sclass="hint-box">
+			<label value="${x:l('axes.msg.blankRoleEditorHint')}"/>
+		</div>
+	</div>
+	<singletabbox id="vtabbox" sclass="classic1" visible="false" vflex="1" hflex="1">
+		<tabs>
+			<tab id="vroleInfo" label="${x:l('axes.information')}" sclass="max-width-ellipsis"></tab>
+			<tab id="vroleRoles" label="${x:l('axes.role.users')}"></tab>
+			<tab id="vrolePermissions" label="${x:l('axes.role.permissions')}"></tab>
+		</tabs>
+		<tabpanels>
+			<singletabpanel id="vroleInfoEditor" src="~@/axes/admin/role/roleInfoEditor.zul"></singletabpanel>
+			<singletabpanel id="vroleUsersEditor" src="~@/axes/admin/role/roleUsersEditor.zul"></singletabpanel>
+			<singletabpanel id="vrolePermissionsEditor" src="~@/axes/admin/role/rolePermissionsEditor.zul"></singletabpanel>
+		</tabpanels>
+	</singletabbox>
+</vlayout>

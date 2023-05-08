@@ -1,0 +1,8 @@
+axes.msg.sessionTimeout={
+The page is no longer available by timeout or opening too many pages.
+Please reload this page and try again.
+}
+axes.msg.systemError={
+Sorry, you encountered a system error, please try later.
+Error message : {0}
+}

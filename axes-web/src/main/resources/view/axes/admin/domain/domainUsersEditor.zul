@@ -1,0 +1,42 @@
+<vlayout
+	apply="onexas.axes.web.zk.ctrl.admin.domain.DomainUsersEditorCtrl"
+	vflex="1" hflex="1" sclass="form-layout" spacing="0">
+	<toolbar hflex="1" sclass="classic2">
+		<hlayout sclass="z-valign-middle">		
+			<div>
+				<textbox id="vkeyword" sclass="form-input"
+					forward="onChange=mainComp.onSearch,onOK=mainComp.onSearch" />
+				<i sclass="fas fa-search float-hint" />
+			</div>
+		</hlayout>
+	</toolbar>
+	<grid id="vusers" vflex="1" hflex="1">
+		<columns>
+			<column hflex="min" />
+			<column hflex="1" label="${x:l('axes.user.account')}"
+				sclass="sortable" forward="onClick=mainComp.onColumnSort(account)" />
+			<column hflex="1"
+				label="${x:l('axes.user.displayName')}" sclass="sortable"
+				forward="onClick=mainComp.onColumnSort(displayName)" />
+			<column hflex="min" />
+		</columns>
+		<template name="model">
+			<row sclass="narrow">
+				<cell sclass="iconCell">
+					<i sclass="${mainCtrl.getUserIconSclass(each)}" />
+				</cell>
+				<label value="${each.account}" sclass="sortable"
+					forward="onClick=mainComp.onColumnSort(account)" />
+				<label value="${each.displayName}" sclass="sortable"
+					forward="onClick=mainComp.onColumnSort(displayName)" />
+
+				<hlayout>
+					<button iconSclass="fas fa-plus" tooltiptext="${x:l('axes.add')}"
+						forward="onClick=mainComp.onCreateUser(${each})" sclass="slave"
+						disabled="${mainCtrl.isExistUser(each) }" />
+				</hlayout>
+			</row>
+		</template>
+	</grid>
+	<paging id="vpaging" hflex="1" forward="onPaging=mainComp.onPaging" />
+</vlayout>

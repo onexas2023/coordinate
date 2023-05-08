@@ -1,0 +1,37 @@
+<vlayout hflex="1" vflex="1"
+	apply="onexas.axes.web.zk.ctrl.admin.log.LogListCtrl"
+	spacing="0">
+	<listbox id="vlogs" hflex="1" vflex="1"
+		forward="onSelect=mainComp.onSelect"
+		emptyMessage="${x:l('axes.msg.emptyList')}">
+		<listhead>
+			<listheader hflex="1" label="${x:l('axes.id')}"></listheader>
+			<listheader hflex="1"
+				label="${x:l('axes.log.level')}">
+			</listheader>
+			<listheader hflex="5"
+				label="${x:l('axes.log.content')}">
+			</listheader>
+			<listheader hflex="3"
+				label="${x:l('axes.createdDateTime')}" sclass="sortable"
+				forward="onClick=mainComp.onColumnSort(createdDateTime)">
+			</listheader>
+		</listhead>
+		<template name="model">
+			<listitem>
+				<listcell label="${each.id}" sclass="ellipsis-txt"></listcell>
+				<listcell label="${mainCtrl.getLevelInfo(each)}"
+					sclass="ellipsis-txt">
+				</listcell>
+				<listcell label="${each.content}"
+					sclass="ellipsis-txt">
+				</listcell>
+				<listcell
+					label="${mainCtrl.getCreatedDateTimeInfo(each)}"
+					sclass="ellipsis-txt">
+				</listcell>
+			</listitem>
+		</template>
+	</listbox>
+	<paging id="vpaging" hflex="1" forward="onPaging=mainComp.onPaging" />
+</vlayout>

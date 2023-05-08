@@ -1,0 +1,19 @@
+<vlayout
+	apply="onexas.axes.web.zk.ctrl.admin.setting.MiscSettingCtrl"
+	vflex="1" hflex="1" sclass="form-layout">
+	<grid sclass="form-grid" vflex="1">
+		<columns>
+			<column align="right" hflex="min" label="-" />
+			<column hflex="1" label="-" />
+		</columns>
+		<rows>
+			<row>
+				<label sclass="form-title"
+					value="${x:l('axes.cleanCache')}" />
+				<cell>
+					<button label="${x:l('axes.cleanCache')}" forward="onClick=mainComp.onCleanCache"/>
+				</cell>
+			</row>			
+		</rows>
+	</grid>
+</vlayout>

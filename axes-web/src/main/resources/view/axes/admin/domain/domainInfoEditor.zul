@@ -1,0 +1,73 @@
+<vlayout
+	apply="onexas.axes.web.zk.ctrl.admin.domain.DomainInfoEditorCtrl"
+	vflex="1" hflex="1" sclass="form-layout">
+	<grid forward="onOK=mainComp.onSave" hflex="1"
+		sclass="form-grid">
+		<columns>
+			<column align="right" hflex="min" label="-" />
+			<column hflex="1" label="-" />
+		</columns>
+		<rows>
+			<row>
+				<label sclass="form-title" value="${x:l('axes.code')}" />
+				<cell>
+					<label id="vcode" />
+				</cell>
+			</row>
+			<row>
+				<label sclass="form-title-require"
+					value="${x:l('axes.name')}" />
+				<cell>
+					<textbox id="vname" sclass="form-input fullwidth" />
+				</cell>
+			</row>
+			<row>
+				<label sclass="form-title"
+					value="${x:l('axes.description')}" />
+				<cell>
+					<textbox id="vdescription"
+						sclass="form-input fullwidth" hflex="1" />
+				</cell>
+			</row>
+			<row>
+				<label sclass="form-title"
+					value="${x:l('axes.disabled')}" />
+				<cell>
+					<checkbox id="vdisabled"
+						sclass="form-input fullwidth" />
+				</cell>
+			</row>
+			<row>
+				<label sclass="form-title"
+					value="${x:l('axes.domain.provider')}" />
+				<cell>
+					<label id="vfactory" />
+				</cell>
+			</row>
+			<row>
+				<label sclass="form-title"
+					value="${x:l('axes.config')}" />
+				<cell>
+					<hlayout>
+						<button forward="onClick=mainComp.onResetConfig"
+							sclass="slave" tooltiptext="${x:l('axes.template')}"
+							iconSclass="fas fa-file-alt" />
+						<button forward="onClick=mainComp.onCheckConfig"
+							sclass="slave" tooltiptext="${x:l('axes.checkConfig')}"
+							iconSclass="fas fa-stethoscope" />
+					</hlayout>
+				</cell>
+			</row>
+		</rows>
+	</grid>
+	<textbox id="vconfig" sclass="form-input code" vflex="1" hflex="1"
+		multiline="true" />
+	<hlayout hflex="1" sclass="form-btn-box">
+		<div hflex="1" />
+		<button label="${x:l('axes.delete')}"
+			forward="onClick=mainComp.onDelete" sclass="slave"
+			iconSclass="fas fa-trash-alt" />
+		<button label="${x:l('axes.save')}"
+			forward="onClick=mainComp.onSave" />
+	</hlayout>
+</vlayout>

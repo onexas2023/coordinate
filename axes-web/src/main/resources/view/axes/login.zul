@@ -1,0 +1,49 @@
+<div apply="onexas.axes.web.zk.ctrl.LoginCtrl"
+	xmlns:ca="client/attribute" sclass="login-page">
+	<div sclass="login-card">
+		<div sclass="login-sider" vflex="1">
+			<image id="vlogo" sclass="logo" />
+			<div sclass="flex-grow" />
+			${x:l('axes.login.to')}
+			<div sclass="product-name">${x:l('axes.productName')}</div>
+		</div>
+		<vlayout sclass="login" vflex="1" spacing="0">
+			<div hflex="1" vflex="1">
+				<vlayout sclass="login-form" spacing="8px">
+					<textbox id="vaccountBox" focus="true"
+						placeholder="${x:l('axes.login.your.account')}"
+						sclass="form-input" forward="onOK=mainComp.onLogin"
+						ca:autocomplete="username" />
+					<textbox id="vpasswordBox" type="password"
+						placeholder="${x:l('axes.login.your.password')}"
+						sclass="form-input" forward="onOK=mainComp.onLogin"
+						ca:autocomplete="current-password" />
+					<listbox id="vdomainBox" mold="select"
+						sclass="form-input">
+						<template name="model">
+							<listitem label="${x:pfxl(each.name)}" />
+						</template>
+					</listbox>
+					<div sclass="space1" />
+					<button id="vlogin" label="${x:l('axes.login')}"
+						forward="onClick=mainComp.onLogin" />
+					<div sclass="space1" />
+				</vlayout>
+			</div>
+
+		</vlayout>
+	</div>
+	<div sclass="login-lang">
+		<listbox id="vlanguageBox" mold="select"
+			forward="onSelect=mainComp.onChangeLanguage" sclass="form-input">
+			<template name="model">
+				<listitem
+					label="${x:displayloc(each,ws.preferredLocale)}" />
+			</template>
+		</listbox>
+	</div>
+	<div sclass="login-footer">
+		<label
+			value="${appName}@${appVer} ${appLicense.shortDescription}" />
+	</div>
+</div>

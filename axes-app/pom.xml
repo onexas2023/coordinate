@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>onexas.coordinate</groupId>
+		<artifactId>coordinate-root</artifactId>
+		<version>0.0.0.XASHUB-DEV-SNAPSHOT</version>
+		<relativePath>../coordinate-root/pom.xml</relativePath>
+	</parent>
+	<artifactId>axes-app</artifactId>
+	<name>axes-app</name>
+	<description>Axes-App project for Coordinate</description>
+	<packaging>jar</packaging>
+
+	<properties>
+		<start-class>onexas.axes.app.AxesApplication</start-class>
+	</properties>
+
+	<dependencies>
+		<dependency>
+			<groupId>onexas.coordinate</groupId>
+			<artifactId>axes-web</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		
+		<!-- jdbc session -->
+		<dependency>
+			<groupId>org.springframework.session</groupId>
+			<artifactId>spring-session-jdbc</artifactId>
+		</dependency>
+		
+		<!-- redis as session -->
+		<!-- 
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-redis</artifactId>
+			<version>1.4.7.RELEASE</version>
+		</dependency>
+		<dependency>
+			<groupId>redis.clients</groupId>
+			<artifactId>jedis</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.session</groupId>
+			<artifactId>spring-session-data-redis</artifactId>
+		</dependency>
+		 -->
+						
+		<!-- mariadb driver -->
+		<dependency>
+		    <groupId>org.mariadb.jdbc</groupId>
+		    <artifactId>mariadb-java-client</artifactId>
+			<scope>runtime</scope>
+		</dependency>
+		
+		<!-- h2 driver for demo image -->
+		<dependency>
+			<groupId>com.h2database</groupId>
+			<artifactId>h2</artifactId>
+			<scope>runtime</scope>
+		</dependency>
+		
+		
+		<!-- for test-cases dependency -->
+		<dependency>
+			<groupId>onexas.coordinate</groupId>
+			<artifactId>coordinate-common</artifactId>
+			<version>${project.version}</version>
+			<scope>test</scope>
+			<classifier>tests</classifier>
+		</dependency>
+	</dependencies>
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-maven-plugin</artifactId>
+			</plugin>		
+		</plugins>
+	</build>
+</project>

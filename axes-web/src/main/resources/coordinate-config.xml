@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<config name="axes-web" depends="coordinate-web">
+	<app>
+		<name>Coordinate Axes</name>
+		<version>0.0.0.XASHUB-DEV-SNAPSHOT</version>
+		<versions>
+			<version name="axes">0.0.0.XASHUB-DEV-SNAPSHOT</version>
+		</versions>
+		<userConfigName>axes-userconfig.xml</userConfigName>
+	</app>
+	<axes>
+		<labels>
+			<label>axes/axes</label>
+			<label>axes/axes-ml</label>
+			<label>axes/newadd</label>
+		</labels>
+		<javascripts cache="false" compress="false"
+			startup="false">
+			<javascript>/web/axes/js/axes.js</javascript>
+			<javascript>/web/axes/js/jquery.highlight-4.js</javascript>
+			<javascript>/web/axes/js/jquery.fullscreen.js</javascript>
+			<javascript>/web/axes/js/jquery.qtip.js</javascript>
+		</javascripts>
+		<csss cache="false" compress="false" startup="false">
+			<css>/web/axes/css/axes.css</css>
+			<css>/web/axes/css/jquery.qtip.css</css>
+			<css>/web/axes/css/font-awesome.css</css>
+		</csss>
+		<jslabels>
+			<jslabel>axes.ok</jslabel>
+			<jslabel>axes.cancel</jslabel>
+			<jslabel>axes.msg.sessionTimeout</jslabel>
+		</jslabels>
+		<taglibs>
+			<taglib name="axes" prefix="x">tld://onexas/axes</taglib>
+			<taglib name="zkcore" prefix="c">http://www.zkoss.org/dsp/web/core</taglib>
+		</taglibs>
+		<menus>
+			<menu name="main">
+				<menu name="coordinate" label="l:axes.menu.coordinateMgnt"
+					priority="1000" group="g1">
+					<menu name="userMgnt" label="l:axes.page.userMgnt"
+						action="page:userMgnt" group="g2" />
+					<menu name="roleMgnt" label="l:axes.page.roleMgnt"
+						action="page:roleMgnt" group="g2" />
+					<menu name="organizationMgnt"
+						label="l:axes.page.organizationMgnt"
+						action="page:organizationMgnt" group="g2" />
+					<menu name="domainMgnt" label="l:axes.page.domainMgnt"
+						action="page:domainMgnt" group="g3" />
+					<menu name="secretMgnt" label="l:axes.page.secretMgnt"
+						action="page:secretMgnt" group="g3" />
+					<menu name="logMgnt" label="l:axes.page.logMgnt"
+						action="page:logMgnt" group="g4" />
+					<menu name="jobMgnt" label="l:axes.page.jobMgnt"
+						action="page:jobMgnt" group="g4" />
+					<menu name="hookMgnt" label="l:axes.page.hookMgnt"
+						action="page:hookMgnt" group="g4" />
+				</menu>
+				<menu name="setting" label="l:axes.menu.setting"
+					priority="9000" group="g1">
+					<menu name="settingMgnt" label="l:axes.page.settingMgnt"
+						action="page:settingMgnt" />
+				</menu>
+			</menu>
+			<menu name="misc">
+				<menu name="user" label="#{displayName}" priority="1000">
+					<menu name="mySettings" label="l:axes.page.mySettings"
+						priority="1000" action="page:mySettings" group="g1" />
+					<menu name="logout" label="l:axes.menu.logout" priority="1000"
+						action="href:/logout" group="g2" />
+				</menu>
+			</menu>
+		</menus>
+		<hookUrlExpr>#apiBasePath+'/api/coordinate/v1/hook/trigger/'+#hook.zone+'/'+#hook.uid
+		</hookUrlExpr>
+		<permissionPresets>
+			<preset name="user" >
+				<item target="coordinate-profile" action="modify"/>
+				<item target="coordinate-user" action="view"/>
+				<item target="coordinate-organization" action="view"/>
+				<item target="coordinate-job" action="view"/>
+				<item target="coordinate-hook" action="view"/>
+				<item target="coordinate-setting" action="view"/>
+			</preset>
+			<preset name="admin" >
+				<item target="axes" action="view"/>
+				<item target="coordinate-admin-user" action="modify"/>
+				<item target="coordinate-admin-role" action="modify"/>
+				<item target="coordinate-admin-domain" action="modify"/>
+				<item target="coordinate-admin-secret" action="modify"/>
+				<item target="coordinate-admin-organization" action="modify"/>
+				<item target="coordinate-admin-log" action="modify"/>
+				<item target="coordinate-admin-job" action="modify"/>
+				<item target="coordinate-admin-hook" action="modify"/>
+				<item target="coordinate-admin-setting" action="modify"/>
+			</preset>
+		</permissionPresets>
+	</axes>
+</config>

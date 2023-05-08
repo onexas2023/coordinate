@@ -1,0 +1,12 @@
+<vlayout vflex="1" hflex="1">
+	<singletabbox id="vtabbox" sclass="classic1" vflex="1" hflex="1">
+		<tabs>
+			<tab label="${x:l('axes.serverSetting')}"></tab>
+			<tab label="${x:l('axes.miscSetting')}"></tab>
+		</tabs>
+		<tabpanels>
+			<singletabpanel id="vserverSetting" src="~@/axes/admin/setting/serverSetting.zul"></singletabpanel>
+			<singletabpanel id="vmiscSetting" src="~@/axes/admin/setting/miscSetting.zul"></singletabpanel>
+		</tabpanels>
+	</singletabbox>
+</vlayout>

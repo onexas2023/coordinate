@@ -1,0 +1,49 @@
+<vlayout hflex="1" vflex="1"
+	apply="onexas.axes.web.zk.ctrl.admin.hook.HookListCtrl"
+	spacing="0">
+	<listbox id="vhooks" hflex="1" vflex="1"
+		forward="onSelect=mainComp.onSelect"
+		emptyMessage="${x:l('axes.msg.emptyList')}">
+		<listhead>
+			<listheader hflex="2" label="${x:l('axes.uid')}"></listheader>
+			<listheader hflex="1"
+				label="${x:l('axes.hook.zone')}">
+			</listheader>
+			<listheader hflex="1"
+				label="${x:l('axes.hook.ownerType')}">
+			</listheader>
+			<listheader hflex="2"
+				label="${x:l('axes.hook.ownerUid')}">
+			</listheader>
+			<listheader hflex="1"
+				label="${x:l('axes.hook.trigger')}">
+			</listheader>
+			<listheader hflex="3"
+				label="${x:l('axes.createdDateTime')}" sclass="sortable"
+				forward="onClick=mainComp.onColumnSort(createdDateTime)">
+			</listheader>
+		</listhead>
+		<template name="model">
+			<listitem>
+				<listcell label="${each.uid}" sclass="ellipsis-txt"></listcell>
+				<listcell label="${each.zone}"
+					sclass="ellipsis-txt">
+				</listcell>
+				<listcell label="${each.ownerType}"
+					sclass="ellipsis-txt">
+				</listcell>
+				<listcell label="${each.ownerUid}"
+					sclass="ellipsis-txt">
+				</listcell>
+				<listcell label="${mainCtrl.getTriggerInfo(each)}"
+					sclass="ellipsis-txt">
+				</listcell>
+				<listcell
+					label="${mainCtrl.getCreatedDateTimeInfo(each)}"
+					sclass="ellipsis-txt">
+				</listcell>
+			</listitem>
+		</template>
+	</listbox>
+	<paging id="vpaging" hflex="1" forward="onPaging=mainComp.onPaging" />
+</vlayout>

@@ -1,0 +1,17 @@
+<vlayout apply="onexas.axes.web.zk.ctrl.admin.organization.OrganizationEditorCtrl" vflex="1" hflex="1">
+	<div id="vhintbox" sclass="form-layout">
+		<div sclass="hint-box">
+			<label value="${x:l('axes.msg.blankOrganizationEditorHint')}"/>
+		</div>
+	</div>
+	<singletabbox id="vtabbox" sclass="classic1" visible="false" vflex="1" hflex="1">
+		<tabs>
+			<tab id="vorganizationInfo" label="${x:l('axes.information')}" sclass="max-width-ellipsis" ></tab>
+			<tab id="vorganizationOrganizations" label="${x:l('axes.organization.users')}" ></tab>
+		</tabs>
+		<tabpanels>
+			<singletabpanel id="vorganizationInfoEditor" src="~@/axes/admin/organization/organizationInfoEditor.zul"></singletabpanel>
+			<singletabpanel id="vorganizationUsersEditor" src="~@/axes/admin/organization/organizationUsersEditor.zul"></singletabpanel>
+		</tabpanels>
+	</singletabbox>
+</vlayout>

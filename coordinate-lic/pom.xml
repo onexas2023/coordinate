@@ -1,0 +1,25 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>onexas.coordinate</groupId>
+		<artifactId>coordinate-root</artifactId>
+		<version>0.0.0.XASHUB-DEV-SNAPSHOT</version>
+		<relativePath>../coordinate-root/pom.xml</relativePath>
+	</parent>
+	<artifactId>coordinate-lic</artifactId>
+	<packaging>jar</packaging>
+	<name>coordinate-lic</name>
+	
+	<dependencies>	
+		<dependency>
+			<groupId>onexas.coordinate</groupId>
+			<artifactId>coordinate-common</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+	</dependencies>
+	<build>
+		<plugins>
+		</plugins>
+	</build>
+</project>

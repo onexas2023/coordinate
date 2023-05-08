@@ -1,0 +1,34 @@
+<vlayout hflex="1" vflex="1" apply="onexas.axes.web.zk.ctrl.admin.job.JobFilterCtrl" spacing="0" sclass="form-layout">
+	<grid forward="onOK=mainComp.onFilter" vflex="1">
+		<columns>
+			<column hflex="1" />
+		</columns>
+		<rows>
+			<row sclass="narrow">
+				<label sclass="form-title" value="${x:l('axes.state')}" />
+			</row>
+			<row>
+				<listbox id="vstate" hflex="1" sclass="form-input" mold="select" >
+					<template name="model">
+						<listitem label="${each}"/>
+					</template>
+				</listbox>
+			</row>
+			<row sclass="narrow">
+				<label sclass="form-title" value="${x:l('axes.error')}" />
+			</row>
+			<row>
+				<listbox id="verror" hflex="1" sclass="form-input" mold="select" >
+					<template name="model">
+						<listitem label="${each}"/>
+					</template>
+				</listbox>
+			</row>
+		</rows>
+	</grid>
+	<hlayout hflex="1" sclass="form-btn-box">
+		<div hflex="1" />
+		<button label="${x:l('axes.search')}" forward="onClick=mainComp.onFilter" />
+		<button label="${x:l('axes.reset')}" forward="onClick=mainComp.onReset" sclass="slave" />
+	</hlayout>
+</vlayout>

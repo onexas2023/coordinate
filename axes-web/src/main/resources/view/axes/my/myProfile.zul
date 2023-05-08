@@ -1,0 +1,30 @@
+<vlayout apply="onexas.axes.web.zk.ctrl.my.MyProfileCtrl"
+	vflex="1" hflex="1" sclass="form-layout">
+	<grid forward="onOK=mainComp.onSave" sclass="form-grid" vflex="1">
+		<columns>
+			<column align="right" hflex="min" label="-" />
+			<column hflex="1" label="-" />
+		</columns>
+		<rows>
+			<row>
+				<label sclass="form-title-require"
+					value="${x:l('axes.user.displayName')}" />
+				<cell>
+					<textbox id="vdisplayName" sclass="form-input fullwidth"/>
+				</cell>
+			</row>
+			<row>
+				<label sclass="form-title-require"
+					value="${x:l('axes.user.email')}" />
+				<cell>
+					<textbox id="vemail" sclass="form-input fullwidth"/>
+				</cell>
+			</row>
+		</rows>
+	</grid>
+	<hlayout hflex="1" sclass="form-btn-box">
+		<div hflex="1" />
+		<button label="${x:l('axes.save')}"
+			forward="onClick=mainComp.onSave" />
+	</hlayout>
+</vlayout>

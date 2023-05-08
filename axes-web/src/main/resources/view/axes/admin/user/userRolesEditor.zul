@@ -1,0 +1,63 @@
+<vlayout
+	apply="onexas.axes.web.zk.ctrl.admin.user.UserRolesEditorCtrl"
+	vflex="1" hflex="1" sclass="form-layout" spacing="0">
+	<toolbar hflex="1" sclass="classic2">
+		<hlayout sclass="z-valign-middle">
+			<div hflex="1"/>
+			<toolbarbutton iconSclass="fas fa-plus" tooltiptext="${x:l('axes.add')}"
+				forward="onClick=mainComp.onAddRole" />
+		</hlayout>
+	</toolbar>
+	<grid id="vroles" vflex="1" hflex="1"
+		emptyMessage="${x:l('axes.msg.emptyList')}">
+		<columns>
+			<column hflex="min" />
+			<column hflex="1" label="${x:l('axes.code')}"
+				sclass="sortable" forward="onClick=mainComp.onColumnSort(code)" />
+			<column hflex="1" label="${x:l('axes.name')}"
+				sclass="sortable" forward="onClick=mainComp.onColumnSort(name)" />
+			<column hflex="min" />
+		</columns>
+		<template name="model">
+			<row sclass="narrow">
+				<cell sclass="iconCell">
+					<i sclass="${mainCtrl.getRoleIconSclass(each)}" />
+				</cell>
+				<label value="${each.code}" />
+				<label value="${each.name}" />
+				<hlayout>
+					<button iconSclass="fas fa-unlink" tooltiptext="${x:l('axes.remove')}"
+						forward="onClick=mainComp.onRemoveRole(${each})" sclass="slave"
+						disabled="${mainCtrl.isInToRemove(each) }" />
+				</hlayout>
+			</row>
+		</template>
+	</grid>
+	<hlayout hflex="1">
+		<groupbox closable="false" hflex="1">
+			<caption label="${x:l('axes.toAdd')}"></caption>
+			<hlayout style="height:80px">
+				<div id="vtoadd" sclass="chosen-box" hflex="1" vflex="1"
+					style="overflow-y:auto">
+				</div>
+				<button iconSclass="fas fa-eraser" tooltiptext="${x:l('axes.clear')}"
+					forward="onClick=mainComp.onClearToAdd()" sclass="slave" />
+			</hlayout>
+		</groupbox>
+		<groupbox closable="false" hflex="1">
+			<caption label="${x:l('axes.toRemove')}"></caption>
+			<hlayout style="height:80px">
+				<div id="vtoremove" sclass="chosen-box" hflex="1"
+					vflex="1" style="overflow-y:auto">
+				</div>
+				<button iconSclass="fas fa-eraser" tooltiptext="${x:l('axes.clear')}"
+					forward="onClick=mainComp.onClearToRemove()" sclass="slave" />
+			</hlayout>
+		</groupbox>
+	</hlayout>
+	<hlayout hflex="1" sclass="form-btn-box">
+		<div hflex="1" />
+		<button label="${x:l('axes.save')}"
+			forward="onClick=mainComp.onSave" />
+	</hlayout>
+</vlayout>

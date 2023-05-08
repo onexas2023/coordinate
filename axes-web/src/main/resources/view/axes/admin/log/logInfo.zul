@@ -1,0 +1,43 @@
+<vlayout hflex="1" vflex="1" apply="onexas.axes.web.zk.ctrl.admin.log.LogInfoCtrl" spacing="0">
+	<grid id="vinfo" vflex="1" hflex="1" sclass="form-grid">
+		<columns>
+			<column align="right" hflex="min" label="-"/>
+			<column hflex="1" label="-"/>
+		</columns>
+		<rows>
+			<row>
+				<label sclass="form-title" value="${x:l('axes.log.reporter')}" />
+				<label id="vreporter"/>
+			</row>
+			<row>
+				<label sclass="form-title" value="${x:l('axes.createdDateTime')}" />
+				<label id="vcreatedDateTime" />
+			</row>	
+			<row>
+				<label sclass="form-title" value="${x:l('axes.log.level')}" />
+				<label id="vlevel" />
+			</row>				
+			<row>
+				<label sclass="form-title" value="${x:l('axes.log.objUid')}" />
+				<label id="vobjId"/>
+			</row>
+			<row>
+				<label sclass="form-title" value="${x:l('axes.log.objType')}" />
+				<label id="vobjType"/>
+			</row>
+			<row>
+				<label sclass="form-title" value="${x:l('axes.log.subjectUid')}" />
+				<label id="vsubjectId" />
+			</row>
+			<row>
+				<label sclass="form-title" value="${x:l('axes.log.subjectType')}" />
+				<label id="vsubjectType"/>
+			</row>			
+
+			<row>
+				<label sclass="form-title" value="${x:l('axes.log.content')}" />
+				<label id="vcontent" multiline="true" />
+			</row>
+		</rows>
+	</grid>
+</vlayout>

@@ -1,0 +1,123 @@
+<taglib>
+	<short-name>axes</short-name>
+	<uri>tld://onexas/axes</uri>
+	<function>
+		<name>l</name>
+		<function-class>onexas.axes.web.zk.core.TaglibFn</function-class>
+		<function-signature>
+			java.lang.String getLabel(java.lang.String)
+		</function-signature>
+	</function>
+	<function>
+		<name>ll</name>
+		<function-class>onexas.axes.web.zk.core.TaglibFn</function-class>
+		<function-signature>
+			java.lang.String getLabel(java.lang.String,java.lang.String)
+		</function-signature>
+	</function>
+	<function>
+		<name>lll</name>
+		<function-class>onexas.axes.web.zk.core.TaglibFn</function-class>
+		<function-signature>
+			java.lang.String getLabel(java.lang.String,java.lang.String,java.lang.String)
+		</function-signature>
+	</function>	
+	<function>
+		<name>l1</name>
+		<function-class>onexas.axes.web.zk.core.TaglibFn</function-class>
+		<function-signature>
+			java.lang.String getLabelWithArgs(java.lang.String,java.lang.String)
+		</function-signature>
+	</function>	
+	<function>
+		<name>l2</name>
+		<function-class>onexas.axes.web.zk.core.TaglibFn</function-class>
+		<function-signature>
+			java.lang.String getLabelWithArgs(java.lang.String,java.lang.String,java.lang.String)
+		</function-signature>
+	</function>	
+	<function>
+		<name>l3</name>
+		<function-class>onexas.axes.web.zk.core.TaglibFn</function-class>
+		<function-signature>
+			java.lang.String getLabelWithArgs(java.lang.String,java.lang.String,java.lang.String,java.lang.String)
+		</function-signature>
+	</function>				
+	<function>
+		<name>pfxl</name>
+		<function-class>onexas.axes.web.zk.core.TaglibFn</function-class>
+		<function-signature>
+			java.lang.String getPrefixedLabel(java.lang.String)
+		</function-signature>
+	</function>
+	<function>
+		<name>cfg</name>
+		<function-class>onexas.axes.web.zk.core.TaglibFn</function-class>
+		<function-signature>
+			onexas.app.Config getConfig()
+		</function-signature>
+	</function>
+	<function>
+		<name>cfgboolean</name>
+		<function-class>onexas.axes.web.zk.core.TaglibFn</function-class>
+		<function-signature>
+			boolean getConfigAsBoolean(java.lang.String)
+		</function-signature>
+	</function>	
+	<function>
+		<name>cfglist</name>
+		<function-class>onexas.axes.web.zk.core.TaglibFn</function-class>
+		<function-signature>
+			onexas.app.Config getConfigAsList(java.lang.String)
+		</function-signature>
+	</function>
+	<function>
+		<name>esclabel</name>
+		<function-class>onexas.axes.web.zk.core.TaglibFn</function-class>
+		<function-signature>
+			java.lang.String getEscLabel(java.lang.String)
+		</function-signature>
+	</function>
+	<function>
+		<name>loadjs</name>
+		<function-class>onexas.axes.web.zk.core.TaglibFn</function-class>
+		<function-signature>
+			java.lang.String loadJsResource(java.lang.String,boolean,boolean)
+		</function-signature>
+	</function>
+	<function>
+		<name>loadcss</name>
+		<function-class>onexas.axes.web.zk.core.TaglibFn</function-class>
+		<function-signature>
+			java.lang.String loadCssResource(java.lang.String,boolean,boolean)
+		</function-signature>
+	</function>	
+	<function>
+		<name>perm</name>
+		<function-class>onexas.axes.web.zk.core.TaglibFn</function-class>
+		<function-signature>
+			boolean hasPermission(java.lang.String,java.lang.String)
+		</function-signature>
+	</function>
+	<function>
+		<name>anyperm</name>
+		<function-class>onexas.axes.web.zk.core.TaglibFn</function-class>
+		<function-signature>
+			boolean hasPermission(java.lang.String)
+		</function-signature>
+	</function>
+	<function>
+		<name>displayloc</name>
+		<function-class>onexas.axes.web.zk.core.TaglibFn</function-class>
+		<function-signature>
+			String getLocaleDisplay(java.util.Locale,java.util.Locale)
+		</function-signature>
+	</function>
+	<function>
+		<name>ellipsis</name>
+		<function-class>onexas.axes.web.zk.core.TaglibFn</function-class>
+		<function-signature>
+			java.lang.String ellipsis(java.lang.String, java.lang.Integer)
+		</function-signature>
+	</function>
+</taglib>

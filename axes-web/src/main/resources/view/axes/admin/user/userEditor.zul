@@ -1,0 +1,17 @@
+<vlayout apply="onexas.axes.web.zk.ctrl.admin.user.UserEditorCtrl" vflex="1" hflex="1">
+	<div id="vhintbox" sclass="form-layout">
+		<div sclass="hint-box">
+			<label value="${x:l('axes.msg.blankUserEditorHint')}"/>
+		</div>
+	</div>
+	<singletabbox id="vtabbox" sclass="classic1" visible="false" vflex="1" hflex="1">
+		<tabs>
+			<tab id="vuserInfo" label="${x:l('axes.information')}" sclass="max-width-ellipsis"></tab>
+			<tab id="vuserRoles" label="${x:l('axes.user.roles')}" ></tab>
+		</tabs>
+		<tabpanels>
+			<singletabpanel id="vuserInfoEditor" src="~@/axes/admin/user/userInfoEditor.zul"></singletabpanel>
+			<singletabpanel id="vuserRolesEditor" src="~@/axes/admin/user/userRolesEditor.zul"></singletabpanel>
+		</tabpanels>
+	</singletabbox>
+</vlayout>

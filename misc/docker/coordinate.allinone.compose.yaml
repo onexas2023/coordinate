@@ -1,0 +1,37 @@
+version: '3.1'
+services:
+  coordinate:
+    image: nexus.mshome.net:8082/repository/docker-releases/coordinate:latest
+    ports:
+      - 28088:8088
+    environment:
+      COORDINATE_JDBC_URL: jdbc:h2:mem:coordinate;DB_CLOSE_ON_EXIT=FALSE
+      COORDINATE_JDBC_DRIVER: org.h2.Driver
+      COORDINATE_JDBC_USER: sa
+      COORDINATE_JDBC_PASSWORD: sa
+      COORDINATE_SESSION_JDBC_INITIALIZE_SCHEMA: embedded
+      COORDINATE_SESSION_JDBC_SCHEMA: classpath:org/springframework/session/jdbc/schema-h2.sql
+      COORDINATE_SESSION_JDBC_TABLE_NAME: SPRING_SESSION
+      COORDINATE_DATA_SCHEMA_AUTO_MIGRATION: 'false'
+      COORDINATE_DATA_SCHEMA_HBM2DDL_AUTO: create    
+      COORDINATE_INIT_SECRET: 1234
+  axes:
+    image: nexus.mshome.net:8082/repository/docker-releases/axes:latest
+    ports:
+      - 28080:8080
+    environment:
+      AXES_JDBC_URL: jdbc:h2:mem:axes;DB_CLOSE_ON_EXIT=FALSE
+      AXES_JDBC_DRIVER: org.h2.Driver
+      AXES_JDBC_USER: sa
+      AXES_JDBC_PASSWORD: sa
+      AXES_SESSION_JDBC_INITIALIZE_SCHEMA: embedded
+      AXES_SESSION_JDBC_SCHEMA: classpath:org/springframework/session/jdbc/schema-h2.sql
+      AXES_SESSION_JDBC_TABLE_NAME: SPRING_SESSION
+      COORDINATE_API_BASE_PATH: http://coordinate:8088/
+  sphere:
+    image: nexus.mshome.net:8082/repository/docker-releases/sphere:latest
+    ports:
+      - 20080:80
+    environment:
+      ## $${} for escape ${}
+      SPHERE_CLIENT_COORDINATE_API_BASE_PATH: http://$${REQUEST_HOST_NAME}:28088      

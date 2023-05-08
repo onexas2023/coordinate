@@ -1,0 +1,38 @@
+<vlayout hflex="1" vflex="1"
+	apply="onexas.axes.web.zk.ctrl.admin.user.UserListCtrl"
+	spacing="0">
+	<toolbar hflex="1" sclass="classic2">
+		<hlayout sclass="z-valign-middle">
+			<div>
+				<textbox id="vkeyword" sclass="form-input"
+					forward="onChange=mainComp.onSearch,onOK=mainComp.onSearch" />
+				<i sclass="fas fa-search float-hint" />
+			</div>
+		</hlayout>
+	</toolbar>
+	<listbox id="vusers" hflex="1" vflex="1"
+		forward="onSelect=mainComp.onSelect"
+		emptyMessage="${x:l('axes.msg.emptyList')}">
+		<listhead>
+			<listheader hflex="1"
+				label="${x:l('axes.user.account')}" sclass="sortable"
+				forward="onClick=mainComp.onColumnSort(account)">
+			</listheader>
+			<listheader hflex="1"
+				label="${x:l('axes.user.displayName')}" sclass="sortable"
+				forward="onClick=mainComp.onColumnSort(displayName)">
+			</listheader>
+			<listheader hflex="1" label="${x:l('axes.domain')}"></listheader>
+		</listhead>
+		<template name="model">
+			<listitem>
+				<listcell label="${each.account}"></listcell>
+				<listcell label="${each.displayName}"></listcell>
+				<listcell
+					label="${mainCtrl.getDomainName(each.domain)}">
+				</listcell>
+			</listitem>
+		</template>
+	</listbox>
+	<paging id="vpaging" hflex="1" forward="onPaging=mainComp.onPaging" />
+</vlayout>

@@ -1,0 +1,17 @@
+<borderlayout apply="onexas.axes.web.zk.ctrl.admin.JobMgntCtrl" hflex="1" vflex="1" sclass="classic1">
+	<north splittable="false" collapsible="false">
+		<toolbar hflex="1" sclass="classic1">
+			<label value="${x:l('axes.page.jobMgnt')}" sclass="h1" />
+			<separator/>
+		</toolbar>
+	</north>
+	<west size="30%" vflex="true" minsize="250" splittable="true" collapsible="true">
+		<include src="~@/axes/admin/job/jobFilter.zul"></include>
+	</west>
+	<center>
+		<vlayout hflex="1" vflex="1" spacing="0">
+			<include vflex="1" id="vlistInc" src="~@/axes/admin/job/jobList.zul"></include>
+			<include vflex="1" id="vinfoInc" visible="false"></include>
+		</vlayout>
+	</center>
+</borderlayout>

@@ -1,0 +1,6 @@
+<config name="coordinate-impl">
+	<coordinateData>
+		<entityPackage>onexas.coordinate.service.impl.entity</entityPackage>
+		<schemaMigratorClass>onexas.coordinate.service.impl.SchemaMigratorImpl</schemaMigratorClass>
+	</coordinateData>
+</config>

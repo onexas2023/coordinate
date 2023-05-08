@@ -1,0 +1,298 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>org.springframework.boot</groupId>
+		<artifactId>spring-boot-starter-parent</artifactId>
+		<!-- Dec, 2020 -->
+		<version>2.3.7.RELEASE</version>
+		<relativePath /> <!-- lookup parent from repository -->
+	</parent>
+	<groupId>onexas.coordinate</groupId>
+	<artifactId>coordinate-root</artifactId>
+	<packaging>pom</packaging>
+	<version>0.0.0.XASHUB-DEV-SNAPSHOT</version>
+	<name>coordinate-root</name>
+	<description>cRoot project for Coordinate</description>
+
+	<properties>
+		<java.version>1.8</java.version>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+
+		<!-- api -->
+		<!-- Dec, 2020 -->
+		<springdoc.version>1.5.2</springdoc.version>
+		<!-- Dec, 2020 -->
+		<swagger-api.version>2.1.6</swagger-api.version>
+
+		<openapi-generator.version>5.0.0</openapi-generator.version>
+		<!-- apache ldap -->
+		<apache-directory.version>1.0.0-RC1</apache-directory.version>
+
+		<guava.version>20.0</guava.version>
+		<bcprov-jdk16.version>1.46</bcprov-jdk16.version>
+		<yuicompressor.version>2.4.8</yuicompressor.version>
+		<jsch.version>0.1.55</jsch.version>
+		<commons-configuration.version>1.10</commons-configuration.version>
+		<commons-fileupload.version>1.4</commons-fileupload.version>
+		<commons-configuration2.version>2.4</commons-configuration2.version>
+		<commons-collections.version>3.2.2</commons-collections.version>
+		<commons-validator.version>1.6</commons-validator.version>
+		<jacoco.version>0.8.6</jacoco.version>
+	</properties>
+	<repositories>
+		<repository>
+			<id>onexas-maven-public</id>
+			<url>http://nexus.mshome.net:8081/repository/maven-public/</url>
+		</repository>
+	</repositories>
+	<distributionManagement>
+		<site>
+			<id>onexas</id>
+			<!-- the url must end with staging, sub-module's site:stage use 'staging' 
+				as relative path -->
+			<url>scp://onexas/www/coordinate/docs/staging/</url>
+		</site>		
+		<!-- remember to set onexas-maven authentication in m2 setting -->
+		<repository>
+			<id>onexas-maven</id>
+			<name>Internal Releases</name>
+			<url>http://nexus.mshome.net:8081/repository/maven-releases/</url>
+		</repository>
+		<snapshotRepository>
+			<id>onexas-maven</id>
+			<name>Internal Snapshots</name>
+			<url>http://nexus.mshome.net:8081/repository/maven-snapshots/</url>
+		</snapshotRepository>
+	</distributionManagement>
+	<dependencies>
+		<!-- test -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-test</artifactId>
+			<scope>test</scope>
+		</dependency>
+	</dependencies>
+
+	<modules>
+		<module>../coordinate-common</module>
+		<module>../coordinate-data</module>
+		<module>../coordinate-jms</module>
+		<module>../coordinate-web</module>
+
+		<module>../coordinate-shell</module>
+		<module>../coordinate-impl</module>
+		<module>../coordinate-api</module>
+		<module>../coordinate-api-impl</module>
+
+		<module>../coordinate-app</module>
+
+		<module>../coordinate-api-generator</module>
+		<module>../coordinate-api-sdk</module>
+		<module>../coordinate-api-sdk-typescript</module>
+
+		<module>../axes-web</module>
+		<module>../axes-app</module>
+		
+		<module>../coordinate-lic</module>
+	</modules>
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-source-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>attach-sources</id>
+						<goals>
+							<goal>jar</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-javadoc-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>attach-javadocs</id>
+						<goals>
+							<goal>jar</goal>
+						</goals>
+						<configuration>
+							<!-- 2 for backward compatible -->
+							<additionalparam>-Xdoclint:none</additionalparam>
+							<doclint>none</doclint>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+
+			<!-- limit it, to prevent build fail -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-surefire-plugin</artifactId>
+				<configuration>
+					<!-- if there is no this var in env, then it uses 1 -->
+					<forkCount>${env.TEST_FORK_COUNT}</forkCount>
+					<!-- in many async and queue case, multiple or reuse fork will cause test 
+						unstable, don't use it by default -->
+					<reuseForks>false</reuseForks>
+					<!-- argLine from jacoco -->
+					<argLine>@{jacocoArgLine} -Xmx1024m -XX:MaxPermSize=256m</argLine>
+					<includes>
+						<include>**/*Test.java</include>
+					</includes>
+					<excludes>
+						<!-- we have some test that are for developing, ignore them on regular 
+							build -->
+						<exclude>**/*DevTest.java</exclude>
+					</excludes>
+				</configuration>
+			</plugin>
+			<!-- to build our project site for multiple sub-module, see http://tech-mind.blogspot.tw/2009/01/configure-site-plugin-for-maven-multi.html -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-site-plugin</artifactId>
+				<!-- don't use managed version to avoid java.lang.NoClassDefFoundError: 
+					org/apache/maven/doxia/siterenderer/DocumentContent -->
+				<inherited>false</inherited>
+				<version>3.4</version>
+				<configuration>
+					<siteDirectory>${project.parent.basedir}/src/site</siteDirectory>
+					<stagingDirectory>${session.executionRootDirectory}/target/staging/${project.artifactId}</stagingDirectory>
+				</configuration>
+			</plugin>
+			<!-- with maven-site-plugin -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-project-info-reports-plugin</artifactId>
+				<version>2.7</version>
+			</plugin>
+
+			<!-- jacoco coverage report -->
+			<plugin>
+				<groupId>org.jacoco</groupId>
+				<artifactId>jacoco-maven-plugin</artifactId>
+				<version>${jacoco.version}</version>
+				<executions>
+					<execution>
+						<id>prepare-agent</id>
+						<goals>
+							<goal>prepare-agent</goal>
+						</goals>
+						<configuration>
+							<destFile>${session.executionRootDirectory}/target/jacoco/${project.artifactId}.exec</destFile>
+							<propertyName>jacocoArgLine</propertyName>
+						</configuration>
+					</execution>
+					<execution>
+						<id>report</id>
+						<phase>verify</phase>
+						<goals>
+							<goal>report</goal>
+						</goals>
+						<configuration>
+							<dataFile>${session.executionRootDirectory}/target/jacoco/${project.artifactId}.exec</dataFile>
+						</configuration>
+					</execution>
+					<!--  I didn't success the all in one report when staging -->
+					<!--  TODO , make the merge or aggregate work, remove the skip when done-->
+					<execution>
+						<id>merge</id>
+						<phase>pre-site</phase>
+						<goals>
+							<goal>merge</goal>
+						</goals>
+						<configuration>
+							<fileSets>
+								<fileSet>
+									<directory>${session.executionRootDirectory}/target/jacoco/</directory>
+									<includes>
+										<include>*.exec</include>
+									</includes>
+								</fileSet>
+							</fileSets>
+							<destFile>${session.executionRootDirectory}/target/jacoco-merge.exec</destFile>
+							<skip>true</skip>
+						</configuration>
+					</execution>
+					<execution>
+						<id>report-aggregate</id>
+						<phase>pre-site</phase>
+						<goals>
+							<goal>report-aggregate</goal>
+						</goals>
+						<configuration>
+							<dataFileInlucdes>
+								<dataFileInclude>${session.executionRootDirectory}/target/jacoco/*.exec</dataFileInclude>
+							</dataFileInlucdes>
+							<outputDirectory>${session.executionRootDirectory}/target/site/jacoco-aggregate</outputDirectory>
+						</configuration>
+					</execution>
+					<execution>
+						<id>report-merge</id>
+						<phase>pre-site</phase>
+						<goals>
+							<goal>report</goal>
+						</goals>
+						<configuration>
+							<dataFile>${session.executionRootDirectory}/target/jacoco-merge.exec</dataFile>
+							<outputDirectory>${session.executionRootDirectory}/target/site/jacoco-merge</outputDirectory>
+							<skip>true</skip>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+		<pluginManagement>
+			<plugins>
+
+				<!-- for child who wants to generate test-jar files -->
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-jar-plugin</artifactId>
+					<executions>
+						<execution>
+							<goals>
+								<goal>test-jar</goal>
+							</goals>
+						</execution>
+					</executions>
+				</plugin>
+			</plugins>
+		</pluginManagement>
+	</build>
+	<reporting>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-project-info-reports-plugin</artifactId>
+				<version>2.7</version>
+				<!-- http://maven.apache.org/plugins/maven-project-info-reports-plugin/examples/selective-project-info-reports.html -->
+				<reportSets>
+					<reportSet>
+						<reports>
+							<report>index</report>
+							<report>license</report>
+						</reports>
+					</reportSet>
+				</reportSets>
+			</plugin>
+
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-surefire-report-plugin</artifactId>
+				<version>3.0.0-M3</version>
+				<configuration>
+					<aggregate>true</aggregate>
+					<!-- <showSuccess>true</showSuccess> -->
+				</configuration>
+			</plugin>
+		</plugins>
+	</reporting>
+</project>

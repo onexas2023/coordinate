@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<config name="coordinate-api-sdk-test" depends="coordinate-api-sdk">
+	<app>
+		<initSecret>ilovedennis</initSecret>
+		<adminAccountDeletable>true</adminAccountDeletable>
+	</app>
+</config>

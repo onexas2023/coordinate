@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<package name="axeswgt.xterm" language="xul/html" depends="axeswgt" >
+
+	<function class="onexas.axes.web.zk.component.Wpds"
+		signature="java.lang.String getXtermJs(javax.servlet.ServletRequest, javax.servlet.ServletResponse)"/>
+		
+	<script src="afterload.js" />
+	<widget name="Xterm" />
+</package>

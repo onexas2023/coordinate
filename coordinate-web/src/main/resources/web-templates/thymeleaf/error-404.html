@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<link type="text/css" href="/thymeleaf/error.css" rel="stylesheet" />
+</head>
+<body>
+	<h1 class="header">
+		404 - Page <span th:text="${requestUri}"></span> Not Found 
+	</h1>
+	<p />
+	<p class="error-message">The page you're looking for no longer exist. Return to the Home page</p>
+	<p class="error-message" th:text="${errorMessage}">Error Message</p>
+	<p />
+	<p class="navigation">
+		<a href="/" th:unless="${requestUri} == '/'">Go Home</a>
+	</p>
+</body>
+</html>

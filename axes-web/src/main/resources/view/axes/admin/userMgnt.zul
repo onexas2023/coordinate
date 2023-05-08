@@ -1,0 +1,15 @@
+<borderlayout apply="onexas.axes.web.zk.ctrl.admin.UserMgntCtrl" hflex="1" vflex="1" sclass="classic1">
+	<north splittable="false" collapsible="false">
+		<toolbar hflex="1" sclass="classic1">
+			<label value="${x:l('axes.page.userMgnt')}" sclass="h1" />
+			<separator/>
+			<toolbarbutton iconSclass="fas fa-plus"  tooltiptext="${x:l('axes.create')}" forward="onClick=mainComp.onNew" />
+		</toolbar>
+	</north>
+	<west size="30%" vflex="true" minsize="250" splittable="true" collapsible="true">
+		<include src="~@/axes/admin/user/userList.zul"></include>
+	</west>
+	<center>
+		<include id="veditorInc" src="~@/axes/admin/user/userEditor.zul"></include>
+	</center>
+</borderlayout>

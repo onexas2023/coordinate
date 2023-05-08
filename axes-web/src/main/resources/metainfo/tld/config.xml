@@ -1,0 +1,7 @@
+<config>
+	<config-name>axes-tlds</config-name>
+	<taglib>
+		<taglib-uri>tld://onexas/axes</taglib-uri>
+		<taglib-location>/metainfo/tld/axes.tld</taglib-location>
+	</taglib>
+</config>

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<config name="coordinate">
+	<app>
+		<name>Coordinate</name>
+		<version>0.0.0.XASHUB-DEV-SNAPSHOT</version>
+		<versions>
+			<version name="coordinate">0.0.0.XASHUB-DEV-SNAPSHOT</version>
+		</versions>
+	</app>
+	<coordinateCommon>
+		<model>
+			<additionalSchemaClass>onexas.coordinate.model.JobState</additionalSchemaClass>
+			<additionalSchemaClass>onexas.coordinate.model.OrganizationUserRelationType</additionalSchemaClass>
+		</model>
+	</coordinateCommon>
+</config>

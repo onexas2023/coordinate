@@ -1,0 +1,7 @@
+<?init class="onexas.axes.web.zk.util.EntryPageInitial" auth="false"?>
+
+<vlayout apply="onexas.axes.web.zk.ctrl.TestCtrl" vflex="1" hflex="1">
+	<textbox id="vuri"/>
+	<xterm id="vxterm" vflex="1" hflex="1"/>
+	<button label="remove" forward="onClick=mainComp.onRemove"/>
+</vlayout>

@@ -1,0 +1,24 @@
+<div 
+    apply="onexas.axes.web.zk.ctrl.AxesCtrl" sclass="axes-page"
+	hflex="1" vflex="1">
+	<div id="vtimerbox" style="display:none" />
+	<vlayout id="vbody" hflex="1" vflex="1" spacing="0"
+		sclass="axes-body">
+		<hlayout hflex="1" spacing="0"
+			sclass="z-valign-middle axes-menu">
+			<custom-attributes org.zkoss.zul.image.preload="true" />
+			<menubar>
+				<menuitem id="vhomemenu" />
+				<menuseparator/>
+			</menubar>
+			<menubar id="vmainmenubar" hflex="1"/>
+			<menubar id="vmiscmenubar" sclass="misc-menu"/>
+		</hlayout>
+		<include id="vbodyInc" src="" hflex="1" vflex="1"
+			style="overflow-y:auto" />
+	</vlayout>
+	<div id="vlicense" sclass="axes-footer">
+		<label
+			value="${appName}@${appVer} ${appLicense.shortDescription}" />
+	</div>
+</div>

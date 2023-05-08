@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<config name="coordinate-api-impl">
+	<app>
+		<adminAccount>admin</adminAccount>
+		<adminRole>administrators</adminRole>
+		<userRole>users</userRole>
+	</app>
+</config>

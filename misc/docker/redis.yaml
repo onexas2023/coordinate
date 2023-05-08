@@ -1,0 +1,13 @@
+# Use root/example as user/password credentials
+version: '3.1'
+services:
+  redis:
+    image: redis:5.0.3
+    ports:
+      - 6379:6379
+    volumes:
+      - /data/docker/redis-data:/data
+    command: >
+      --requirepass 1234
+
+      

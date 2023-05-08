@@ -1,0 +1,2 @@
+<?init class="onexas.axes.web.zk.util.EntryPageInitial"?>
+<include src="~@/axes/axes.zul" sclass="entry-page"/>
