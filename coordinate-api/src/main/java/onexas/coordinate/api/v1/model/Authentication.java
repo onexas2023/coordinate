@@ -21,6 +21,8 @@ public class Authentication implements Serializable {
 	String displayName;
 
 	String aliasUid;
+	
+	String domain;
 
 	List<UPrincipalPermission> permissions;
 
@@ -55,4 +57,14 @@ public class Authentication implements Serializable {
 	public void setDisplayName(String displayName) {
 		this.displayName = displayName;
 	}
+
+	public String getDomain() {
+		return domain;
+	}
+
+	public void setDomain(String domain) {
+		this.domain = domain;
+	}
+	
+	
 }

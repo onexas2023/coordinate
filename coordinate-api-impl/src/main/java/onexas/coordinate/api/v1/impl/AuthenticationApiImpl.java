@@ -237,6 +237,7 @@ public class AuthenticationApiImpl extends ApiImplBase implements Authentication
 		Authentication auth = new Authentication();
 		auth.setToken(token);
 		auth.setAliasUid(aliasUid);
+		auth.setDomain(user.getDomain());
 		auth.setDisplayName(user.getDisplayName());
 		auth.setPermissions(Jsons.transform(permissions, new TypeReference<List<UPrincipalPermission>>() {
 		}));

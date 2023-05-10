@@ -2,9 +2,11 @@ package onexas.axes.web.zk.ctrl.my;
 
 import org.apache.logging.log4j.util.Strings;
 import org.zkoss.zk.ui.select.annotation.Wire;
+import org.zkoss.zul.Button;
 import org.zkoss.zul.Textbox;
 
 import onexas.api.invoker.ApiException;
+import onexas.axes.web.Constants;
 import onexas.axes.web.model.ValidationFields;
 import onexas.axes.web.zk.util.ComponentValidator;
 import onexas.axes.web.zk.util.CtrlBase;
@@ -27,6 +29,9 @@ public class MyPasswordCtrl extends CtrlBase {
 	
 	@Wire
 	Textbox vpasswordAgain;
+	
+	@Wire
+	Button vsave;
 
 	protected void afterCompose() throws Exception {
 
@@ -41,6 +46,13 @@ public class MyPasswordCtrl extends CtrlBase {
 		voldPassword.setValue("");
 		vpassword.setValue("");
 		vpasswordAgain.setValue("");
+		
+		boolean local = Constants.DOMAIN_LOCAL.equals(workspace.getAuthentication().getDomain());
+		
+		voldPassword.setDisabled(!local);
+		vpassword.setDisabled(!local);
+		vpasswordAgain.setDisabled(!local);
+		vsave.setDisabled(!local);
 	}
 
 	private void doSave() {

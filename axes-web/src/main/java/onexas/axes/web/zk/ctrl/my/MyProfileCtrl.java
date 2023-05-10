@@ -5,6 +5,7 @@ import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
 import org.zkoss.zk.ui.select.annotation.Wire;
+import org.zkoss.zul.Button;
 import org.zkoss.zul.Textbox;
 
 import onexas.api.invoker.ApiException;
@@ -27,6 +28,9 @@ public class MyProfileCtrl extends CtrlBase {
 
 	@Wire
 	Textbox vemail;
+	
+	@Wire
+	Button vsave;
 
 	protected void afterCompose() throws Exception {
 
@@ -44,6 +48,11 @@ public class MyProfileCtrl extends CtrlBase {
 
 		vdisplayName.setValue(profile.getDisplayName());
 		vemail.setValue(profile.getEmail());
+		
+		boolean permission = workspace.hasPermission("coordinate-profile:modify"); 
+		vdisplayName.setDisabled(!permission);
+		vemail.setDisabled(!permission);
+		vsave.setDisabled(!permission);
 
 	}
 
