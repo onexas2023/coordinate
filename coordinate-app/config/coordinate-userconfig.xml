@@ -2,11 +2,4 @@
 	<app>
 		<initSecret>${COORDINATE_INIT_SECRET:#{null}}</initSecret>
 	</app>
-	<coordinate>
-		<domain>
-			<defaultRoles>
-				<role>users</role>
-			</defaultRoles>
-		</domain>
-	</coordinate>
 </config>

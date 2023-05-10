@@ -12,3 +12,5 @@ search-no-criteria-filter: "(&(objectClass=person))"
 user-account-attr: "uid"
 user-display-name-attr: "cn"
 user-email-attr: "mail"
+
+# default-roles: "users"
