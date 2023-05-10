@@ -274,6 +274,9 @@ public class UserServiceImpl implements UserService {
 			boolean fireDisabled = false;
 			// account, domain are not updateable.
 			if (userUpdate.getPassword() != null) {
+				if(!Domain.LOCAL.equals(e.getDomain())){
+					throw new BadArgumentException("can't update non-local domain user's password");
+				}
 				e.setPassword(getPasswordMd5(userUpdate.getPassword()));
 			}
 			if (userUpdate.getDisplayName() != null

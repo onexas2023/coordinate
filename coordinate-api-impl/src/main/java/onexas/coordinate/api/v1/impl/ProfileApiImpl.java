@@ -56,13 +56,14 @@ public class ProfileApiImpl extends ApiImplBase implements ProfileApi {
 
 		String userUid = reqContext.grantUserUid();
 
+		User user = userService.get(userUid);
+		if(!Domain.LOCAL.equals(user.getDomain())) {
+			throw new NoPermissionException("not allow to update a non-local domain user's password");
+		}
+		
 		if (userService.verifyPassword(userUid, passwordUpdate.getOldPassword())) {
 			userService.update(userUid, new UserUpdate().withPassword(passwordUpdate.getNewPassword()));
 		} else {
-			User user = userService.get(userUid);
-			if(user!=null && !Domain.LOCAL.equals(user.getDomain())) {
-				throw new NoPermissionException("not allow to update a non-local domain user's password");
-			}
 			throw new NoPermissionException("invalid old password");
 		}
 		return new Response();

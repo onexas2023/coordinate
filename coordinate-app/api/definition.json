@@ -7799,6 +7799,9 @@
           "displayName" : {
             "type" : "string"
           },
+          "domain" : {
+            "type" : "string"
+          },
           "permissions" : {
             "type" : "array",
             "items" : {

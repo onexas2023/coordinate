@@ -24,7 +24,7 @@
 	</grid>
 	<hlayout hflex="1" sclass="form-btn-box">
 		<div hflex="1" />
-		<button label="${x:l('axes.save')}"
+		<button id="vsave" label="${x:l('axes.save')}"
 			forward="onClick=mainComp.onSave" />
 	</hlayout>
 </vlayout>

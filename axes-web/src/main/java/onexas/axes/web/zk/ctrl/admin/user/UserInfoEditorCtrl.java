@@ -114,6 +114,11 @@ public class UserInfoEditorCtrl extends CtrlBase {
 					domainMap.containsKey(selectedUser.getDomain()) ? domainMap.get(selectedUser.getDomain()).getName()
 							: "");
 			vdisabled.setChecked(Boolean.TRUE.equals(selectedUser.getDisabled()));
+			
+			boolean local = Constants.DOMAIN_LOCAL.equals(selectedUser.getDomain());
+			vpassword.setDisabled(!local);
+			vpwdagain.setDisabled(!local);
+			
 		} else {
 			vuid.setValue("");
 			vaccount.setValue("");
@@ -121,6 +126,8 @@ public class UserInfoEditorCtrl extends CtrlBase {
 			vemail.setValue("");
 			vdomain.setValue("");
 			vdisabled.setChecked(false);
+			vpassword.setDisabled(true);
+			vpwdagain.setDisabled(true);
 		}
 	}
 
