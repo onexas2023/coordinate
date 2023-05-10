@@ -14,6 +14,7 @@
           
  * Fixed Bugs
    * XAS-1 Don't allow password update of a domain user
+   * XAS-17 Support default roles in domain config
          
  * Upgrade Notes
 

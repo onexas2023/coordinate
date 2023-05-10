@@ -2,6 +2,7 @@ package onexas.coordinate.service.impl;
 
 import java.util.HashMap;
 import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -28,10 +29,12 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import onexas.coordinate.common.app.AppContext;
 import onexas.coordinate.common.app.Env;
 import onexas.coordinate.common.err.BadArgumentException;
+import onexas.coordinate.common.err.BadConfigurationException;
 import onexas.coordinate.common.err.NotFoundException;
 import onexas.coordinate.common.lang.Objects;
 import onexas.coordinate.common.lang.Strings;
 import onexas.coordinate.common.model.ListPage;
+import onexas.coordinate.common.util.BetterPropertySource;
 import onexas.coordinate.common.util.Jsons;
 import onexas.coordinate.common.util.Securitys;
 import onexas.coordinate.data.CoordinateEntityManageConfiguration;
@@ -260,6 +263,8 @@ public class UserServiceImpl implements UserService {
 		logService.info(getClass(), e.getUid(), User.class, null, null, "Created user {}/{}", e.getAccount(),
 				e.getDisplayName());
 
+		applyUserDefaultRoles(e);
+
 		return Jsons.transform(e, User.class);
 	}
 
@@ -274,7 +279,7 @@ public class UserServiceImpl implements UserService {
 			boolean fireDisabled = false;
 			// account, domain are not updateable.
 			if (userUpdate.getPassword() != null) {
-				if(!Domain.LOCAL.equals(e.getDomain())){
+				if (!Domain.LOCAL.equals(e.getDomain())) {
 					throw new BadArgumentException("can't update non-local domain user's password");
 				}
 				e.setPassword(getPasswordMd5(userUpdate.getPassword()));
@@ -651,20 +656,48 @@ public class UserServiceImpl implements UserService {
 
 		e.setDomainUserIdentity(domainUser.getIdentity());
 
-		
 		User before = Jsons.transform(e, User.class);
 		eventPublisher.publishEvent(new BeforeCreateUserEvent(before));
-		
+
 		e = userRepo.save(e);
 
 		UserRecordEntity record = new UserRecordEntity();
 		syncRecord(e, record);
 		record = userRecordRepo.save(record);
 
-		logService.info(getClass(), e.getUid(), User.class, null, null, "Created user {}/{}/{}", e.getAccount(),
+		logService.info(getClass(), e.getUid(), User.class, null, null, "Created domain user {}/{}/{}", e.getAccount(),
 				e.getDisplayName(), e.getDomain());
 
+		// add default roles
+		applyUserDefaultRoles(e);
+
 		return Jsons.transform(e, User.class);
+	}
+
+	private void applyUserDefaultRoles(UserEntity user) {
+		try {
+			BetterPropertySource config = domainService.getConfig(user.getDomain()).toPropertySource();
+			List<String> roles = config.getStringList(onexas.coordinate.service.domain.Constants.CONFIG_DEFAULT_ROLES);
+			if (roles != null && roles.size() > 0) {
+				Set<String> roleCodes = new LinkedHashSet<>();
+				for (String code : roles) {
+					Optional<RoleEntity> role = roleRepo.findByCode(code);
+					if (role.isPresent()) {
+						roleUserRelationRepo.save(new RoleUserRelationEntity(role.get().getUid(), user.getUid()));
+						roleCodes.add(code);
+					} else {
+						logger.warn("can't find role {} to add to user {}", code, user.combineAccountDomain());
+					}
+				}
+				if (roleCodes.size() > 0) {
+					logService.info(getClass(), user.getUid(), User.class, null, null,
+							"Set user {} with default roles {}", user.combineAccountDomain(), roleCodes);
+				}
+			}
+		} catch (BadConfigurationException e1) {
+			logger.warn("bad domain configuration, ignore to add default roles to user {}",
+					user.combineAccountDomain());
+		}
 	}
 
 	@Override
