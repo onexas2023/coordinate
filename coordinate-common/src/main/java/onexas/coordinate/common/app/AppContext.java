@@ -11,6 +11,7 @@ import org.springframework.context.ApplicationContextAware;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.EmbeddedValueResolverAware;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.context.event.ContextClosedEvent;
 import org.springframework.core.convert.ConversionService;
 import org.springframework.core.convert.support.DefaultConversionService;
@@ -28,6 +29,7 @@ import onexas.coordinate.common.app.DefinitionValueConfig.DefinitionValueResolve
  *
  */
 @Component(AppContext.BEAN_NAME)
+@Configuration
 public class AppContext
 		implements ApplicationContextAware, ApplicationListener<ContextClosedEvent>, EmbeddedValueResolverAware {
 
