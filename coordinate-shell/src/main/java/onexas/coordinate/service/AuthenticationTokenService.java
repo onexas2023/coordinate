@@ -18,6 +18,8 @@ public interface AuthenticationTokenService {
 	AuthenticationToken find(String token);
 
 	AuthenticationToken extend(String token);
+	
+	boolean shouldExtend(long timeoutAt);
 
 	void delete(String token, boolean quiet);
 	

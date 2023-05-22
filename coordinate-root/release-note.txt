@@ -10,7 +10,8 @@
    * Support Role, Permission & Relation Services & APIs
    * Support Axes, a general console UI.  
        
- * Improvements
+ * Improvements	
+   * XAS-32 Don't extend authtoken for every request, it has bad performance
           
  * Fixed Bugs
    * XAS-1 Don't allow password update of a domain user

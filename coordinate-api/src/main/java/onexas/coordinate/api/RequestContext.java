@@ -214,9 +214,11 @@ public class RequestContext {
 	@PreDestroy
 	public void destroy() {
 		if (token != null) {
-			try {
-				authTokenService.extend(token.getToken());
-			} catch (Exception x) {
+			if(authTokenService.shouldExtend(token.getTimeoutAt())) {
+				try {
+					authTokenService.extend(token.getToken());
+				} catch (Exception x) {
+				}
 			}
 		}
 	}

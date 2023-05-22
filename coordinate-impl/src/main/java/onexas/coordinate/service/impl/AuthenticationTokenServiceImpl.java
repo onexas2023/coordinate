@@ -7,6 +7,7 @@ import java.util.Optional;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.DependsOn;
 import org.springframework.context.event.EventListener;
 import org.springframework.data.domain.Page;
@@ -55,20 +56,33 @@ public class AuthenticationTokenServiceImpl implements AuthenticationTokenServic
 
 	@Autowired
 	AsyncExService asyncExService;
+	
+	@Value("${coordinate.authentication.token-timeout:60m}")
+	String tokenTimeout;
+	
+	@Value("${coordinate.authentication.token-extend-after:1m}")
+	String tokenExtendAfter;
+	
 
 	@Override
 	@Transactional(transactionManager = CoordinateEntityManageConfiguration.TX_MANAGER, isolation = Isolation.READ_COMMITTED)
 	public AuthenticationToken create(AuthenticationTokenCreate authCreate) {
 		AuthenticationTokenEntity t = Jsons.transform(authCreate, AuthenticationTokenEntity.class);
 		t.setToken(Strings.randomUid(TOKEN_LOOP));
-		t.setTimeoutAt(getTimeoutAt());
+		t.setTimeoutAt(System.currentTimeMillis() + getTokenTimeout());
 		t = atRepo.save(t);
 		return Jsons.transform(t, AuthenticationToken.class);
 	}
-
-	private Long getTimeoutAt() {
-		return System.currentTimeMillis()
-				+ AppContext.config().getMillisecond("coordinate.authentication.tokenTimeout", "120m");
+	
+	private long getTokenTimeout() {
+		return Strings.parseMillisecond(tokenTimeout);
+	}
+	
+	public boolean shouldExtend(long timeoutAt) {
+		long extendAfter = Strings.parseMillisecond(tokenExtendAfter);
+		long now = System.currentTimeMillis();
+		long tokenTimeout = getTokenTimeout();
+		return now > timeoutAt - tokenTimeout + extendAfter;
 	}
 
 	@Override
@@ -85,7 +99,7 @@ public class AuthenticationTokenServiceImpl implements AuthenticationTokenServic
 			throw new NotFoundException("token {} not found", Strings.ellipsis(token, 10));
 		}
 		AuthenticationTokenEntity e = o.get();
-		e.setTimeoutAt(getTimeoutAt());
+		e.setTimeoutAt(System.currentTimeMillis() + getTokenTimeout());
 		return Jsons.transform(e, AuthenticationToken.class);
 	}
 
