@@ -15,6 +15,7 @@ import onexas.coordinate.common.app.Env;
 import onexas.coordinate.common.util.Jsons;
 import onexas.coordinate.data.CoordinateEntityManageConfiguration;
 import onexas.coordinate.model.ServerSetting;
+import onexas.coordinate.service.GlobalCacheEvictService;
 import onexas.coordinate.service.SettingService;
 import onexas.coordinate.web.api.impl.ApiImplBase;
 import onexas.coordinate.web.api.model.Response;
@@ -32,6 +33,9 @@ public class AdminSettingApiImpl extends ApiImplBase implements AdminSettingApi 
 
 	@Autowired
 	SettingService settingService;
+	
+	@Autowired
+	GlobalCacheEvictService cacheEvictService;
 
 	public AdminSettingApiImpl() {
 		super(AdminSettingApi.API_NAME, V1, AdminSettingApi.API_URI);
@@ -65,7 +69,7 @@ public class AdminSettingApiImpl extends ApiImplBase implements AdminSettingApi 
 			AdminSettingApi.ACTION_MODIFY, AdminSettingApi.ACTION_ADMIN }))
 	@Transactional(transactionManager = CoordinateEntityManageConfiguration.TX_MANAGER, isolation = Isolation.READ_COMMITTED)
 	public Response cleanCache() {
-		settingService.cleanCache();
+		cacheEvictService.clear();
 		return new Response();
 	}
 }

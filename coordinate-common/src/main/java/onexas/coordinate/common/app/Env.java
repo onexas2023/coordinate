@@ -7,6 +7,7 @@ package onexas.coordinate.common.app;
  */
 public class Env {
 	public static final String NS_BEAN = "onexas.";
+	public static final String NS_CACHE = "onexas.";
 	
 	public static final String PROFILE_QUEUE = "queue";
 	public static final String PROFILE_TIMER_NODE = "timer-node";

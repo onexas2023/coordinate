@@ -34,7 +34,6 @@ import onexas.coordinate.model.AuthenticationTokenCreate;
 import onexas.coordinate.model.Domain;
 import onexas.coordinate.model.DomainConfig;
 import onexas.coordinate.model.DomainUser;
-import onexas.coordinate.model.Permission;
 import onexas.coordinate.model.PrincipalPermission;
 import onexas.coordinate.model.Role;
 import onexas.coordinate.model.User;
@@ -230,8 +229,8 @@ public class AuthenticationApiImpl extends ApiImplBase implements Authentication
 
 		Set<PrincipalPermission> permissions = new LinkedHashSet<>();
 		for (Role r : roles) {
-			for (Permission p : permissionService.listByPrincipal(r.getUid())) {
-				permissions.add(new PrincipalPermission(p.getTarget(), p.getAction()));
+			for (PrincipalPermission p : roleService.listPermission(r.getUid())) {
+				permissions.add(p);
 			}
 		}
 		Authentication auth = new Authentication();

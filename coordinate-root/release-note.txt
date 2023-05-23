@@ -12,6 +12,7 @@
        
  * Improvements	
    * XAS-32 Don't extend authtoken for every request, it has bad performance
+   * XAS-31 Add Cache on some major-read service
           
  * Fixed Bugs
    * XAS-1 Don't allow password update of a domain user
