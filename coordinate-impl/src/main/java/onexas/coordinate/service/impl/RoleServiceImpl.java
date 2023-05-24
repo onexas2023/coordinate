@@ -14,10 +14,7 @@ import java.util.Optional;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.annotation.CacheConfig;
-import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
-import org.springframework.cache.annotation.Caching;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.ExampleMatcher;
@@ -70,7 +67,6 @@ import onexas.coordinate.service.impl.entity.UserEntity;
  *
  */
 @Service(Env.NS_BEAN + "RoleServiceImpl")
-@CacheConfig(cacheNames = CACHE_NAME_ROLE)
 public class RoleServiceImpl implements RoleService {
 
 	private static final int UID_LOOP = 2;
@@ -150,7 +146,7 @@ public class RoleServiceImpl implements RoleService {
 	}
 
 	@Override
-	@Cacheable(unless = UNLESS_RESULT_NULL)
+	@Cacheable(cacheNames = CACHE_NAME_ROLE, unless = UNLESS_RESULT_NULL)
 	public Role get(String uid) {
 		Optional<RoleEntity> o = roleRepo.findById(uid);
 		if (o.isPresent()) {
@@ -160,7 +156,7 @@ public class RoleServiceImpl implements RoleService {
 	}
 
 	@Override
-	@Cacheable(unless = UNLESS_RESULT_NULL)
+	@Cacheable(cacheNames = CACHE_NAME_ROLE, unless = UNLESS_RESULT_NULL)
 	public Role find(String uid) {
 		Optional<RoleEntity> o = roleRepo.findById(uid);
 		if (o.isPresent()) {
@@ -199,8 +195,6 @@ public class RoleServiceImpl implements RoleService {
 	}
 
 	@Override
-	@Caching(evict = { @CacheEvict(key = "#p0", cacheNames = { CACHE_NAME_ROLE, CACHE_NAME_ROLE_PERMISSIONS }),
-			@CacheEvict(key = "#result.code", cacheNames = { CACHE_NAME_ROLE_BYCODE }) })
 	@Transactional(transactionManager = CoordinateEntityManageConfiguration.TX_MANAGER, isolation = Isolation.READ_COMMITTED)
 	public Role update(String uid, RoleUpdate roleUpdate) {
 
@@ -222,6 +216,7 @@ public class RoleServiceImpl implements RoleService {
 
 			cacheEvictService.evict(uid, CACHE_NAME_ROLE, CACHE_NAME_ROLE_PERMISSIONS);
 			cacheEvictService.evict(e.getCode(), CACHE_NAME_ROLE_BYCODE);
+			cacheEvictService.clear(CACHE_NAME_USER_ROLES);
 
 			return Jsons.transform(e, Role.class);
 		} else {
@@ -230,8 +225,6 @@ public class RoleServiceImpl implements RoleService {
 	}
 
 	@Override
-	@CacheEvict(allEntries = true, cacheNames = { CACHE_NAME_ROLE, CACHE_NAME_ROLE_BYCODE,
-			CACHE_NAME_ROLE_PERMISSIONS })
 	@Transactional(transactionManager = CoordinateEntityManageConfiguration.TX_MANAGER, isolation = Isolation.READ_COMMITTED)
 	public void delete(String uid, boolean quiet) {
 		Role role;
@@ -249,7 +242,9 @@ public class RoleServiceImpl implements RoleService {
 
 			logService.info(getClass(), role.getUid(), Role.class, null, null, "Deleted role {}", role.getCode());
 
-			cacheEvictService.clear(CACHE_NAME_ROLE, CACHE_NAME_ROLE_PERMISSIONS, CACHE_NAME_USER_ROLES);
+			cacheEvictService.evict(uid, CACHE_NAME_ROLE, CACHE_NAME_ROLE_PERMISSIONS);
+			cacheEvictService.evict(role.getCode(), CACHE_NAME_ROLE_BYCODE);
+			cacheEvictService.clear(CACHE_NAME_USER_ROLES);
 
 			asyncExService.asyncRunAfterTxCommit(() -> {
 				eventPublisher.publishEvent(new DeletedRoleEvent(role));
@@ -310,7 +305,6 @@ public class RoleServiceImpl implements RoleService {
 		}
 
 		cacheEvictService.clear(CACHE_NAME_USER_ROLES);
-
 		return role;
 	}
 
@@ -371,7 +365,6 @@ public class RoleServiceImpl implements RoleService {
 	}
 
 	@Override
-	@CacheEvict(key = "#p0", cacheNames = { CACHE_NAME_ROLE_PERMISSIONS })
 	@Transactional(transactionManager = CoordinateEntityManageConfiguration.TX_MANAGER, isolation = Isolation.READ_COMMITTED)
 	public Role addPermissions(String uid, Set<PrincipalPermission> rolePermissionList) {
 		Role role = get(uid);// check
@@ -395,7 +388,6 @@ public class RoleServiceImpl implements RoleService {
 	}
 
 	@Override
-	@CacheEvict(key = "#p0", cacheNames = { CACHE_NAME_ROLE_PERMISSIONS })
 	@Transactional(transactionManager = CoordinateEntityManageConfiguration.TX_MANAGER, isolation = Isolation.READ_COMMITTED)
 	public Role setPermissions(String uid, Set<PrincipalPermission> rolePermissionList) {
 		Role role = get(uid);// check
@@ -414,7 +406,6 @@ public class RoleServiceImpl implements RoleService {
 	}
 
 	@Override
-	@CacheEvict(key = "#p0", cacheNames = { CACHE_NAME_ROLE_PERMISSIONS })
 	@Transactional(transactionManager = CoordinateEntityManageConfiguration.TX_MANAGER, isolation = Isolation.READ_COMMITTED)
 	public Role removePermissions(String uid, Set<PrincipalPermission> rolePermissionList) {
 		Role role = get(uid);// check

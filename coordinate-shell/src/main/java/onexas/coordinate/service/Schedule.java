@@ -31,6 +31,9 @@ public class Schedule {
 
 	@Autowired
 	InfoCacheService infoCacheService;
+	
+	@Autowired
+	GlobalCacheEvictService cacheEvictService;
 
 	@Autowired
 	JobService jobService;
@@ -80,6 +83,15 @@ public class Schedule {
 	public void pruneInfoCache() {
 		locker.runOrSkip(getLockPrefix() + ".pruneInfoCache", () -> {
 			infoCacheService.prune(System.currentTimeMillis());
+			return null;
+		}, Strings.parseMillisecond(minimumLockTime));
+	}
+	
+	@Scheduled(cron = "${coordinate.schedule.clearCache}")
+	public void clearCache() {
+		locker.runOrSkip(getLockPrefix() + ".clearCache", () -> {
+			System.out.println(">>>>daily clear cache");
+			cacheEvictService.clear();
 			return null;
 		}, Strings.parseMillisecond(minimumLockTime));
 	}

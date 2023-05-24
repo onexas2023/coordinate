@@ -18,10 +18,8 @@ import java.util.Set;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
-import org.springframework.cache.annotation.Caching;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.ExampleMatcher;
@@ -92,7 +90,6 @@ import onexas.coordinate.service.impl.entity.UserRecordEntity;
  *
  */
 @Service(Env.NS_BEAN + "UserServiceImpl")
-@CacheConfig(cacheNames = CACHE_NAME_USER)
 public class UserServiceImpl implements UserService {
 
 	private static final Logger logger = LoggerFactory.getLogger(UserServiceImpl.class);
@@ -199,7 +196,7 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	@Cacheable(unless = UNLESS_RESULT_NULL)
+	@Cacheable(cacheNames = CACHE_NAME_USER, unless = UNLESS_RESULT_NULL)
 	public User get(String uid) {
 		Optional<UserEntity> o = userRepo.findById(uid);
 		if (o.isPresent()) {
@@ -209,7 +206,7 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	@Cacheable(unless = UNLESS_RESULT_NULL)
+	@Cacheable(cacheNames = CACHE_NAME_USER, unless = UNLESS_RESULT_NULL)
 	public User find(String uid) {
 		Optional<UserEntity> o = userRepo.findById(uid);
 		if (o.isPresent()) {
@@ -282,16 +279,12 @@ public class UserServiceImpl implements UserService {
 		logService.info(getClass(), e.getUid(), User.class, null, null, "Created user {}/{}", e.getAccount(),
 				e.getDisplayName());
 
-		applyUserDefaultRoles(e);
+		applyNewUserDefaultRoles(e);
 
 		return Jsons.transform(e, User.class);
 	}
 
 	@Override
-	@Caching(evict = { @CacheEvict(key = "#p0", cacheNames = { CACHE_NAME_USER, CACHE_NAME_USER_ROLES }),
-			@CacheEvict(key = "#result.account + '#' + #result.domain", cacheNames = {
-					CACHE_NAME_USER_BYACCOUNTDOMAIN }),
-			@CacheEvict(key = "#result.aliasUid", cacheNames = { CACHE_NAME_USER_BYALIASUID }) })
 	@Transactional(transactionManager = CoordinateEntityManageConfiguration.TX_MANAGER, isolation = Isolation.READ_COMMITTED)
 	public User update(String uid, UserUpdate userUpdate) {
 
@@ -336,15 +329,16 @@ public class UserServiceImpl implements UserService {
 
 			logService.info(getClass(), e.getUid(), User.class, null, null, "Updated user {}", e.getDisplayName());
 
+			User user = Jsons.transform(e, User.class);
+			if (fireDisabled) {
+				eventPublisher.publishEvent(new DisabledUserEvent(user));
+			}
+
 			cacheEvictService.evict(uid, CACHE_NAME_USER, CACHE_NAME_USER_ROLES);
 			cacheEvictService.evict(Strings.format("{}#{}", e.getAccount(), e.getDomain()),
 					CACHE_NAME_USER_BYACCOUNTDOMAIN);
 			cacheEvictService.evict(e.getAliasUid(), CACHE_NAME_USER_BYALIASUID);
 
-			User user = Jsons.transform(e, User.class);
-			if (fireDisabled) {
-				eventPublisher.publishEvent(new DisabledUserEvent(user));
-			}
 			return user;
 		} else {
 			throw new BadArgumentException("user {} not found", uid);
@@ -398,8 +392,10 @@ public class UserServiceImpl implements UserService {
 			logService.info(getClass(), user.getUid(), User.class, null, null, "Deleted user {}",
 					user.getDisplayName());
 
-			cacheEvictService.clear(CACHE_NAME_USER, CACHE_NAME_USER_ROLES, CACHE_NAME_USER_BYACCOUNTDOMAIN,
-					CACHE_NAME_USER_BYALIASUID);
+			cacheEvictService.evict(uid, CACHE_NAME_USER, CACHE_NAME_USER_ROLES);
+			cacheEvictService.evict(Strings.format("{}#{}", e.getAccount(), e.getDomain()),
+					CACHE_NAME_USER_BYACCOUNTDOMAIN);
+			cacheEvictService.evict(e.getAliasUid(), CACHE_NAME_USER_BYALIASUID);
 
 			asyncExService.asyncRunAfterTxCommit(() -> {
 				eventPublisher.publishEvent(new DeletedUserEvent(user));
@@ -513,7 +509,6 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	@CacheEvict(key = "#p0", cacheNames = { CACHE_NAME_USER_ROLES })
 	@Transactional(transactionManager = CoordinateEntityManageConfiguration.TX_MANAGER, isolation = Isolation.READ_COMMITTED)
 	public User addRoles(String uid, Set<String> roleUids) {
 		User user = get(uid);// check
@@ -536,7 +531,6 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	@CacheEvict(key = "#p0", cacheNames = { CACHE_NAME_USER_ROLES })
 	@Transactional(transactionManager = CoordinateEntityManageConfiguration.TX_MANAGER, isolation = Isolation.READ_COMMITTED)
 	public User removeRoles(String uid, Set<String> roleUids) {
 		User user = get(uid);// check
@@ -553,7 +547,6 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	@CacheEvict(key = "#p0", cacheNames = { CACHE_NAME_USER_ROLES })
 	@Transactional(transactionManager = CoordinateEntityManageConfiguration.TX_MANAGER, isolation = Isolation.READ_COMMITTED)
 	public User setRoles(String uid, Set<String> roleUids) {
 		User user = get(uid);// check
@@ -710,12 +703,12 @@ public class UserServiceImpl implements UserService {
 				e.getDisplayName(), e.getDomain());
 
 		// add default roles
-		applyUserDefaultRoles(e);
+		applyNewUserDefaultRoles(e);
 
 		return Jsons.transform(e, User.class);
 	}
 
-	private void applyUserDefaultRoles(UserEntity user) {
+	private void applyNewUserDefaultRoles(UserEntity user) {
 		try {
 			BetterPropertySource config = domainService.getConfig(user.getDomain()).toPropertySource();
 			List<String> roles = config.getStringList(onexas.coordinate.service.domain.Constants.CONFIG_DEFAULT_ROLES);

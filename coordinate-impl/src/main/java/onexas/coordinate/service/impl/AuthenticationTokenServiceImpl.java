@@ -11,8 +11,6 @@ import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.cache.annotation.CacheConfig;
-import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.context.annotation.DependsOn;
 import org.springframework.context.event.EventListener;
@@ -50,7 +48,6 @@ import onexas.coordinate.service.impl.entity.PropertyEntity;
  */
 @DependsOn(AppContext.BEAN_NAME)
 @Service(Env.NS_BEAN + "AuthenticationTokenServiceImpl")
-@CacheConfig(cacheNames = CACHE_NAME_AUTHTOKEN)
 public class AuthenticationTokenServiceImpl implements AuthenticationTokenService {
 
 	private static final int TOKEN_LOOP = 6;
@@ -97,14 +94,13 @@ public class AuthenticationTokenServiceImpl implements AuthenticationTokenServic
 	}
 
 	@Override
-	@Cacheable(unless = UNLESS_RESULT_NULL)
+	@Cacheable(cacheNames = CACHE_NAME_AUTHTOKEN, unless = UNLESS_RESULT_NULL)
 	public AuthenticationToken find(String token) {
 		Optional<AuthenticationTokenEntity> o = atRepo.findByToken(token);
 		return o.isPresent() ? o.get() : null;
 	}
 
 	@Override
-	@CacheEvict
 	@Transactional(transactionManager = CoordinateEntityManageConfiguration.TX_MANAGER, isolation = Isolation.READ_COMMITTED)
 	public AuthenticationToken extend(String token) {
 		Optional<AuthenticationTokenEntity> o = atRepo.findByToken(token);
@@ -113,11 +109,13 @@ public class AuthenticationTokenServiceImpl implements AuthenticationTokenServic
 		}
 		AuthenticationTokenEntity e = o.get();
 		e.setTimeoutAt(System.currentTimeMillis() + getTokenTimeout());
+		
+		cacheEvictService.evict(token, CACHE_NAME_AUTHTOKEN);
+		
 		return Jsons.transform(e, AuthenticationToken.class);
 	}
 
 	@Override
-	@CacheEvict(key = "#p0")
 	public void delete(String token, boolean quiet) {
 		Optional<AuthenticationTokenEntity> o = atRepo.findByToken(token);
 		if (!o.isPresent()) {
@@ -127,6 +125,8 @@ public class AuthenticationTokenServiceImpl implements AuthenticationTokenServic
 			return;
 		}
 		deleteEntity(o.get());
+		
+		cacheEvictService.evict(token, CACHE_NAME_AUTHTOKEN);
 	}
 
 	@Override

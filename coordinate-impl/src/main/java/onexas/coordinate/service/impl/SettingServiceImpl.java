@@ -9,8 +9,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.cache.annotation.CacheConfig;
-import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
@@ -35,7 +33,6 @@ import onexas.coordinate.service.impl.entity.PropertyEntity;
  *
  */
 @Service(Env.NS_BEAN + "SettingServiceImpl")
-@CacheConfig(cacheNames = CACHE_NAME_SETTING)
 public class SettingServiceImpl implements SettingService {
 
 	private static final String SERVER_SETTING_PROP = "server-setting";
@@ -74,7 +71,7 @@ public class SettingServiceImpl implements SettingService {
 	}
 
 	@Override
-	@Cacheable(unless = UNLESS_RESULT_NULL)
+	@Cacheable(key="'server-setting'", cacheNames = CACHE_NAME_SETTING, unless = UNLESS_RESULT_NULL)
 	public ServerSetting getServerSetting() {
 		Optional<PropertyEntity> o = propertyRepo
 				.findById(new PropertyEntity.PK(Strings.toUid(0), SERVER_SETTING_PROP));
@@ -104,7 +101,6 @@ public class SettingServiceImpl implements SettingService {
 	}
 
 	@Override
-	@CacheEvict(allEntries = true)
 	@Transactional(transactionManager = CoordinateEntityManageConfiguration.TX_MANAGER, isolation = Isolation.READ_COMMITTED)
 	public ServerSetting updateServerSetting(ServerSettingUpdate serverSettingUpdate) {
 		ServerSetting setting = getServerSetting();
@@ -141,12 +137,11 @@ public class SettingServiceImpl implements SettingService {
 			e.setValue(Jsons.jsonify(setting));
 			propertyRepo.save(e);
 		}
-		cacheEvictService.clear(CACHE_NAME_SETTING);
+		cacheEvictService.evict("server-setting",CACHE_NAME_SETTING);
 		return setting;
 	}
 
 	@Override
-	@CacheEvict(allEntries = true)
 	@Transactional(transactionManager = CoordinateEntityManageConfiguration.TX_MANAGER, isolation = Isolation.READ_COMMITTED)
 	public synchronized ServerSetting resetServerSetting() {
 		Optional<PropertyEntity> o = propertyRepo
@@ -154,7 +149,7 @@ public class SettingServiceImpl implements SettingService {
 		if (o.isPresent()) {
 			propertyRepo.delete(o.get());
 		}
-		cacheEvictService.clear(CACHE_NAME_SETTING);
+		cacheEvictService.evict("server-setting",CACHE_NAME_SETTING);
 		return getDefaultServerSetting();
 	}
 
