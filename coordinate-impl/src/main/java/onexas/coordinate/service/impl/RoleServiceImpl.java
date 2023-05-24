@@ -1,10 +1,10 @@
 package onexas.coordinate.service.impl;
 
-import static onexas.coordinate.service.Constants.CACHE_NAME_ROLE;
-import static onexas.coordinate.service.Constants.CACHE_NAME_ROLE_BYCODE;
-import static onexas.coordinate.service.Constants.CACHE_NAME_ROLE_PERMISSIONS;
-import static onexas.coordinate.service.Constants.CACHE_NAME_USER_ROLES;
 import static onexas.coordinate.service.GlobalCacheEvictService.UNLESS_RESULT_NULL;
+import static onexas.coordinate.service.impl.Constants.CACHE_NAME_ROLE;
+import static onexas.coordinate.service.impl.Constants.CACHE_NAME_ROLE_BYCODE;
+import static onexas.coordinate.service.impl.Constants.CACHE_NAME_ROLE_PERMISSIONS;
+import static onexas.coordinate.service.impl.Constants.CACHE_NAME_USER_ROLES;
 
 import java.util.HashSet;
 import java.util.LinkedHashSet;

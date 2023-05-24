@@ -1,7 +1,7 @@
 package onexas.coordinate.service.impl;
 
-import static onexas.coordinate.service.Constants.CACHE_NAME_SETTING;
 import static onexas.coordinate.service.GlobalCacheEvictService.UNLESS_RESULT_NULL;
+import static onexas.coordinate.service.impl.Constants.CACHE_NAME_SETTING;
 
 import java.util.Optional;
 

@@ -11,6 +11,7 @@
 			<name>onexas.user.byaccountdomain</name>
 			<name>onexas.user.byaliasuid</name>
 			<name>onexas.user.roles</name>
+			<name>onexas.authtoken</name>
 			<name>onexas.setting</name>
 		</cacheNames>	
 	</coordinateCommon>

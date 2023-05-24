@@ -1,5 +1,8 @@
 package onexas.coordinate.service.impl;
 
+import static onexas.coordinate.service.GlobalCacheEvictService.UNLESS_RESULT_NULL;
+import static onexas.coordinate.service.impl.Constants.CACHE_NAME_AUTHTOKEN;
+
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -8,6 +11,9 @@ import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cache.annotation.CacheConfig;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.context.annotation.DependsOn;
 import org.springframework.context.event.EventListener;
 import org.springframework.data.domain.Page;
@@ -28,6 +34,7 @@ import onexas.coordinate.model.Domain;
 import onexas.coordinate.model.User;
 import onexas.coordinate.service.AsyncExService;
 import onexas.coordinate.service.AuthenticationTokenService;
+import onexas.coordinate.service.GlobalCacheEvictService;
 import onexas.coordinate.service.event.DeletedUserEvent;
 import onexas.coordinate.service.event.DisabledDomainEvent;
 import onexas.coordinate.service.event.DisabledUserEvent;
@@ -43,6 +50,7 @@ import onexas.coordinate.service.impl.entity.PropertyEntity;
  */
 @DependsOn(AppContext.BEAN_NAME)
 @Service(Env.NS_BEAN + "AuthenticationTokenServiceImpl")
+@CacheConfig(cacheNames = CACHE_NAME_AUTHTOKEN)
 public class AuthenticationTokenServiceImpl implements AuthenticationTokenService {
 
 	private static final int TOKEN_LOOP = 6;
@@ -56,6 +64,9 @@ public class AuthenticationTokenServiceImpl implements AuthenticationTokenServic
 
 	@Autowired
 	AsyncExService asyncExService;
+	
+	@Autowired
+	GlobalCacheEvictService cacheEvictService;
 	
 	@Value("${coordinate.authentication.token-timeout:60m}")
 	String tokenTimeout;
@@ -86,12 +97,14 @@ public class AuthenticationTokenServiceImpl implements AuthenticationTokenServic
 	}
 
 	@Override
+	@Cacheable(unless = UNLESS_RESULT_NULL)
 	public AuthenticationToken find(String token) {
 		Optional<AuthenticationTokenEntity> o = atRepo.findByToken(token);
 		return o.isPresent() ? o.get() : null;
 	}
 
 	@Override
+	@CacheEvict
 	@Transactional(transactionManager = CoordinateEntityManageConfiguration.TX_MANAGER, isolation = Isolation.READ_COMMITTED)
 	public AuthenticationToken extend(String token) {
 		Optional<AuthenticationTokenEntity> o = atRepo.findByToken(token);
@@ -104,6 +117,7 @@ public class AuthenticationTokenServiceImpl implements AuthenticationTokenServic
 	}
 
 	@Override
+	@CacheEvict(key = "#p0")
 	public void delete(String token, boolean quiet) {
 		Optional<AuthenticationTokenEntity> o = atRepo.findByToken(token);
 		if (!o.isPresent()) {
@@ -206,6 +220,9 @@ public class AuthenticationTokenServiceImpl implements AuthenticationTokenServic
 				AppContext.getBean(AuthenticationTokenService.class).prune(time);
 			});
 		}
+		if(page.getSize()>0) {
+			cacheEvictService.clear(CACHE_NAME_AUTHTOKEN);
+		}
 	}
 
 	@Override
@@ -246,6 +263,7 @@ public class AuthenticationTokenServiceImpl implements AuthenticationTokenServic
 				deleteEntity(e);
 			}
 		}
+		cacheEvictService.clear(CACHE_NAME_AUTHTOKEN);
 	}
 
 	private void pruneByDomain(Domain domain, long createdDateTimeBefore) {
@@ -254,6 +272,7 @@ public class AuthenticationTokenServiceImpl implements AuthenticationTokenServic
 				deleteEntity(e);
 			}
 		}
+		cacheEvictService.clear(CACHE_NAME_AUTHTOKEN);
 	}
 
 	private void deleteEntity(AuthenticationTokenEntity e) {

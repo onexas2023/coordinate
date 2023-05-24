@@ -1,4 +1,4 @@
-package onexas.coordinate.service;
+package onexas.coordinate.service.impl;
 
 import onexas.coordinate.common.app.Env;
 
@@ -8,6 +8,8 @@ import onexas.coordinate.common.app.Env;
  *
  */
 public class Constants {
+	
+	public static final String CACHE_NAME_AUTHTOKEN = Env.NS_CACHE + "authtoken";
 
 	public static final String CACHE_NAME_USER = Env.NS_CACHE + "user";
 	public static final String CACHE_NAME_USER_BYACCOUNTDOMAIN = CACHE_NAME_USER + ".byaccountdomain";

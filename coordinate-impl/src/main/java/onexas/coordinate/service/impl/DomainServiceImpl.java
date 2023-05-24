@@ -1,9 +1,9 @@
 package onexas.coordinate.service.impl;
 
-import static onexas.coordinate.service.Constants.CACHE_NAME_DOMAIN;
-import static onexas.coordinate.service.Constants.CACHE_NAME_DOMAIN_CONFIG;
-import static onexas.coordinate.service.Constants.CACHE_NAME_DOMAIN_CONFIG_YAML;
 import static onexas.coordinate.service.GlobalCacheEvictService.UNLESS_RESULT_NULL;
+import static onexas.coordinate.service.impl.Constants.CACHE_NAME_DOMAIN;
+import static onexas.coordinate.service.impl.Constants.CACHE_NAME_DOMAIN_CONFIG;
+import static onexas.coordinate.service.impl.Constants.CACHE_NAME_DOMAIN_CONFIG_YAML;
 
 import java.util.LinkedList;
 import java.util.List;
