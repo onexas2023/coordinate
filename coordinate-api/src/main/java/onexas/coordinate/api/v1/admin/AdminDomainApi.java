@@ -67,16 +67,16 @@ public interface AdminDomainApi extends Api {
 	@RequestMapping(value = "/domains", method = RequestMethod.GET, produces = { TYPE_APP_JSON })
 	public List<ADomain> listDomain();
 
-	@Operation(summary = "Get a domain by it's uid", description = "Return the the domain's brief information", tags = {
+	@Operation(summary = "Get a domain by it's code", description = "Return the the domain's brief information", tags = {
 			AdminDomainApi.API_TAG }, security = @SecurityRequirement(name = NAME_AUTH_TOKEN))
 	@ApiResponses(value = {
 			@ApiResponse(responseCode = HTTP_OK, description = MSG_OK, content = @Content(schema = @Schema(implementation = ADomain.class))) })
 	@RequestMapping(value = "/domain/{code}", method = RequestMethod.GET, produces = { TYPE_APP_JSON })
 	public ADomain getDomain(
-			@Parameter(description = "uid of domain", required = true) @PathVariable("code") String code,
+			@Parameter(description = "code of domain", required = true) @PathVariable("code") String code,
 			@Parameter(description = "find mode, return null when not found") @RequestParam(name = "find", required = false) Boolean find);
 
-	@Operation(summary = "Create a domain", description = "you must't set a uid of domain, uid will be generated automatically", tags = {
+	@Operation(summary = "Create a domain", description = "Create a domain", tags = {
 			AdminDomainApi.API_TAG }, security = @SecurityRequirement(name = NAME_AUTH_TOKEN), extensions = {
 					@Extension(properties = @ExtensionProperty(name = CODE_GEN_REQ_BODY_NAME, value = "domain")) })
 	@ApiResponses(value = {
@@ -86,7 +86,7 @@ public interface AdminDomainApi extends Api {
 	public ADomain createDomain(
 			@Parameter(description = "domain-create object", required = true) @Valid @NotNull @RequestBody ADomainCreate domainCreate);
 
-	@Operation(summary = "Update a domain", description = "a null field of domain means keep the old value, the domain's uid is always required", tags = {
+	@Operation(summary = "Update a domain", description = "a null field of domain means keep the old value, the domain's code is always required", tags = {
 			AdminDomainApi.API_TAG }, security = @SecurityRequirement(name = NAME_AUTH_TOKEN), extensions = {
 					@Extension(properties = @ExtensionProperty(name = CODE_GEN_REQ_BODY_NAME, value = "domain")) })
 	@ApiResponses(value = {

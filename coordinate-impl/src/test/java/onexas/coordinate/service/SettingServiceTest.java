@@ -53,8 +53,6 @@ public class SettingServiceTest extends CoordinateImplTestBase {
 		Assert.assertEquals(apiBaseUrl, setting.getApiBaseUrl());
 		Assert.assertEquals(apiInternalBaseUrl, setting.getApiInternalBaseUrl());
 		
-		settingService.cleanCache();
-		
 		setting = settingService.getServerSetting();
 		System.out.println("2.5>>>>>>>>>>>>>>>>>"+Jsons.jsonify(setting));
 		Assert.assertEquals(adminEmail1, setting.getAdminEmail());

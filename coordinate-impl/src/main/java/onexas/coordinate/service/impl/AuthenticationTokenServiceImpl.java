@@ -1,5 +1,8 @@
 package onexas.coordinate.service.impl;
 
+import static onexas.coordinate.service.GlobalCacheEvictService.UNLESS_RESULT_NULL;
+import static onexas.coordinate.service.impl.Constants.CACHE_NAME_AUTHTOKEN;
+
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -8,6 +11,7 @@ import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.context.annotation.DependsOn;
 import org.springframework.context.event.EventListener;
 import org.springframework.data.domain.Page;
@@ -28,6 +32,7 @@ import onexas.coordinate.model.Domain;
 import onexas.coordinate.model.User;
 import onexas.coordinate.service.AsyncExService;
 import onexas.coordinate.service.AuthenticationTokenService;
+import onexas.coordinate.service.GlobalCacheEvictService;
 import onexas.coordinate.service.event.DeletedUserEvent;
 import onexas.coordinate.service.event.DisabledDomainEvent;
 import onexas.coordinate.service.event.DisabledUserEvent;
@@ -56,6 +61,9 @@ public class AuthenticationTokenServiceImpl implements AuthenticationTokenServic
 
 	@Autowired
 	AsyncExService asyncExService;
+	
+	@Autowired
+	GlobalCacheEvictService cacheEvictService;
 	
 	@Value("${coordinate.authentication.token-timeout:60m}")
 	String tokenTimeout;
@@ -86,6 +94,7 @@ public class AuthenticationTokenServiceImpl implements AuthenticationTokenServic
 	}
 
 	@Override
+	@Cacheable(cacheNames = CACHE_NAME_AUTHTOKEN, unless = UNLESS_RESULT_NULL)
 	public AuthenticationToken find(String token) {
 		Optional<AuthenticationTokenEntity> o = atRepo.findByToken(token);
 		return o.isPresent() ? o.get() : null;
@@ -100,6 +109,9 @@ public class AuthenticationTokenServiceImpl implements AuthenticationTokenServic
 		}
 		AuthenticationTokenEntity e = o.get();
 		e.setTimeoutAt(System.currentTimeMillis() + getTokenTimeout());
+		
+		cacheEvictService.evict(token, CACHE_NAME_AUTHTOKEN);
+		
 		return Jsons.transform(e, AuthenticationToken.class);
 	}
 
@@ -113,6 +125,8 @@ public class AuthenticationTokenServiceImpl implements AuthenticationTokenServic
 			return;
 		}
 		deleteEntity(o.get());
+		
+		cacheEvictService.evict(token, CACHE_NAME_AUTHTOKEN);
 	}
 
 	@Override
@@ -206,6 +220,9 @@ public class AuthenticationTokenServiceImpl implements AuthenticationTokenServic
 				AppContext.getBean(AuthenticationTokenService.class).prune(time);
 			});
 		}
+		if(page.getSize()>0) {
+			cacheEvictService.clear(CACHE_NAME_AUTHTOKEN);
+		}
 	}
 
 	@Override
@@ -246,6 +263,7 @@ public class AuthenticationTokenServiceImpl implements AuthenticationTokenServic
 				deleteEntity(e);
 			}
 		}
+		cacheEvictService.clear(CACHE_NAME_AUTHTOKEN);
 	}
 
 	private void pruneByDomain(Domain domain, long createdDateTimeBefore) {
@@ -254,6 +272,7 @@ public class AuthenticationTokenServiceImpl implements AuthenticationTokenServic
 				deleteEntity(e);
 			}
 		}
+		cacheEvictService.clear(CACHE_NAME_AUTHTOKEN);
 	}
 
 	private void deleteEntity(AuthenticationTokenEntity e) {

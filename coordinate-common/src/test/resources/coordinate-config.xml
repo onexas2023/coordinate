@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<config name="coordinate-common-test">
+	<coordinateCommon>
+		<cacheNames>
+			<name>cache-test</name>
+		</cacheNames>
+	</coordinateCommon>
+</config>

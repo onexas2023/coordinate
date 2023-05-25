@@ -211,7 +211,7 @@
     },
     "/api/coordinate/v1/admin/domain/domain" : {
       "post" : {
-        "description" : "you must't set a uid of domain, uid will be generated automatically",
+        "description" : "Create a domain",
         "operationId" : "coordinate-admin-domain#createDomain",
         "requestBody" : {
           "content" : {
@@ -365,7 +365,7 @@
         "description" : "Return the the domain's brief information",
         "operationId" : "coordinate-admin-domain#getDomain",
         "parameters" : [ {
-          "description" : "uid of domain",
+          "description" : "code of domain",
           "in" : "path",
           "name" : "code",
           "required" : true,
@@ -436,11 +436,11 @@
         "security" : [ {
           "Coordinate-Auth-Token" : [ ]
         } ],
-        "summary" : "Get a domain by it's uid",
+        "summary" : "Get a domain by it's code",
         "tags" : [ "coordinate-admin-domain" ]
       },
       "put" : {
-        "description" : "a null field of domain means keep the old value, the domain's uid is always required",
+        "description" : "a null field of domain means keep the old value, the domain's code is always required",
         "operationId" : "coordinate-admin-domain#updateDomain",
         "parameters" : [ {
           "description" : "code of a domain",

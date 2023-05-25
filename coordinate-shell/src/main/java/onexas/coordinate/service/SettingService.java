@@ -16,5 +16,4 @@ public interface SettingService {
 	
 	public ServerSetting resetServerSetting();
 	
-	public void cleanCache();
 }

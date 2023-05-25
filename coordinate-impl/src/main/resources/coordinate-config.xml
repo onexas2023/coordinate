@@ -1,4 +1,20 @@
 <config name="coordinate-impl">
+	<coordinateCommon>
+		<cacheNames>
+			<name>onexas.domain</name>
+			<name>onexas.domain.config</name>
+			<name>onexas.domain.configYaml</name>
+			<name>onexas.role</name>
+			<name>onexas.role.byCode</name>
+			<name>onexas.role.permissions</name>
+			<name>onexas.user</name>
+			<name>onexas.user.byAccountDomain</name>
+			<name>onexas.user.byAliasUid</name>
+			<name>onexas.user.roles</name>
+			<name>onexas.authtoken</name>
+			<name>onexas.setting</name>
+		</cacheNames>	
+	</coordinateCommon>
 	<coordinateData>
 		<entityPackage>onexas.coordinate.service.impl.entity</entityPackage>
 		<schemaMigratorClass>onexas.coordinate.service.impl.SchemaMigratorImpl</schemaMigratorClass>

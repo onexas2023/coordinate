@@ -1,5 +1,10 @@
 package onexas.coordinate.service.impl;
 
+import static onexas.coordinate.service.GlobalCacheEvictService.UNLESS_RESULT_NULL;
+import static onexas.coordinate.service.impl.Constants.CACHE_NAME_DOMAIN;
+import static onexas.coordinate.service.impl.Constants.CACHE_NAME_DOMAIN_CONFIG;
+import static onexas.coordinate.service.impl.Constants.CACHE_NAME_DOMAIN_CONFIGYAML;
+
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -8,6 +13,7 @@ import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Order;
@@ -30,6 +36,7 @@ import onexas.coordinate.model.DomainUpdate;
 import onexas.coordinate.model.MapDomainConfig;
 import onexas.coordinate.service.AsyncExService;
 import onexas.coordinate.service.DomainService;
+import onexas.coordinate.service.GlobalCacheEvictService;
 import onexas.coordinate.service.LogService;
 import onexas.coordinate.service.event.BeforeDeleteDomainEvent;
 import onexas.coordinate.service.event.DeletedDomainEvent;
@@ -44,7 +51,7 @@ import onexas.coordinate.service.impl.entity.DomainEntity;
  */
 @Service(Env.NS_BEAN + "DomainServiceImpl")
 public class DomainServiceImpl implements DomainService {
-
+	
 	private static final Logger logger = LoggerFactory.getLogger(DomainServiceImpl.class);
 
 	@Autowired
@@ -52,6 +59,9 @@ public class DomainServiceImpl implements DomainService {
 
 	@Autowired
 	ApplicationEventPublisher eventPublisher;
+	
+	@Autowired
+	GlobalCacheEvictService cacheEvictService;
 
 	@Autowired
 	LogService logService;
@@ -83,6 +93,7 @@ public class DomainServiceImpl implements DomainService {
 	}
 
 	@Override
+	@Cacheable(cacheNames = CACHE_NAME_DOMAIN, unless = UNLESS_RESULT_NULL)
 	public Domain get(String code) {
 		Optional<DomainEntity> o = domainRepo.findById(code);
 		if (o.isPresent()) {
@@ -104,6 +115,7 @@ public class DomainServiceImpl implements DomainService {
 	}
 
 	@Override
+	@Cacheable(cacheNames = CACHE_NAME_DOMAIN, unless = UNLESS_RESULT_NULL)
 	public Domain find(String code) {
 		Optional<DomainEntity> o = domainRepo.findById(code);
 		if (o.isPresent()) {
@@ -150,15 +162,15 @@ public class DomainServiceImpl implements DomainService {
 
 	@Override
 	@Transactional(transactionManager = CoordinateEntityManageConfiguration.TX_MANAGER, isolation = Isolation.READ_COMMITTED)
-	public Domain update(String code, DomainUpdate domainUpdate) {
-		Optional<DomainEntity> o = domainRepo.findById(code);
+	public Domain update(String domainCode, DomainUpdate domainUpdate) {
+		Optional<DomainEntity> o = domainRepo.findById(domainCode);
 		DomainEntity e = null;
 		if (!o.isPresent()) {
-			if (Domain.LOCAL.equals(code)) {
+			if (Domain.LOCAL.equals(domainCode)) {
 				e = Jsons.transform(newDefaultLocalDomain(), DomainEntity.class);
 				e = domainRepo.save(e);
 			} else {
-				throw new BadArgumentException("domain {} not found", code);
+				throw new BadArgumentException("domain {} not found", domainCode);
 			}
 		} else {
 			e = o.get();
@@ -190,6 +202,10 @@ public class DomainServiceImpl implements DomainService {
 
 		logService.info(getClass(), e.getCode(), Domain.class, null, null, "Update domain {}/{}", e.getCode(),
 				e.getName());
+		
+		
+		cacheEvictService.evict(domainCode, CACHE_NAME_DOMAIN, CACHE_NAME_DOMAIN_CONFIG, CACHE_NAME_DOMAIN_CONFIGYAML);
+		
 		Domain domain = Jsons.transform(e, Domain.class);
 
 		if (fireDisabled) {
@@ -221,6 +237,8 @@ public class DomainServiceImpl implements DomainService {
 
 			logService.info(getClass(), domain.getCode(), Domain.class, null, null, "Deleted domain {}/{}",
 					domain.getCode(), domain.getName());
+			
+			cacheEvictService.evict(domainCode, CACHE_NAME_DOMAIN, CACHE_NAME_DOMAIN_CONFIG, CACHE_NAME_DOMAIN_CONFIGYAML);
 
 			asyncExService.asyncRunAfterTxCommit(() -> {
 				eventPublisher.publishEvent(new DeletedDomainEvent(domain));
@@ -229,6 +247,7 @@ public class DomainServiceImpl implements DomainService {
 	}
 
 	@Override
+	@Cacheable(cacheNames= CACHE_NAME_DOMAIN_CONFIG, unless = UNLESS_RESULT_NULL)
 	public DomainConfig getConfig(String domainCode) {
 		Optional<DomainEntity> o = domainRepo.findById(domainCode);
 		if (!o.isPresent()) {
@@ -247,6 +266,7 @@ public class DomainServiceImpl implements DomainService {
 	}
 
 	@Override
+	@Cacheable(cacheNames= CACHE_NAME_DOMAIN_CONFIGYAML, unless = UNLESS_RESULT_NULL)
 	public String getConfigYaml(String domainCode) {
 		Optional<DomainEntity> o = domainRepo.findById(domainCode);
 		if (!o.isPresent()) {

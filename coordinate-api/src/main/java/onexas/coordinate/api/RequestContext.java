@@ -26,7 +26,6 @@ import onexas.coordinate.model.PrincipalPermission;
 import onexas.coordinate.model.Role;
 import onexas.coordinate.model.User;
 import onexas.coordinate.service.AuthenticationTokenService;
-import onexas.coordinate.service.PermissionService;
 import onexas.coordinate.service.RoleService;
 import onexas.coordinate.service.UserService;
 import onexas.coordinate.web.api.Api;
@@ -44,9 +43,6 @@ public class RequestContext {
 
 	@Autowired
 	HttpServletRequest request;
-
-	@Autowired
-	PermissionService permissionService;
 
 	@Autowired
 	AuthenticationTokenService authTokenService;
@@ -146,8 +142,8 @@ public class RequestContext {
 
 		Set<PrincipalPermission> permissions = new LinkedHashSet<>();
 		for (Role r : roles) {
-			for (Permission p : permissionService.listByPrincipal(r.getUid())) {
-				permissions.add(new PrincipalPermission(p.getTarget(), p.getAction()));
+			for (PrincipalPermission p : roleService.listPermission(r.getUid())) {
+				permissions.add(p);
 			}
 		}
 		this.permissions = Collections.unmodifiableSet(permissions);

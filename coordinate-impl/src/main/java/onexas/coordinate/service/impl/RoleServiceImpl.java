@@ -1,5 +1,11 @@
 package onexas.coordinate.service.impl;
 
+import static onexas.coordinate.service.GlobalCacheEvictService.UNLESS_RESULT_NULL;
+import static onexas.coordinate.service.impl.Constants.CACHE_NAME_ROLE;
+import static onexas.coordinate.service.impl.Constants.CACHE_NAME_ROLE_BYCODE;
+import static onexas.coordinate.service.impl.Constants.CACHE_NAME_ROLE_PERMISSIONS;
+import static onexas.coordinate.service.impl.Constants.CACHE_NAME_USER_ROLES;
+
 import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.LinkedList;
@@ -8,6 +14,7 @@ import java.util.Optional;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.ExampleMatcher;
@@ -40,6 +47,7 @@ import onexas.coordinate.model.RoleUpdate;
 import onexas.coordinate.model.RoleUserFilter;
 import onexas.coordinate.model.User;
 import onexas.coordinate.service.AsyncExService;
+import onexas.coordinate.service.GlobalCacheEvictService;
 import onexas.coordinate.service.LogService;
 import onexas.coordinate.service.PermissionService;
 import onexas.coordinate.service.RoleService;
@@ -79,11 +87,14 @@ public class RoleServiceImpl implements RoleService {
 	ApplicationEventPublisher eventPublisher;
 
 	@Autowired
+	GlobalCacheEvictService cacheEvictService;
+
+	@Autowired
 	LogService logService;
 
 	@Autowired
 	PermissionService permissionService;
-	
+
 	@Autowired
 	AsyncExService asyncExService;
 
@@ -135,6 +146,7 @@ public class RoleServiceImpl implements RoleService {
 	}
 
 	@Override
+	@Cacheable(cacheNames = CACHE_NAME_ROLE, unless = UNLESS_RESULT_NULL)
 	public Role get(String uid) {
 		Optional<RoleEntity> o = roleRepo.findById(uid);
 		if (o.isPresent()) {
@@ -144,6 +156,7 @@ public class RoleServiceImpl implements RoleService {
 	}
 
 	@Override
+	@Cacheable(cacheNames = CACHE_NAME_ROLE, unless = UNLESS_RESULT_NULL)
 	public Role find(String uid) {
 		Optional<RoleEntity> o = roleRepo.findById(uid);
 		if (o.isPresent()) {
@@ -153,6 +166,7 @@ public class RoleServiceImpl implements RoleService {
 	}
 
 	@Override
+	@Cacheable(cacheNames = CACHE_NAME_ROLE_BYCODE, unless = UNLESS_RESULT_NULL)
 	public Role findByCode(String code) {
 		Optional<RoleEntity> o = roleRepo.findByCode(code);
 		if (o.isPresent()) {
@@ -175,8 +189,7 @@ public class RoleServiceImpl implements RoleService {
 		}
 		e = roleRepo.save(e);
 
-		logService.info(getClass(), e.getUid(), Role.class, null, null, "Created role {}/{}", e.getCode(),
-				e.getName());
+		logService.info(getClass(), e.getUid(), Role.class, null, null, "Created role {}/{}", e.getCode(), e.getName());
 
 		return Jsons.transform(e, Role.class);
 	}
@@ -201,6 +214,10 @@ public class RoleServiceImpl implements RoleService {
 
 			logService.info(getClass(), e.getUid(), Role.class, null, null, "Update role {}", e.getCode());
 
+			cacheEvictService.evict(uid, CACHE_NAME_ROLE, CACHE_NAME_ROLE_PERMISSIONS);
+			cacheEvictService.evict(e.getCode(), CACHE_NAME_ROLE_BYCODE);
+			cacheEvictService.clear(CACHE_NAME_USER_ROLES);
+
 			return Jsons.transform(e, Role.class);
 		} else {
 			throw new BadArgumentException("role {} not found", uid);
@@ -224,6 +241,10 @@ public class RoleServiceImpl implements RoleService {
 			permissionService.deleteByPricipal(uid);
 
 			logService.info(getClass(), role.getUid(), Role.class, null, null, "Deleted role {}", role.getCode());
+
+			cacheEvictService.evict(uid, CACHE_NAME_ROLE, CACHE_NAME_ROLE_PERMISSIONS);
+			cacheEvictService.evict(role.getCode(), CACHE_NAME_ROLE_BYCODE);
+			cacheEvictService.clear(CACHE_NAME_USER_ROLES);
 
 			asyncExService.asyncRunAfterTxCommit(() -> {
 				eventPublisher.publishEvent(new DeletedRoleEvent(role));
@@ -283,6 +304,7 @@ public class RoleServiceImpl implements RoleService {
 			}
 		}
 
+		cacheEvictService.clear(CACHE_NAME_USER_ROLES);
 		return role;
 	}
 
@@ -298,6 +320,7 @@ public class RoleServiceImpl implements RoleService {
 						"Removed user {} from role {}", user.getDisplayName(), role.getCode());
 			}
 		}
+		cacheEvictService.clear(CACHE_NAME_USER_ROLES);
 		return role;
 	}
 
@@ -322,10 +345,13 @@ public class RoleServiceImpl implements RoleService {
 				throw new BadArgumentException("user {} not found", userUid);
 			}
 		}
+
+		cacheEvictService.clear(CACHE_NAME_USER_ROLES);
 		return role;
 	}
 
 	@Override
+	@Cacheable(cacheNames = CACHE_NAME_ROLE_PERMISSIONS, unless = UNLESS_RESULT_NULL)
 	public List<PrincipalPermission> listPermission(String uid) {
 		get(uid);// check
 		List<PrincipalPermission> list = new LinkedList<>();
@@ -339,6 +365,7 @@ public class RoleServiceImpl implements RoleService {
 	}
 
 	@Override
+	@Transactional(transactionManager = CoordinateEntityManageConfiguration.TX_MANAGER, isolation = Isolation.READ_COMMITTED)
 	public Role addPermissions(String uid, Set<PrincipalPermission> rolePermissionList) {
 		Role role = get(uid);// check
 
@@ -351,14 +378,17 @@ public class RoleServiceImpl implements RoleService {
 		}
 		for (PrincipalPermission rp : toAdd) {
 			permissionService.create(uid, rp.getTarget(), rp.getAction(), "role");
-			logService.info(getClass(), uid, Role.class, null, null, "Added permision {}:{} to role {}",
-					rp.getTarget(), rp.getAction(), role.getCode());
+			logService.info(getClass(), uid, Role.class, null, null, "Added permision {}:{} to role {}", rp.getTarget(),
+					rp.getAction(), role.getCode());
 		}
+
+		cacheEvictService.evict(uid, CACHE_NAME_ROLE_PERMISSIONS);
 
 		return role;
 	}
 
 	@Override
+	@Transactional(transactionManager = CoordinateEntityManageConfiguration.TX_MANAGER, isolation = Isolation.READ_COMMITTED)
 	public Role setPermissions(String uid, Set<PrincipalPermission> rolePermissionList) {
 		Role role = get(uid);// check
 
@@ -366,14 +396,17 @@ public class RoleServiceImpl implements RoleService {
 		logService.info(getClass(), uid, Role.class, null, null, "Removed all permission of role {}", role.getCode());
 		for (PrincipalPermission rp : new LinkedHashSet<>(rolePermissionList)) {
 			permissionService.create(uid, rp.getTarget(), rp.getAction(), "role");
-			logService.info(getClass(), uid, Role.class, null, null, "Added permision {}:{} to role {}",
-					rp.getTarget(), rp.getAction(), role.getCode());
+			logService.info(getClass(), uid, Role.class, null, null, "Added permision {}:{} to role {}", rp.getTarget(),
+					rp.getAction(), role.getCode());
 		}
+
+		cacheEvictService.evict(uid, CACHE_NAME_ROLE_PERMISSIONS);
 
 		return role;
 	}
 
 	@Override
+	@Transactional(transactionManager = CoordinateEntityManageConfiguration.TX_MANAGER, isolation = Isolation.READ_COMMITTED)
 	public Role removePermissions(String uid, Set<PrincipalPermission> rolePermissionList) {
 		Role role = get(uid);// check
 
@@ -389,6 +422,8 @@ public class RoleServiceImpl implements RoleService {
 						rp.getTarget(), rp.getAction(), role.getCode());
 			}
 		}
+
+		cacheEvictService.evict(uid, CACHE_NAME_ROLE_PERMISSIONS);
 
 		return role;
 	}

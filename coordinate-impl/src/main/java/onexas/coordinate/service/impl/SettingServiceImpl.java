@@ -1,30 +1,31 @@
 package onexas.coordinate.service.impl;
 
+import static onexas.coordinate.service.GlobalCacheEvictService.UNLESS_RESULT_NULL;
+import static onexas.coordinate.service.impl.Constants.CACHE_NAME_SETTING;
+
 import java.util.Optional;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.event.EventListener;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.google.common.base.Objects;
 
-import onexas.coordinate.Constants;
 import onexas.coordinate.common.app.Env;
 import onexas.coordinate.common.lang.Strings;
 import onexas.coordinate.common.util.Jsons;
 import onexas.coordinate.data.CoordinateEntityManageConfiguration;
 import onexas.coordinate.model.ServerSetting;
 import onexas.coordinate.model.ServerSettingUpdate;
+import onexas.coordinate.service.GlobalCacheEvictService;
 import onexas.coordinate.service.SettingService;
-import onexas.coordinate.service.event.GlobalEvent;
 import onexas.coordinate.service.impl.dao.PropertyEntityRepo;
 import onexas.coordinate.service.impl.entity.PropertyEntity;
-import onexas.coordinate.service.jms.GlobalEventSender;
 
 /**
  * 
@@ -42,11 +43,11 @@ public class SettingServiceImpl implements SettingService {
 	PropertyEntityRepo propertyRepo;
 
 	@Autowired
-	GlobalEventSender globalSender;
+	GlobalCacheEvictService cacheEvictService;
 
 //	@Value("${coordinate.server-setting.locale:#{T(java.util.Locale).getDefault()}}")
 //	Locale locale;
-	
+
 	@Value("${coordinate.server-setting.admin-email:#{null}}")
 	String adminEmail;
 
@@ -59,22 +60,19 @@ public class SettingServiceImpl implements SettingService {
 	@Value("${coordinate.server-setting.api-internal-base-url:#{null}}")
 	String apiInternalBaseUrl;
 
-	ServerSetting serverSettingCache;
-
 	private ServerSetting getDefaultServerSetting() {
 		ServerSetting setting = new ServerSetting();
 		setting.setAdminEmail(adminEmail == null ? "admin@bar.foo.com" : adminEmail);
 		setting.setConsoleUrl(consoleUrl == null ? "http://bar.foo.com:8080" : consoleUrl);
 		setting.setApiBaseUrl(apiBaseUrl == null ? "http://bar.foo.com:8088" : apiBaseUrl);
-		setting.setApiInternalBaseUrl(apiInternalBaseUrl == null ? "http://internal.bar.foo.com:8088" : apiInternalBaseUrl);
+		setting.setApiInternalBaseUrl(
+				apiInternalBaseUrl == null ? "http://internal.bar.foo.com:8088" : apiInternalBaseUrl);
 		return setting;
 	}
 
 	@Override
-	public synchronized ServerSetting getServerSetting() {
-		if (serverSettingCache != null) {
-			return serverSettingCache;
-		}
+	@Cacheable(key="'server-setting'", cacheNames = CACHE_NAME_SETTING, unless = UNLESS_RESULT_NULL)
+	public ServerSetting getServerSetting() {
 		Optional<PropertyEntity> o = propertyRepo
 				.findById(new PropertyEntity.PK(Strings.toUid(0), SERVER_SETTING_PROP));
 		ServerSetting setting = getDefaultServerSetting();
@@ -99,12 +97,12 @@ public class SettingServiceImpl implements SettingService {
 				// eat, just in case
 			}
 		}
-		return serverSettingCache = setting;
+		return setting;
 	}
 
 	@Override
 	@Transactional(transactionManager = CoordinateEntityManageConfiguration.TX_MANAGER, isolation = Isolation.READ_COMMITTED)
-	public synchronized ServerSetting updateServerSetting(ServerSettingUpdate serverSettingUpdate) {
+	public ServerSetting updateServerSetting(ServerSettingUpdate serverSettingUpdate) {
 		ServerSetting setting = getServerSetting();
 		if (serverSettingUpdate.getAdminEmail() != null
 				&& !Objects.equal(serverSettingUpdate.getAdminEmail(), setting.getAdminEmail())) {
@@ -139,7 +137,7 @@ public class SettingServiceImpl implements SettingService {
 			e.setValue(Jsons.jsonify(setting));
 			propertyRepo.save(e);
 		}
-		cleanSettingCache();
+		cacheEvictService.evict("server-setting",CACHE_NAME_SETTING);
 		return setting;
 	}
 
@@ -151,33 +149,8 @@ public class SettingServiceImpl implements SettingService {
 		if (o.isPresent()) {
 			propertyRepo.delete(o.get());
 		}
-		cleanSettingCache();
+		cacheEvictService.evict("server-setting",CACHE_NAME_SETTING);
 		return getDefaultServerSetting();
-	}
-
-	@Override
-	public synchronized void cleanCache() {
-		// all cache
-		globalSender.send(new GlobalEvent(Constants.GLOBAL_EVENT_CLEAN_CACHE));
-	}
-
-	private synchronized void cleanSettingCache() {
-		doCleanCache();
-		// only setting cache
-		globalSender.send(new GlobalEvent(Constants.GLOBAL_EVENT_CLEAN_CACHE, Constants.SETTING_CACHE_NAME));
-	}
-
-	@EventListener
-	public synchronized void handleCleanEvent(GlobalEvent event) {
-		if(Constants.GLOBAL_EVENT_CLEAN_CACHE.equals(event.getName())) {
-			if(event.getData()==null || Constants.SETTING_CACHE_NAME.equals(event.getData())){
-				doCleanCache();
-			}
-		}
-	}
-
-	private void doCleanCache() {
-		serverSettingCache = null;
 	}
 
 }
