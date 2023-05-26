@@ -13,6 +13,7 @@
  * Improvements	
    * XAS-32 Don't extend authtoken for every request, it has bad performance
    * XAS-31 Add Cache on some major-read service
+   * XAS-33 should move some coordinate web config in config.xml to coordinateWeb
           
  * Fixed Bugs
    * XAS-1 Don't allow password update of a domain user

@@ -88,7 +88,7 @@ public class SpringDocCustomizer implements OpenApiCustomiser, OpenApiBuilderCus
 
 		List<Pattern> ignorePattern = new LinkedList<>();
 
-		for (String pattern : AppContext.config().getStringList("coordinateCommon.model.additionalSchemaClassIgnorePattern",
+		for (String pattern : AppContext.config().getStringList("coordinateWeb.springDocApi.model.additionalSchemaClassIgnorePattern",
 				Collections.emptyList())) {
 			try {
 				pattern.replace(".", "\\.");
@@ -98,7 +98,7 @@ public class SpringDocCustomizer implements OpenApiCustomiser, OpenApiBuilderCus
 				logger.error(x.getMessage(), x);
 			}
 		}
-		for (String regex : AppContext.config().getStringList("coordinateCommon.model.additionalSchemaClassIgnoreRegex",
+		for (String regex : AppContext.config().getStringList("coordinateWeb.springDocApi.model.additionalSchemaClassIgnoreRegex",
 				Collections.emptyList())) {
 			try {
 				ignorePattern.add(Pattern.compile(regex));
@@ -108,7 +108,7 @@ public class SpringDocCustomizer implements OpenApiCustomiser, OpenApiBuilderCus
 		}
 
 		List<Class<?>> enumClzs = new LinkedList<>();
-		for (Config sub : AppContext.config().getSubConfigList("coordinateCommon.model.additionalSchemaClass","",true)) {
+		for (Config sub : AppContext.config().getSubConfigList("coordinateWeb.springDocApi.model.additionalSchemaClass","",true)) {
 			try {
 
 				String className = sub.getString("");

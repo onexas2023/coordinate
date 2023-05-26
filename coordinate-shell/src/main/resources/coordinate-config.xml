@@ -7,10 +7,12 @@
 			<version name="coordinate">0.0.0.XASHUB-DEV-SNAPSHOT</version>
 		</versions>
 	</app>
-	<coordinateCommon>
-		<model>
-			<additionalSchemaClass>onexas.coordinate.model.JobState</additionalSchemaClass>
-			<additionalSchemaClass>onexas.coordinate.model.OrganizationUserRelationType</additionalSchemaClass>
-		</model>
-	</coordinateCommon>
+	<coordinateWeb>
+		<springDocApi>
+			<model>
+				<additionalSchemaClass>onexas.coordinate.model.JobState</additionalSchemaClass>
+				<additionalSchemaClass>onexas.coordinate.model.OrganizationUserRelationType</additionalSchemaClass>
+			</model>
+		</springDocApi>
+	</coordinateWeb>
 </config>
