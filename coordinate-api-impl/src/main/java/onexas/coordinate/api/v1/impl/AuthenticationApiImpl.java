@@ -218,8 +218,15 @@ public class AuthenticationApiImpl extends ApiImplBase implements Authentication
 			token = authTokenService.create(new AuthenticationTokenCreate().withAccount(account).withAliasUid(aliasUid)
 					.withDomain(domainCode).withDisplayName(displayName).withClientIp(clientIp)).getToken();
 		} else {
+			
+			AuthenticationToken at = authTokenService.find(token);
+			if (at == null) {
+				throw new UnauthenticatedException("invalidate token, not found");
+			}
 			try {
-				authTokenService.extend(token);
+				if (authTokenService.shouldExtend(at.getTimeoutAt())) {
+					authTokenService.extend(token);
+				}
 			} catch (NotFoundException x) {
 				throw new UnauthenticatedException("invalidate token, just timeout");
 			}

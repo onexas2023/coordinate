@@ -68,7 +68,7 @@ public class AuthenticationTokenServiceImpl implements AuthenticationTokenServic
 	@Value("${coordinate.authentication.token-timeout:60m}")
 	String tokenTimeout;
 	
-	@Value("${coordinate.authentication.token-extend-after:1m}")
+	@Value("${coordinate.authentication.token-extend-after:5m}")
 	String tokenExtendAfter;
 	
 
