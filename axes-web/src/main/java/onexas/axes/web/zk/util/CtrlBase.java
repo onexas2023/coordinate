@@ -70,7 +70,7 @@ public class CtrlBase implements Composer<Component>, ComposerExt<Component> {
 		mainComp.addEventListener("onColumnSort", new EventListener<Event>() {
 			@Override
 			public void onEvent(Event event) throws Exception {
-				HeaderElement column = (HeaderElement) Events.unwrap(event, Event.class).getTarget();
+				HeaderElement column = (HeaderElement) Zks.unwrap(event, Event.class).getTarget();
 
 				String sortdir = (String) column.getAttribute("sortdir");
 				if (!"desc".equals(sortdir)) {

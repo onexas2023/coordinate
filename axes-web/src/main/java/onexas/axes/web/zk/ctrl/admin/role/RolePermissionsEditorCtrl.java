@@ -19,7 +19,6 @@ import onexas.axes.web.Constants;
 import onexas.axes.web.model.PrincipalPermissionWrap;
 import onexas.axes.web.zk.ctrl.admin.security.PrincipalPermissionSelectionEvent;
 import onexas.axes.web.zk.util.CtrlBase;
-import onexas.axes.web.zk.util.Events;
 import onexas.axes.web.zk.util.ListModelList;
 import onexas.axes.web.zk.util.Zks;
 import onexas.coordinate.api.v1.sdk.CoordinateAdminRoleApi;
@@ -68,7 +67,7 @@ public class RolePermissionsEditorCtrl extends CtrlBase {
 			arg.put(Constants.ARG_REQUEST_ID, requestId = Strings.randomUid());
 			arg.put(Constants.ARG_SELECTOR_MULTIPLE, Boolean.TRUE);
 			Zks.openPopup(Constants.URI_PRINCIPAL_PERMISSION_SELECTOR_POPUP, mainComp.getPage(),
-					Events.unwrap(evt, Event.class).getTarget(), 600, -1, "end_before", arg);
+					Zks.unwrap(evt, Event.class).getTarget(), 600, -1, "end_before", arg);
 		});
 		mainComp.addEventListener("onRemovePermission", (evt) -> {
 			doRemovePermission((PrincipalPermissionWrap) evt.getData());
