@@ -1,6 +1,20 @@
 -------------------------------------------
  OneXas - Coordinate Release Notes
 -------------------------------------------
+ 1.1.0-ga
+ --------
+ * New Features  
+       
+ * Improvements	
+   * XAS-40 Add Javax EL Utility to xashub
+          
+ * Fixed Bugs
+         
+ * Upgrade Notes
+
+-------------------------------------------
+ History
+-------------------------------------------
  1.0.0-beta
  --------
  * New Features
@@ -20,7 +34,3 @@
    * XAS-17 Support default roles in domain config
          
  * Upgrade Notes
-
--------------------------------------------
- History
--------------------------------------------
