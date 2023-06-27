@@ -7,10 +7,13 @@
        
  * Improvements	
    * XAS-40 Add Javax EL Utility to xashub
+   * XAS-41 Refactor hook to use simple javax el insteaded of springel
           
  * Fixed Bugs
          
  * Upgrade Notes
+   * The expression pattern of app.initSecret in xashub-userconfig.xml has been changed to __${COORDINATE_INIT_SECRET:#{null}},
+     for evaluating value in config to spring definition has to use special __{SPEL} to avoid conflict when read pure string in config.
 
 -------------------------------------------
  History

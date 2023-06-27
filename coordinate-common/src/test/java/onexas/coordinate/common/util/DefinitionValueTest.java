@@ -37,9 +37,9 @@ public class DefinitionValueTest extends CoordinateCommonTestBase {
 	@Test
 	public void testAppContext() {
 		AppContext ctx = AppContext.instance();
-		Assert.assertEquals("Test", ctx.resolveDefinitionValue("${value1}"));
-		Assert.assertEquals(123, ctx.resolveDefinitionValue("${value2}", Integer.class).intValue());
-		Assert.assertEquals("abcd", ctx.resolveDefinitionValue("${value_default:abcd}"));
-		Assert.assertNull(value_defaultnull, ctx.resolveDefinitionValue("${value_default:#{null}}"));
+		Assert.assertEquals("Test", ctx.resolveDefinitionValue("__${value1}"));
+		Assert.assertEquals(123, ctx.resolveDefinitionValue("__${value2}", Integer.class).intValue());
+		Assert.assertEquals("abcd", ctx.resolveDefinitionValue("__${value_default:abcd}"));
+		Assert.assertNull(value_defaultnull, ctx.resolveDefinitionValue("__${value_default:#{null}}"));
 	}
 }

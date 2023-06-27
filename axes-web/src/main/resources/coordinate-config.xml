@@ -72,8 +72,7 @@
 				</menu>
 			</menu>
 		</menus>
-		<hookUrlExpr>#apiBasePath+'/api/coordinate/v1/hook/trigger/'+#hook.zone+'/'+#hook.uid
-		</hookUrlExpr>
+		<hookUrlExpr>${apiBasePath}/api/coordinate/v1/hook/trigger/${hook.zone}/${hook.uid}</hookUrlExpr>
 		<permissionPresets>
 			<preset name="user" >
 				<item target="coordinate-profile" action="modify"/>

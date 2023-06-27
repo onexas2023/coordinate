@@ -1,5 +1,5 @@
 <config>
 	<app>
-		<initSecret>${COORDINATE_INIT_SECRET:#{null}}</initSecret>
+		<initSecret>__${COORDINATE_INIT_SECRET:#{null}}</initSecret>
 	</app>
 </config>

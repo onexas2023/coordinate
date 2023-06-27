@@ -1,10 +1,11 @@
 package onexas.axes.web.zk.ctrl.admin.hook;
 
 import java.text.DateFormat;
+import java.util.HashMap;
+import java.util.Map;
 
-import org.springframework.expression.ExpressionParser;
-import org.springframework.expression.spel.standard.SpelExpressionParser;
-import org.springframework.expression.spel.support.StandardEvaluationContext;
+import javax.el.ELException;
+
 import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.select.annotation.Wire;
 import org.zkoss.zul.Label;
@@ -16,6 +17,7 @@ import onexas.axes.web.zk.util.Zks;
 import onexas.coordinate.api.v1.sdk.CoordinateAdminHookApi;
 import onexas.coordinate.api.v1.sdk.model.AHook;
 import onexas.coordinate.common.app.AppContext;
+import onexas.coordinate.common.util.Expressions;
 
 /**
  * 
@@ -59,14 +61,11 @@ public class HookInfoCtrl extends CtrlBase {
 
 	AHook selectedHook;
 
-	org.springframework.expression.Expression hookUrlExp;
+	String hookUrlExpr;
 
 	protected void afterCompose() throws Exception {
 
-		String hookUrlExpr = AppContext.config().getString("axes.hookUrlExpr");
-
-		ExpressionParser parser = new SpelExpressionParser();
-		hookUrlExp = parser.parseExpression(hookUrlExpr);
+		hookUrlExpr = AppContext.config().getString("axes.hookUrlExpr");
 
 		selectedHook = (AHook) Zks.getScopeArg(mainComp, Constants.ARG_EDITING_OBJ);
 
@@ -133,13 +132,17 @@ public class HookInfoCtrl extends CtrlBase {
 
 			String basePath = workspace.getApiClient().getBasePath();
 
-			StandardEvaluationContext context = new StandardEvaluationContext();
-			context.setVariable("apiBasePath", basePath);
-			context.setVariable("hook", selectedHook);
+			Map<String,Object> variables = new HashMap<String, Object>();
+			variables.put("apiBasePath", basePath);
+			variables.put("hook", selectedHook);
 
-			String url = hookUrlExp.getValue(context, String.class);
-
-			vurl.setValue(url);
+			String url = null;
+			try {
+				url = Expressions.eval(hookUrlExpr, String.class, variables);
+				vurl.setValue(url);
+			}catch(ELException x) {
+				vurl.setValue(x.getMessage());
+			}
 		}
 	}
 

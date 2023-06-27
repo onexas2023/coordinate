@@ -244,7 +244,9 @@ public class AppContext
 	public String resolveDefinitionValue(String value) {
 		if (value != null) {
 			String expr = value.trim();
-			if (expr.startsWith("${") && expr.endsWith("}")) {
+			//use a special pattern to read spring definition in our config to prevent some simple el case in config (e.g. {abc}/def/{xyz})
+			if (expr.startsWith("__${") && expr.endsWith("}")) {
+				expr = expr.substring(2);
 				return embeddedValueResolver.resolveStringValue(expr);
 			}
 		}
