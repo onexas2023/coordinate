@@ -220,4 +220,16 @@ public class Base58 {
 		System.arraycopy(array, array.length - size, target, 0, size);
 		return target;
 	}
+	
+	public static byte[] trimLeadingZero(final byte[] decoded) {
+		if (decoded == null || decoded.length == 0) {
+			return decoded;
+		}
+		if (decoded[0] == 0x0) {
+			byte target[] = new byte[decoded.length - 1];
+			System.arraycopy(decoded, 1, target, 0, target.length);
+			return target;
+		}
+		return decoded;
+	}
 }
