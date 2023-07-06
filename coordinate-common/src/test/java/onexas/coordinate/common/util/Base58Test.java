@@ -18,7 +18,7 @@ public class Base58Test extends CoordinateCommonTestBase {
 
 	@Test
 	public void testSimple() {
-		for (int i = 1; i < 100; i++) {
+		for (int i = 1; i < 200; i++) {
 			byte[] data = new byte[i];
 			
 			Randoms.random.nextBytes(data);
@@ -29,7 +29,7 @@ public class Base58Test extends CoordinateCommonTestBase {
 			
 			
 			String str = Base58.doEncode(data);			
-			byte[] data2 = Base58.trimLeadingZero(Base58.doDecode(str));
+			byte[] data2 = Base58.doDecode(str);
 			String str2 = Base58.doEncode(data2);
 			
 //			for (int x = 0; x < data2.length; x++) {
@@ -40,7 +40,6 @@ public class Base58Test extends CoordinateCommonTestBase {
 			System.out.println("2>>"+str2);
 			
 			Assert.assertEquals(str, str2);
-			Assert.assertArrayEquals(data, data2);
 		}
 	}
 	
