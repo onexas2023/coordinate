@@ -15,14 +15,13 @@ import org.slf4j.LoggerFactory;
 import com.jcraft.jsch.ChannelExec;
 import com.jcraft.jsch.ChannelSftp;
 import com.jcraft.jsch.ChannelSftp.LsEntry;
-
-import onexas.coordinate.common.lang.Strings;
-
 import com.jcraft.jsch.JSch;
 import com.jcraft.jsch.JSchException;
 import com.jcraft.jsch.Session;
 import com.jcraft.jsch.SftpATTRS;
 import com.jcraft.jsch.SftpException;
+
+import onexas.coordinate.common.lang.Strings;
 
 /**
  * 
@@ -45,6 +44,8 @@ public class SshClient {
 	private String sudoUser;
 
 	private File privateKeyFile;
+	
+	private String privateKey;
 
 	private String encoding;
 	private int port;
@@ -122,13 +123,24 @@ public class SshClient {
 	/**
 	 * Sets the private key file
 	 * 
-	 * @param privateKeyFile       private key file, pem (openssh) or ppk(putty)
-	 *                             format
+	 * @param privateKeyFile       private key file, pem (classic openssh) format
 	 * @param privateKeyPassphrase the key passphrase, supported when using pem,
 	 *                             null if key file doesn't has phrase.
 	 */
-	public void setPrivateKey(File privateKeyFile, String privateKeyPassphrase) {
+	public void setPrivateKeyFile(File privateKeyFile, String privateKeyPassphrase) {
 		this.privateKeyFile = privateKeyFile;
+		this.password = privateKeyPassphrase;
+	}
+
+	/**
+	 * Sets the private key
+	 * 
+	 * @param privateKeyFile       private key string, pem (classic openssh) format
+	 * @param privateKeyPassphrase the key passphrase, supported when using pem,
+	 *                             null if key file doesn't has phrase.
+	 */	
+	public void setPrivateKey(String privateKey, String privateKeyPassphrase) {
+		this.privateKey = privateKey;
 		this.password = privateKeyPassphrase;
 	}
 
@@ -367,12 +379,16 @@ public class SshClient {
 		if (session == null || !session.isConnected()) {
 			JSch jsch = new JSch();
 
-			if (privateKeyFile == null) {
+			if (privateKey != null) {
+				jsch.addIdentity("sshclient", privateKey.getBytes(Strings.UTF8), null,
+						Strings.isBlank(password) ? null : password.getBytes(Strings.UTF8));
 				session = jsch.getSession(user, ip, port);
-				session.setPassword(password);
-			} else {
+			}else if (privateKeyFile != null) {
 				jsch.addIdentity(privateKeyFile.getAbsolutePath(), Strings.isBlank(password) ? null : password);
 				session = jsch.getSession(user, ip, port);
+			}else {
+				session = jsch.getSession(user, ip, port);
+				session.setPassword(password);
 			}
 
 			session.setConfig(commonConfig);

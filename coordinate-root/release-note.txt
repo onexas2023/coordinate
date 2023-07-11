@@ -4,6 +4,7 @@
  1.1.0-ga
  --------
  * New Features  
+   * XAS-46 Support private key string in ssh client
        
  * Improvements	
    * XAS-40 Add Javax EL Utility to xashub
