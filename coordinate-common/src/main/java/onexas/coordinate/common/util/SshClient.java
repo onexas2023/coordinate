@@ -40,6 +40,7 @@ public class SshClient {
 	private String ip;
 	private String user;
 	private String password;
+	private String privateKeyPassphrase;
 
 	private String sudoUser;
 
@@ -129,7 +130,7 @@ public class SshClient {
 	 */
 	public void setPrivateKeyFile(File privateKeyFile, String privateKeyPassphrase) {
 		this.privateKeyFile = privateKeyFile;
-		this.password = privateKeyPassphrase;
+		this.privateKeyPassphrase = privateKeyPassphrase;
 	}
 
 	/**
@@ -141,7 +142,7 @@ public class SshClient {
 	 */	
 	public void setPrivateKey(String privateKey, String privateKeyPassphrase) {
 		this.privateKey = privateKey;
-		this.password = privateKeyPassphrase;
+		this.privateKeyPassphrase = privateKeyPassphrase;
 	}
 
 	public OutputStream upload(String remoteFilePath) throws JSchException, SftpException, IOException {
@@ -381,10 +382,10 @@ public class SshClient {
 
 			if (privateKey != null) {
 				jsch.addIdentity("sshclient", privateKey.getBytes(Strings.UTF8), null,
-						Strings.isBlank(password) ? null : password.getBytes(Strings.UTF8));
+						Strings.isBlank(privateKeyPassphrase) ? null : privateKeyPassphrase.getBytes(Strings.UTF8));
 				session = jsch.getSession(user, ip, port);
 			}else if (privateKeyFile != null) {
-				jsch.addIdentity(privateKeyFile.getAbsolutePath(), Strings.isBlank(password) ? null : password);
+				jsch.addIdentity(privateKeyFile.getAbsolutePath(), Strings.isBlank(privateKeyPassphrase) ? null : privateKeyPassphrase);
 				session = jsch.getSession(user, ip, port);
 			}else {
 				session = jsch.getSession(user, ip, port);
