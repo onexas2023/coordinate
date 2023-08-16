@@ -247,3 +247,4 @@ week.Wednesday=星期三
 axes.secret.content=內容
 axes.secret.toggleUpdateContent=切換更新內容
 axes.secret.fingerprint=指印
+axes.required=必要

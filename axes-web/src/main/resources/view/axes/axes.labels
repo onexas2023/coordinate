@@ -247,3 +247,4 @@ week.Wednesday=Wednesday
 axes.secret.content=Content
 axes.secret.toggleUpdateContent=Toggle update content
 axes.secret.fingerprint=Fingerprint
+axes.required=Required
