@@ -9,6 +9,7 @@
  * Improvements	
    * XAS-40 Add Javax EL Utility to xashub
    * XAS-41 Refactor hook to use simple javax el insteaded of springel
+   * XAS-73 Handle REQUEST_HOST_NAME in axes COORDINATE_API_BASE_PATH environment
           
  * Fixed Bugs
    * XAS-74 navigator.clipboard undefine error

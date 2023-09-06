@@ -4,9 +4,11 @@ import java.net.InetSocketAddress;
 import java.net.Proxy;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.HashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import java.util.Set;
 import java.util.TimeZone;
 
@@ -18,6 +20,8 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.WebApplicationContext;
+import org.zkoss.zk.ui.Execution;
+import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.event.EventListener;
 import org.zkoss.zk.ui.event.EventQueues;
@@ -37,6 +41,7 @@ import onexas.coordinate.common.lang.Collections;
 import onexas.coordinate.common.lang.Locales;
 import onexas.coordinate.common.lang.Strings;
 import onexas.coordinate.common.util.CalendarHelper;
+import onexas.coordinate.common.util.Expressions;
 import onexas.coordinate.common.util.ValueI;
 
 @Component(Env.NS_BEAN + "axes.Workspace")
@@ -157,8 +162,18 @@ public class Workspace {
 			httpClient = builder.build();
 			apiClient.setHttpClient(httpClient);
 		}
-
-		apiClient.setBasePath(apiBasePath);
+		
+		Execution exec = Executions.getCurrent();
+		String basePath = apiBasePath;
+		
+		if (exec != null) {
+			String hostName = exec.getServerName();
+			Map<String, Object> ctx = new HashMap<>();
+			ctx.put("REQUEST_HOST_NAME", hostName);
+			basePath = Expressions.eval(apiBasePath, String.class, ctx);
+		}
+		
+		apiClient.setBasePath(basePath);
 
 		// current api client has hostnameVerifier NPE when setting verifyingSsl to true
 		// or set any sslCaCert and keyManagers
