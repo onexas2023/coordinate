@@ -259,6 +259,19 @@ public class Zks {
 		sb.append(")},50);");
 		Clients.evalJavaScript(sb.toString());
 	}
+	
+	public static void copyToClipboard(String text) {
+		StringBuilder sb = new StringBuilder();
+
+		sb.append("setTimeout(function(){");
+
+		text = StringEscapeUtils.escapeJavaScript(text);
+		sb.append("_axes.copyToClipboard('").append(text).append("');");
+
+		//end set function/timeout
+		sb.append("},50);");
+		Clients.evalJavaScript(sb.toString());
+	}
 
 	public static void showClientBusy(String msg) {
 		Clients.showBusy(msg);

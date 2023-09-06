@@ -314,6 +314,15 @@
 		var w = jq(widget.$n());
 		w.css({ top: top, left: left });
 	}
+	axes.copyToClipboard = function(text) {
+    	const listener = (e) => {
+	        e.clipboardData.setData('text/plain', text);
+	        e.preventDefault();
+        	document.removeEventListener('copy', listener);
+    	};
+    	window.document.addEventListener('copy', listener);
+    	window.document.execCommand('copy');
+    }
 
 	window._axes = axes;
 

@@ -11,6 +11,7 @@
    * XAS-41 Refactor hook to use simple javax el insteaded of springel
           
  * Fixed Bugs
+   * XAS-74 navigator.clipboard undefine error
          
  * Upgrade Notes
    * The expression pattern of app.initSecret in xashub-userconfig.xml has been changed to __${COORDINATE_INIT_SECRET:#{null}},
