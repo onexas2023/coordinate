@@ -27,7 +27,8 @@ services:
       AXES_SESSION_JDBC_INITIALIZE_SCHEMA: embedded
       AXES_SESSION_JDBC_SCHEMA: classpath:org/springframework/session/jdbc/schema-h2.sql
       AXES_SESSION_JDBC_TABLE_NAME: SPRING_SESSION
-      COORDINATE_API_BASE_PATH: http://coordinate:8088/
+      ## #{'$$'}{} for escape ${}
+      COORDINATE_API_BASE_PATH: http://#{'$$'}{REQUEST_HOST_NAME}:28088
   sphere:
     image: nexus.mshome.net:8082/repository/docker-releases/sphere:latest
     ports:
