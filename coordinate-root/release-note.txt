@@ -1,7 +1,20 @@
 -------------------------------------------
  OneXas - Coordinate Release Notes
 -------------------------------------------
- 1.1.0-ga
+ 1.2.0
+ --------
+ * New Features  
+       
+ * Improvements	
+          
+ * Fixed Bugs
+   
+ * Upgrade Notes   
+
+-------------------------------------------
+ History
+-------------------------------------------
+ 1.1.0
  --------
  * New Features  
    * XAS-46 Support private key string in ssh client
@@ -18,10 +31,7 @@
    * The expression pattern of app.initSecret in xashub-userconfig.xml has been changed to __${COORDINATE_INIT_SECRET:#{null}},
      for evaluating value in config to spring definition has to use special __{SPEL} to avoid conflict when read pure string in config.
 
--------------------------------------------
- History
--------------------------------------------
- 1.0.0-beta
+ 1.0.0
  --------
  * New Features
    * Support User, Domain & Relation Services & APIs
