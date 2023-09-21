@@ -76,6 +76,7 @@
 		<permissionPresets>
 			<preset name="user" >
 				<item target="coordinate-profile" action="modify"/>
+				<item target="coordinate-preference" action="modify"/>
 				<item target="coordinate-user" action="view"/>
 				<item target="coordinate-organization" action="view"/>
 				<item target="coordinate-job" action="view"/>

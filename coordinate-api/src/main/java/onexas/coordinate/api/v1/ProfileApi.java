@@ -79,6 +79,6 @@ public interface ProfileApi extends Api {
 	@RequestMapping(value = "/profile", method = RequestMethod.PUT, consumes = { TYPE_APP_JSON }, produces = {
 			TYPE_APP_JSON })
 	public UProfile updateProfile(
-			@Parameter(description = "password update") @Valid @NotNull @RequestBody(required = false) UProfileUpdate profileUpdate);
+			@Parameter(description = "profile update") @Valid @NotNull @RequestBody(required = false) UProfileUpdate profileUpdate);
 
 }

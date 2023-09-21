@@ -302,6 +302,13 @@ public class UserServiceTest extends CoordinateImplTestBase {
 
 		props = service.getProperties(uid, "cat1");
 		Assert.assertEquals(0, props.size());
+		
+		String prop = service.findProperty(uid, "abc");
+		Assert.assertEquals("xyz", prop);
+		prop = service.findProperty(uid, "def");
+		Assert.assertNull(prop);
+		
+		
 
 		// update
 		service.setProperty(uid, "abc", "xyz2", "cat1");
@@ -311,7 +318,12 @@ public class UserServiceTest extends CoordinateImplTestBase {
 		Assert.assertEquals(2, props.size());
 		Assert.assertEquals("xyz2", props.get("abc"));
 		Assert.assertEquals("ykk", props.get("def"));
-
+		
+		prop = service.findProperty(uid, "abc");
+		Assert.assertEquals("xyz2", prop);
+		prop = service.findProperty(uid, "def");
+		Assert.assertEquals("ykk", prop);
+		
 		props = service.getProperties(uid, "cat1");
 		Assert.assertEquals(1, props.size());
 		Assert.assertEquals("xyz2", props.get("abc"));
@@ -322,6 +334,13 @@ public class UserServiceTest extends CoordinateImplTestBase {
 
 		// remove
 		service.setProperty(uid, "abc", null, null);
+		
+		
+		prop = service.findProperty(uid, "abc");
+		Assert.assertNull(prop);
+		prop = service.findProperty(uid, "def");
+		Assert.assertEquals("ykk", prop);
+		
 		props = service.getProperties(uid, null);
 		Assert.assertEquals(1, props.size());
 		Assert.assertEquals("ykk", props.get("def"));
@@ -335,6 +354,11 @@ public class UserServiceTest extends CoordinateImplTestBase {
 
 		// delete user
 		service.delete(uid, true);
+		
+		prop = service.findProperty(uid, "abc");
+		Assert.assertNull(prop);
+		prop = service.findProperty(uid, "def");
+		Assert.assertNull(prop);
 
 		props = service.getProperties(uid, null);
 		Assert.assertEquals(0, props.size());

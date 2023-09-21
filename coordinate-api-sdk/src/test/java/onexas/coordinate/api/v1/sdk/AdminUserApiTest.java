@@ -1,6 +1,8 @@
 package onexas.coordinate.api.v1.sdk;
 
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.junit.Assert;
 import org.junit.Test;
@@ -326,6 +328,50 @@ public class AdminUserApiTest extends CoordinateApiSDKTestBase {
 			roleApi.deleteRole(role3.getUid(), true);
 			// the auth role
 			Assert.assertEquals(1, roleApi.listRole(null).getItems().size());
+		} catch (ApiException x) {
+			throw new RuntimeException(Strings.format("{}:{}", x.getCode(), x.getResponseBody()), x);
+		}
+	}
+	
+	@Test
+	public void testResetPreference() {
+		try {
+			ApiClient client = getApiClientWithAuthCreate("authuser", Strings.randomPassword(10), "authrole",
+					new PrincipalPermission("*", "*"));
+			CoordinateAdminUserApi api = new CoordinateAdminUserApi(client);
+			
+			ApiClient userClient = getApiClientWithAuthCreate("dennis", "1234", "users",
+					new PrincipalPermission(onexas.coordinate.api.v1.PreferenceApi.API_PERMISSION_TARGET,
+							onexas.coordinate.api.v1.PreferenceApi.ACTION_MODIFY));
+			CoordinatePreferenceApi prefApi = new CoordinatePreferenceApi(userClient);
+
+			AUser user1 = api.listUser(new AUserFilter().account("dennis")).getItems().get(0);
+			
+			String uid = user1.getUid();
+
+			Map<String, String> preference = prefApi.getPreferences();
+			Assert.assertEquals(0, preference.size());
+			
+			Map<String, String> map = new LinkedHashMap<>();
+			map.put("name", "Dennis");
+			map.put("email", "abc@def.com");
+			
+			preference = prefApi.updatePreferences(map);
+			Assert.assertEquals(2, preference.size());
+			Assert.assertEquals("Dennis", preference.get("name"));
+			Assert.assertEquals("abc@def.com", preference.get("email"));
+			
+			preference = prefApi.getPreferences();
+			Assert.assertEquals(2, preference.size());
+			Assert.assertEquals("Dennis", preference.get("name"));
+			Assert.assertEquals("abc@def.com", preference.get("email"));
+			
+			api.resetUserPreferences(uid);
+			
+			
+			preference = prefApi.getPreferences();
+			Assert.assertEquals(0, preference.size());
+
 		} catch (ApiException x) {
 			throw new RuntimeException(Strings.format("{}:{}", x.getCode(), x.getResponseBody()), x);
 		}

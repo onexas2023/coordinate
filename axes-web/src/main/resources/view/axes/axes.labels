@@ -26,7 +26,6 @@ axes.closedDateTime=Closed datetime
 axes.code=Code
 axes.config=Config
 axes.confirmation=Confirmation
-axes.confirmation=Confirmation
 axes.create=Create
 axes.createdDateTime=Created datetime
 axes.dateTime=Datetime
@@ -248,3 +247,5 @@ axes.secret.content=Content
 axes.secret.toggleUpdateContent=Toggle update content
 axes.secret.fingerprint=Fingerprint
 axes.required=Required
+
+axes.resetPreferences=Reset preferences

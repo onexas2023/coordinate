@@ -1,7 +1,11 @@
 package onexas.coordinate.api.v1.admin.impl;
 
+import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.Map.Entry;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Profile;
@@ -22,6 +26,7 @@ import onexas.coordinate.api.v1.admin.model.AUserFilter;
 import onexas.coordinate.api.v1.admin.model.AUserListPage;
 import onexas.coordinate.api.v1.admin.model.AUserOrganization;
 import onexas.coordinate.api.v1.admin.model.AUserUpdate;
+import onexas.coordinate.api.v1.impl.PreferenceApiImpl;
 import onexas.coordinate.common.app.AppContext;
 import onexas.coordinate.common.app.Env;
 import onexas.coordinate.common.err.BadArgumentException;
@@ -196,5 +201,28 @@ public class AdminUserApiImpl extends ApiImplBase implements AdminUserApi {
 		User user = userService.createByDomainUser(domainUser);
 
 		return Jsons.transform(user, AUser.class);
+	}
+
+	@Override
+	@GrantPermissions(@GrantPermission(target = AdminUserApi.API_PERMISSION_TARGET, action = {
+			AdminUserApi.ACTION_MODIFY, AdminUserApi.ACTION_ADMIN }))
+	@Transactional(transactionManager = CoordinateEntityManageConfiguration.TX_MANAGER, isolation = Isolation.READ_COMMITTED)
+	public Response resetUserPreferences(String uid) {
+		
+		Set<String> toRemove = new HashSet<>();
+		Map<String, String> properties = userService.getProperties(uid, PreferenceApiImpl.CATEGORY);
+
+		properties = PreferenceApiImpl.trimKey(properties);
+
+		for (Entry<String, String> e : properties.entrySet()) {
+			toRemove.add(e.getKey());
+		}
+		
+		if (toRemove.size() > 0) {
+			toRemove = PreferenceApiImpl.appendKey(toRemove);
+			userService.deleteProperties(uid, toRemove);
+		}
+
+		return new Response();
 	}
 }

@@ -436,6 +436,12 @@ public class UserServiceImpl implements UserService {
 		}
 		return m;
 	}
+	
+	@Override
+	public String findProperty(String uid, String name) {
+		Optional<PropertyEntity> o = propertyRepo.findById(new PropertyEntity.PK(getPropertyObjUid(uid), name));
+		return o.isPresent() ? o.get().getValue() : null;
+	}
 
 	@Override
 	@Transactional(transactionManager = CoordinateEntityManageConfiguration.TX_MANAGER, isolation = Isolation.READ_COMMITTED)

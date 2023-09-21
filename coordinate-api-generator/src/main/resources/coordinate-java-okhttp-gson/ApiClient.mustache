@@ -878,6 +878,11 @@ public class ApiClient {
         String jsonMime = "(?i)^(application/json|[^;/ \t]+/[^;/ \t]+[+]json)[ \t]*(;.*)?$";
         return mime != null && (mime.matches(jsonMime) || mime.equals("*/*"));
     }
+    
+    public boolean isTextPlainMime(String mime) {
+        String textMime = "(?i)^(text|text */ *plain)$";
+        return mime != null && (mime.matches(textMime) || mime.equals("*/*"));
+    }
 
     /**
      * Select the Accept header's value from the given accepts array:
@@ -892,7 +897,7 @@ public class ApiClient {
         if (accepts.length == 0) {
             return null;
         }
-        //dennis 202330419 accept all to avoid plain/text base response missing
+        //dennis 202330419 accept all to avoid text/plain base response missing
         //for (String accept : accepts) {
         //    if (isJsonMime(accept)) {
         //        return accept;
@@ -1018,6 +1023,15 @@ public class ApiClient {
             String content;
             if (obj != null) {
                 content = json.serialize(obj);
+            } else {
+                content = null;
+            }
+            return RequestBody.create(MediaType.parse(contentType), content);
+        } else if (isTextPlainMime(contentType)) {
+        	//20230921 support text/plain requestbody
+        	String content;
+            if (obj != null) {
+                content = obj.toString();
             } else {
                 content = null;
             }

@@ -63,6 +63,9 @@
     "description" : "Organization Api V1",
     "name" : "coordinate-organization"
   }, {
+    "description" : "Preference Api V1",
+    "name" : "coordinate-preference"
+  }, {
     "description" : "Profile Api V1",
     "name" : "coordinate-profile"
   }, {
@@ -4782,6 +4785,77 @@
         "tags" : [ "coordinate-admin-user" ]
       }
     },
+    "/api/coordinate/v1/admin/user/user/{uid}/preferences" : {
+      "delete" : {
+        "operationId" : "coordinate-admin-user#resetUserPreferences",
+        "parameters" : [ {
+          "description" : "uid of a user",
+          "in" : "path",
+          "name" : "uid",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Response"
+                }
+              }
+            },
+            "description" : "Query successfully"
+          },
+          "400" : {
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Response"
+                }
+              }
+            },
+            "description" : "Has wrong request arguments"
+          },
+          "401" : {
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Response"
+                }
+              }
+            },
+            "description" : "Require authentication"
+          },
+          "403" : {
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Response"
+                }
+              }
+            },
+            "description" : "Has no permission to access"
+          },
+          "404" : {
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Response"
+                }
+              }
+            },
+            "description" : "Resource not found"
+          }
+        },
+        "security" : [ {
+          "Coordinate-Auth-Token" : [ ]
+        } ],
+        "summary" : "reset a user's preferences",
+        "tags" : [ "coordinate-admin-user" ]
+      }
+    },
     "/api/coordinate/v1/admin/user/user/{uid}/role" : {
       "delete" : {
         "description" : "remove roles of the user by giving a role uid list",
@@ -6093,6 +6167,300 @@
         } ],
         "summary" : "Get current user's organization list",
         "tags" : [ "coordinate-organization" ]
+      }
+    },
+    "/api/coordinate/v1/preference/preference/{key}" : {
+      "get" : {
+        "operationId" : "coordinate-preference#findPreference",
+        "parameters" : [ {
+          "description" : "kef of a user preference",
+          "in" : "path",
+          "name" : "key",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "content" : {
+              "text/plain" : {
+                "schema" : {
+                  "type" : "string"
+                }
+              }
+            },
+            "description" : "Query successfully"
+          },
+          "401" : {
+            "content" : {
+              "text/plain" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Response"
+                }
+              }
+            },
+            "description" : "Require authentication"
+          },
+          "403" : {
+            "content" : {
+              "text/plain" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Response"
+                }
+              }
+            },
+            "description" : "Has no permission to access"
+          }
+        },
+        "security" : [ {
+          "Coordinate-Auth-Token" : [ ]
+        } ],
+        "summary" : "find preferences of current user",
+        "tags" : [ "coordinate-preference" ]
+      },
+      "put" : {
+        "operationId" : "coordinate-preference#updatePreference",
+        "parameters" : [ {
+          "description" : "key of the preference",
+          "in" : "path",
+          "name" : "key",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "text/plain" : {
+              "schema" : {
+                "type" : "string",
+                "description" : "value of the preference"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "200" : {
+            "content" : {
+              "text/plain" : {
+                "schema" : {
+                  "type" : "string"
+                }
+              }
+            },
+            "description" : "Query successfully"
+          },
+          "400" : {
+            "content" : {
+              "text/plain" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Response"
+                }
+              }
+            },
+            "description" : "Has wrong request arguments"
+          },
+          "401" : {
+            "content" : {
+              "text/plain" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Response"
+                }
+              }
+            },
+            "description" : "Require authentication"
+          },
+          "403" : {
+            "content" : {
+              "text/plain" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Response"
+                }
+              }
+            },
+            "description" : "Has no permission to access"
+          }
+        },
+        "security" : [ {
+          "Coordinate-Auth-Token" : [ ]
+        } ],
+        "summary" : "update a preference of current user by key",
+        "tags" : [ "coordinate-preference" ],
+        "x-codegen-request-body-name" : "preferences"
+      }
+    },
+    "/api/coordinate/v1/preference/preferences" : {
+      "get" : {
+        "operationId" : "coordinate-preference#getPreferences",
+        "responses" : {
+          "200" : {
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/PreferenceMap"
+                }
+              }
+            },
+            "description" : "Query successfully"
+          },
+          "401" : {
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Response"
+                }
+              }
+            },
+            "description" : "Require authentication"
+          },
+          "403" : {
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Response"
+                }
+              }
+            },
+            "description" : "Has no permission to access"
+          }
+        },
+        "security" : [ {
+          "Coordinate-Auth-Token" : [ ]
+        } ],
+        "summary" : "get preferences of current user",
+        "tags" : [ "coordinate-preference" ]
+      },
+      "post" : {
+        "operationId" : "coordinate-preference#updatePreferences",
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "type" : "object",
+                "additionalProperties" : {
+                  "type" : "string"
+                },
+                "description" : "preference update"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "200" : {
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/PreferenceMap"
+                }
+              }
+            },
+            "description" : "Query successfully"
+          },
+          "400" : {
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Response"
+                }
+              }
+            },
+            "description" : "Has wrong request arguments"
+          },
+          "401" : {
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Response"
+                }
+              }
+            },
+            "description" : "Require authentication"
+          },
+          "403" : {
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Response"
+                }
+              }
+            },
+            "description" : "Has no permission to access"
+          }
+        },
+        "security" : [ {
+          "Coordinate-Auth-Token" : [ ]
+        } ],
+        "summary" : "update preferences of current user",
+        "tags" : [ "coordinate-preference" ],
+        "x-codegen-request-body-name" : "preferences"
+      },
+      "put" : {
+        "operationId" : "coordinate-preference#resetPreferences",
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "type" : "object",
+                "additionalProperties" : {
+                  "type" : "string"
+                },
+                "description" : "preference reset"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "200" : {
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/PreferenceMap"
+                }
+              }
+            },
+            "description" : "Query successfully"
+          },
+          "400" : {
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Response"
+                }
+              }
+            },
+            "description" : "Has wrong request arguments"
+          },
+          "401" : {
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Response"
+                }
+              }
+            },
+            "description" : "Require authentication"
+          },
+          "403" : {
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Response"
+                }
+              }
+            },
+            "description" : "Has no permission to access"
+          }
+        },
+        "security" : [ {
+          "Coordinate-Auth-Token" : [ ]
+        } ],
+        "summary" : "reset preferences of current user",
+        "tags" : [ "coordinate-preference" ],
+        "x-codegen-request-body-name" : "preferences"
       }
     },
     "/api/coordinate/v1/profile/password" : {
@@ -7856,6 +8224,12 @@
         "type" : "string",
         "enum" : [ "MEMBER", "ADVANCED_MEMBER", "SUPERVISOR" ]
       },
+      "PreferenceMap" : {
+        "type" : "object",
+        "additionalProperties" : {
+          "type" : "string"
+        }
+      },
       "Response" : {
         "type" : "object",
         "properties" : {
@@ -8119,7 +8493,7 @@
             "description" : "the phone to update"
           }
         },
-        "description" : "password update"
+        "description" : "profile update"
       },
       "UServerSetting" : {
         "type" : "object",

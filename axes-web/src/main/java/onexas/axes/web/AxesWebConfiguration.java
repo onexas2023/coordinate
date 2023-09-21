@@ -74,6 +74,7 @@ public class AxesWebConfiguration {
 					new String[] { Api.ACTION_VIEW, Api.ACTION_MODIFY }));
 			
 			ppRegistory.register(new PrincipalPermissionBundle("coordinate-profile",new String[] {Api.ACTION_MODIFY}));
+			ppRegistory.register(new PrincipalPermissionBundle("coordinate-preference",new String[] {Api.ACTION_MODIFY}));
 			ppRegistory.register(new PrincipalPermissionBundle("coordinate-user",new String[] {Api.ACTION_VIEW}));
 			ppRegistory.register(new PrincipalPermissionBundle("coordinate-organization",new String[] {Api.ACTION_VIEW}));
 			ppRegistory.register(new PrincipalPermissionBundle("coordinate-job",new String[] {Api.ACTION_VIEW}));
