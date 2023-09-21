@@ -79,8 +79,9 @@ public class EntryPageInitial implements Initiator, InitiatorExt {
 			authenticated = !"false".equals(arg.toString());
 		}
 
+		Workspace workspace = AppContext.bean(Workspace.class);
+		
 		if (authenticated) {
-			Workspace workspace = AppContext.bean(Workspace.class);
 			Authentication auth = workspace.getAuthentication();
 			boolean pass = false;
 			if (auth != null) {
@@ -114,6 +115,10 @@ public class EntryPageInitial implements Initiator, InitiatorExt {
 			}
 			page.addFunctionMapper(mapper);
 		}
+		
+		//sync local, for the first redirect after logout case, session is invalid and no locale info in zk yet
+		//XAS-86 In axes, after logout, the locale is not sync in login page
+		workspace.getPreferredLocale();
 	}
 
 	@Override
