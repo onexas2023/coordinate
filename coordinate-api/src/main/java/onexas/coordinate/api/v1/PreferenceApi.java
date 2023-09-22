@@ -83,7 +83,7 @@ public interface PreferenceApi extends Api {
 	
 	@Operation(summary = "update a preference of current user by key", tags = {
 			API_TAG }, security = @SecurityRequirement(name = NAME_AUTH_TOKEN), extensions = {
-					@Extension(properties = @ExtensionProperty(name = CODE_GEN_REQ_BODY_NAME, value = "preferences")) })
+					@Extension(properties = @ExtensionProperty(name = CODE_GEN_REQ_BODY_NAME, value = "value")) })
 	@ApiResponses(value = {
 			@ApiResponse(responseCode = HTTP_OK, description = MSG_OK, content = @Content(schema = @Schema(implementation = String.class))),
 			@ApiResponse(responseCode = HTTP_BAD_REQUEST, description = MSG_BAD_REQUEST, content = @Content(schema = @Schema(implementation = Response.class))),

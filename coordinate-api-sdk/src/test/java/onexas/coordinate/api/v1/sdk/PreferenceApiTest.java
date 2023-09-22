@@ -92,14 +92,14 @@ public class PreferenceApiTest extends CoordinateApiSDKTestBase {
 			Assert.assertEquals("18", preference.get("age"));
 			
 			api.updatePreference("age", "47");
-			api.updatePreference("address", "Somewhere");
+			api.updatePreference("address", "{\"name\":\"value\"}");
 			
 			preference = api.getPreferences();
 			Assert.assertEquals(4, preference.size());
 			Assert.assertEquals("DennisX", preference.get("name"));
 			Assert.assertEquals("abc@def.com", preference.get("email"));
 			Assert.assertEquals("47", preference.get("age"));
-			Assert.assertEquals("Somewhere", preference.get("address"));
+			Assert.assertEquals("{\"name\":\"value\"}", preference.get("address"));
 			
 			
 			map = new LinkedHashMap<>();

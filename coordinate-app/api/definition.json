@@ -6288,7 +6288,7 @@
         } ],
         "summary" : "update a preference of current user by key",
         "tags" : [ "coordinate-preference" ],
-        "x-codegen-request-body-name" : "preferences"
+        "x-codegen-request-body-name" : "value"
       }
     },
     "/api/coordinate/v1/preference/preferences" : {
