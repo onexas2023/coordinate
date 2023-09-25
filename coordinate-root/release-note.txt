@@ -8,7 +8,8 @@
  * Improvements	
           
  * Fixed Bugs
-   
+   * XAS-86 In axes, after logout, the locale is not sync in login page
+      
  * Upgrade Notes   
 
 -------------------------------------------

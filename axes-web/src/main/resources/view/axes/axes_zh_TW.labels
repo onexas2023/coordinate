@@ -26,7 +26,6 @@ axes.closedDateTime=關閉時間
 axes.code=代碼
 axes.config=設定
 axes.confirmation=確認
-axes.confirmation=確認
 axes.create=建立
 axes.createdDateTime=建立時間
 axes.dateTime=日期時間
@@ -248,3 +247,5 @@ axes.secret.content=內容
 axes.secret.toggleUpdateContent=切換更新內容
 axes.secret.fingerprint=指印
 axes.required=必要
+
+axes.resetPreferences=重設偏好

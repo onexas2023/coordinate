@@ -72,6 +72,9 @@ public class UserInfoEditorCtrl extends CtrlBase {
 		mainComp.addEventListener("onDelete", (evt) -> {
 			doDelete();
 		});
+		mainComp.addEventListener("onResetPreferences", (evt) -> {
+			doResetPreferences();
+		});
 
 		workspace.subscribe((evt) -> {
 			doWorkspaceEvent(evt);
@@ -175,5 +178,16 @@ public class UserInfoEditorCtrl extends CtrlBase {
 						Zks.showClientNotification(Zks.getLabelWithArg("axes.msg.notifyDeleted", user.getDisplayName()));
 					});
 				}, null);
+	}
+	
+	private void doResetPreferences() {
+		if (selectedUser == null) {
+			return;
+		}
+
+		CoordinateAdminUserApi api = new CoordinateAdminUserApi(workspace.getApiClient());
+		api.resetUserPreferences(selectedUser.getUid());
+		workspace.publish(new UserEvent(UserEventType.UPDATED, selectedUser));
+		Zks.showClientNotification(Zks.getLabelWithArg("axes.msg.notifyUpdated", selectedUser.getDisplayName()));
 	}
 }

@@ -164,4 +164,14 @@ public interface AdminUserApi extends onexas.coordinate.web.api.Api {
 			TYPE_APP_JSON }, produces = { TYPE_APP_JSON })
 	public AUser createUserByDomainUser(
 			@Parameter(description = "domain-user-create object", required = true) @Valid @NotNull @RequestBody ADomainUserCreate userCreate);
+	
+	
+	@Operation(summary = "reset a user's preferences", tags = {
+			AdminUserApi.API_TAG }, security = @SecurityRequirement(name = NAME_AUTH_TOKEN))
+	@ApiResponses(value = {
+			@ApiResponse(responseCode = HTTP_OK, description = MSG_OK, content = @Content(schema = @Schema(implementation = Response.class))) })
+	@RequestMapping(value = "/user/{uid}/preferences", method = RequestMethod.DELETE, consumes = {
+			TYPE_APP_JSON }, produces = { TYPE_APP_JSON })
+	public Response resetUserPreferences(
+			@Parameter(description = "uid of a user", required = true) @PathVariable("uid") String uid);
 }

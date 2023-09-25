@@ -25,6 +25,7 @@ import onexas.coordinate.service.AuthenticationTokenService;
 import onexas.coordinate.service.UserService;
 import onexas.coordinate.web.api.impl.ApiImplBase;
 import onexas.coordinate.web.api.model.Response;
+
 /**
  * 
  * @author Dennis Chen
@@ -35,6 +36,9 @@ import onexas.coordinate.web.api.model.Response;
 @GrantAuthentication
 public class ProfileApiImpl extends ApiImplBase implements ProfileApi {
 
+	public static final String CATEGORY = "user-profile";
+	private static final String PREFIX = "profile-";
+
 	@Autowired
 	UserService userService;
 
@@ -43,13 +47,11 @@ public class ProfileApiImpl extends ApiImplBase implements ProfileApi {
 
 	@Autowired
 	RequestContext reqContext;
-	
-	
 
 	public ProfileApiImpl() {
 		super(ProfileApi.API_NAME, V1, ProfileApi.API_URI);
 	}
-	
+
 	@Override
 	@Transactional(transactionManager = CoordinateEntityManageConfiguration.TX_MANAGER, isolation = Isolation.READ_COMMITTED)
 	public Response updatePassword(UPasswordUpdate passwordUpdate) {
@@ -57,10 +59,10 @@ public class ProfileApiImpl extends ApiImplBase implements ProfileApi {
 		String userUid = reqContext.grantUserUid();
 
 		User user = userService.get(userUid);
-		if(!Domain.LOCAL.equals(user.getDomain())) {
+		if (!Domain.LOCAL.equals(user.getDomain())) {
 			throw new NoPermissionException("not allow to update a non-local domain user's password");
 		}
-		
+
 		if (userService.verifyPassword(userUid, passwordUpdate.getOldPassword())) {
 			userService.update(userUid, new UserUpdate().withPassword(passwordUpdate.getNewPassword()));
 		} else {
@@ -71,10 +73,10 @@ public class ProfileApiImpl extends ApiImplBase implements ProfileApi {
 
 	@Override
 	public onexas.coordinate.api.v1.model.UProfile getProfile() {
-		
+
 		String userUid = reqContext.grantUserUid();
 		User user = userService.get(userUid);
-		Map<String,String> properties = userService.getProperties(user.getUid(), UserService.PROP_CAT_PROFILE);
+		Map<String, String> properties = userService.getProperties(user.getUid(), CATEGORY);
 		return wrapProfile(user, properties);
 	}
 
@@ -84,36 +86,36 @@ public class ProfileApiImpl extends ApiImplBase implements ProfileApi {
 		profile.setDomain(user.getDomain());
 		profile.setDisplayName(user.getDisplayName());
 		profile.setEmail(user.getEmail());
-		profile.setAddress(properties.get("address"));
-		profile.setPhone(properties.get("phone"));
+		profile.setAddress(properties.get(PREFIX + "address"));
+		profile.setPhone(properties.get(PREFIX + "phone"));
 		return profile;
 	}
 
 	@Override
 	@GrantPermissions(@GrantPermission(target = ProfileApi.API_PERMISSION_TARGET, action = {
-			ProfileApi.ACTION_MODIFY}))
+			ProfileApi.ACTION_MODIFY }))
 	@Transactional(transactionManager = CoordinateEntityManageConfiguration.TX_MANAGER, isolation = Isolation.READ_COMMITTED)
 	public onexas.coordinate.api.v1.model.UProfile updateProfile(UProfileUpdate profileUpdate) {
 		String userUid = reqContext.grantUserUid();
-		
+
 		UserUpdate userUpdate = new UserUpdate();
-		if(profileUpdate.getDisplayName()!=null) {
+		if (profileUpdate.getDisplayName() != null) {
 			userUpdate.setDisplayName(profileUpdate.getDisplayName());
 		}
-		if(profileUpdate.getEmail()!=null) {
+		if (profileUpdate.getEmail() != null) {
 			userUpdate.setEmail(profileUpdate.getEmail());
 		}
 		User user = userService.update(userUid, userUpdate);
-		
-		Map<String,String> properties = userService.getProperties(userUid, UserService.PROP_CAT_PROFILE);		
-		if(profileUpdate.getAddress()!=null) {
-			properties.put("address",profileUpdate.getAddress());
+
+		Map<String, String> properties = userService.getProperties(userUid, CATEGORY);
+		if (profileUpdate.getAddress() != null) {
+			properties.put(PREFIX + "address", profileUpdate.getAddress());
 		}
-		if(profileUpdate.getPhone()!=null) {
-			properties.put("phone",profileUpdate.getPhone());
+		if (profileUpdate.getPhone() != null) {
+			properties.put(PREFIX + "phone", profileUpdate.getPhone());
 		}
-		userService.setProperties(userUid, properties, UserService.PROP_CAT_PROFILE);
-		
+		userService.setProperties(userUid, properties, CATEGORY);
+
 		return wrapProfile(user, properties);
 	}
 

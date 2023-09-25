@@ -61,6 +61,7 @@
 		<div hflex="1" />
 		<button label="${x:l('axes.delete')}" forward="onClick=mainComp.onDelete" sclass="slave"
 			iconSclass="fas fa-trash-alt" />
+		<button label="${x:l('axes.resetPreferences')}" forward="onClick=mainComp.onResetPreferences" sclass="slave"/>
 		<button label="${x:l('axes.save')}" forward="onClick=mainComp.onSave" />
 	</hlayout>
 </vlayout>

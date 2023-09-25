@@ -20,9 +20,6 @@ import onexas.coordinate.model.UserUpdate;
  */
 public interface UserService {
 	
-	public static final String PROP_CAT_PROFILE = "profile";
-	public static final String PROP_CAT_SYSTEM = "system";
-	
 	public ListPage<User> list(UserFilter filter);
 	
 	public ListPage<User> list(UserFilter filter, Boolean disabled);
@@ -46,6 +43,7 @@ public interface UserService {
 	
 	
 	public Map<String, String> getProperties(String uid, String category);
+	public String findProperty(String uid, String name);
 	public void setProperties(String uid, Map<String, String> properties, String category);
 	public void setProperty(String uid, String name, String value, String category);
 	public void deleteProperties(String uid, Set<String> name);
