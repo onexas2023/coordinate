@@ -2,13 +2,13 @@
 <?page title="ZK Test" language="xul/html"?>
 <window title="${arg.title}"
 	sclass="axes z-messagebox-window ${arg.sclass}" border="normal"
-	width="260px" closable="true" use="org.zkoss.zul.impl.MessageboxDlg"
+	width="360px" closable="true" use="org.zkoss.zul.impl.MessageboxDlg"
 	xmlns:w="client">
 	<hbox sclass="-msgbody">
 		<i sclass="${arg.icon}" />
 		<div sclass="z-messagebox">
 			<label value="${arg.message}" multiline="true"
-				w:onBind="zul.wnd.Messagebox.onBind(this, '${empty arg.width ? 350: arg.width}')" />
+				w:onBind="zul.wnd.Messagebox.onBind(this, '${empty arg.width ? 450: arg.width}')" />
 		</div>
 	</hbox>
 	<separator sclass="-sep" />
