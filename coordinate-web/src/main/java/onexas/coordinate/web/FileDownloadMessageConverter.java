@@ -69,67 +69,69 @@ public class FileDownloadMessageConverter extends AbstractHttpMessageConverter<F
 	protected void writeInternal(FileDownload t, HttpOutputMessage outputMessage)
 			throws IOException, HttpMessageNotWritableException {
 
-		String name = t.getName();
-		MediaType mediaType = t.getMediaType();
-		Long lastModified = t.getLastModified();
-		boolean inline = t.isInline();
-
-		HttpHeaders headers = outputMessage.getHeaders();
-		if (mediaType == null) {
-
-			if (name != null) {
-				String type = URLConnection.guessContentTypeFromName(name);
-				if (type != null) {
-					try {
-						mediaType = MediaType.parseMediaType(type);
-					} catch (Exception x) {
-					}
-				}
-			}
-		}
-
-		if (mediaType == null) {
-			mediaType = inline ? MediaType.TEXT_PLAIN : MediaType.APPLICATION_OCTET_STREAM;
-		}
-
-		headers.setContentType(mediaType);
-
-		// modernUserAgent guess
-		String filename = null;
-		if (modernUserAgentRegex != null) {
-			try {
-				HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes())
-						.getRequest();
-				if (request != null) {
-					String userAgent = request.getHeader(HttpHeaders.USER_AGENT);
-					if (userAgent != null && modernUserAgentRegex.matcher(userAgent).matches()) {
-						filename = URLEncoder.encode(name, "UTF8");
-					}
-				}
-			} catch (Exception x) {// eat
-			}
-		}
-
-		if (filename == null) {
-			filename = Files.safeFileName(name);
-		}
-
-		headers.setContentDisposition(ContentDisposition.builder(Boolean.TRUE.equals(inline) ? "inline" : "attachment")
-				.filename(filename).build());
-
-		if (lastModified != null) {
-			headers.setLastModified(lastModified.longValue());
-		}
-
-		// flush body (for header out)first, it is useful when the mediaType is known by
-		// client
-		OutputStream os = outputMessage.getBody();
-		os.flush();
-
 		InputStream is = null;
 
 		try {
+			//get/open stream first to prevent open stream error (e.g. no user permission) after set http header
+			//in such case, the error message will not been shown to client
 			is = t.getInputStream();
+			
+			String name = t.getName();
+			MediaType mediaType = t.getMediaType();
+			Long lastModified = t.getLastModified();
+			boolean inline = t.isInline();
+	
+			HttpHeaders headers = outputMessage.getHeaders();
+			if (mediaType == null) {
+	
+				if (name != null) {
+					String type = URLConnection.guessContentTypeFromName(name);
+					if (type != null) {
+						try {
+							mediaType = MediaType.parseMediaType(type);
+						} catch (Exception x) {
+						}
+					}
+				}
+			}
+	
+			if (mediaType == null) {
+				mediaType = inline ? MediaType.TEXT_PLAIN : MediaType.APPLICATION_OCTET_STREAM;
+			}
+	
+			headers.setContentType(mediaType);
+	
+			// modernUserAgent guess
+			String filename = null;
+			if (modernUserAgentRegex != null) {
+				try {
+					HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes())
+							.getRequest();
+					if (request != null) {
+						String userAgent = request.getHeader(HttpHeaders.USER_AGENT);
+						if (userAgent != null && modernUserAgentRegex.matcher(userAgent).matches()) {
+							filename = URLEncoder.encode(name, "UTF8");
+						}
+					}
+				} catch (Exception x) {// eat
+				}
+			}
+	
+			if (filename == null) {
+				filename = Files.safeFileName(name);
+			}
+	
+			headers.setContentDisposition(ContentDisposition.builder(Boolean.TRUE.equals(inline) ? "inline" : "attachment")
+					.filename(filename).build());
+	
+			if (lastModified != null) {
+				headers.setLastModified(lastModified.longValue());
+			}	
+
+			// flush body (for header out)first, it is useful when the mediaType is known by
+			// client
+			OutputStream os = outputMessage.getBody();
+			os.flush();
 
 			byte[] chunk = new byte[1024];
 			int readLen = -1;
