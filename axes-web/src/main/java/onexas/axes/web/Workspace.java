@@ -145,7 +145,7 @@ public class Workspace {
 		syncZKLocale(locale);
 	}
 
-	public boolean isAuthroized() {
+	public boolean isAuthorized() {
 		return session.getAuthentication() != null;
 	}
 

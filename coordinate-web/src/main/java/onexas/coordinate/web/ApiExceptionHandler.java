@@ -153,7 +153,7 @@ public class ApiExceptionHandler {
 			return applyCommon(ResponseEntity.status(HttpStatus.UNAUTHORIZED)).body(err);
 		}
 
-		// unauthroized
+		// unauthorized
 		if (ex instanceof NoPermissionException) {
 			return applyCommon(ResponseEntity.status(HttpStatus.FORBIDDEN)).body(err);
 		}
