@@ -38,6 +38,11 @@ import onexas.coordinate.web.api.model.Response;
 
 @RequestMapping(PreferenceApi.API_URI)
 @SecurityScheme(name = NAME_AUTH_TOKEN, type = SecuritySchemeType.APIKEY, paramName = NAME_AUTH_TOKEN, in = SecuritySchemeIn.HEADER)
+@ApiResponses(value = {
+		@ApiResponse(responseCode = Api.HTTP_BAD_REQUEST, description = Api.MSG_BAD_REQUEST, content = @Content(mediaType = Api.TYPE_APP_JSON, schema = @Schema(implementation = Response.class))),
+		@ApiResponse(responseCode = Api.HTTP_UNAUTHORIZED, description = Api.MSG_UNAUTHORIZED, content = @Content(mediaType = Api.TYPE_APP_JSON, schema = @Schema(implementation = Response.class))),
+		@ApiResponse(responseCode = Api.HTTP_FORBIDDEN, description = Api.MSG_FORBIDDEN, content = @Content(mediaType = Api.TYPE_APP_JSON, schema = @Schema(implementation = Response.class))),
+		@ApiResponse(responseCode = Api.HTTP_NOT_FOUND, description = Api.MSG_NOT_FOUND, content = @Content(mediaType = Api.TYPE_APP_JSON, schema = @Schema(implementation = Response.class))) })
 public interface PreferenceApi extends Api {
 
 	static public final String API_NAME = "coordinate-preference";
@@ -50,18 +55,14 @@ public interface PreferenceApi extends Api {
 	@Operation(summary = "get preferences of current user", tags = {
 			API_TAG }, security = @SecurityRequirement(name = NAME_AUTH_TOKEN))
 	@ApiResponses(value = {
-			@ApiResponse(responseCode = HTTP_OK, description = MSG_OK, content = @Content(schema = @Schema(implementation = PreferenceMap.class))),
-			@ApiResponse(responseCode = HTTP_UNAUTHORIZED, description = MSG_UNAUTHORIZED, content = @Content(schema = @Schema(implementation = Response.class))),
-			@ApiResponse(responseCode = HTTP_FORBIDDEN, description = MSG_FORBIDDEN, content = @Content(schema = @Schema(implementation = Response.class))) })
+			@ApiResponse(responseCode = HTTP_OK, description = MSG_OK, content = @Content(schema = @Schema(implementation = PreferenceMap.class))) })
 	@RequestMapping(value = "/preferences", method = RequestMethod.GET, produces = { TYPE_APP_JSON })
 	public Map<String, String> getPreferences();
 	
 	@Operation(summary = "find preferences of current user", tags = {
 			API_TAG }, security = @SecurityRequirement(name = NAME_AUTH_TOKEN))
 	@ApiResponses(value = {
-			@ApiResponse(responseCode = HTTP_OK, description = MSG_OK, content = @Content(schema = @Schema(implementation = String.class))),
-			@ApiResponse(responseCode = HTTP_UNAUTHORIZED, description = MSG_UNAUTHORIZED, content = @Content(schema = @Schema(implementation = Response.class))),
-			@ApiResponse(responseCode = HTTP_FORBIDDEN, description = MSG_FORBIDDEN, content = @Content(schema = @Schema(implementation = Response.class))) })
+			@ApiResponse(responseCode = HTTP_OK, description = MSG_OK, content = @Content(schema = @Schema(implementation = String.class))) })
 	@RequestMapping(value = "/preference/{key}", method = RequestMethod.GET, produces = { TYPE_TEXT_PLAIN })
 	public String findPreference(
 			@Parameter(description = "kef of a user preference", required = true) @PathVariable("key") String key);
@@ -70,10 +71,7 @@ public interface PreferenceApi extends Api {
 			API_TAG }, security = @SecurityRequirement(name = NAME_AUTH_TOKEN), extensions = {
 					@Extension(properties = @ExtensionProperty(name = CODE_GEN_REQ_BODY_NAME, value = "preferences")) })
 	@ApiResponses(value = {
-			@ApiResponse(responseCode = HTTP_OK, description = MSG_OK, content = @Content(schema = @Schema(implementation = PreferenceMap.class))),
-			@ApiResponse(responseCode = HTTP_BAD_REQUEST, description = MSG_BAD_REQUEST, content = @Content(schema = @Schema(implementation = Response.class))),
-			@ApiResponse(responseCode = HTTP_UNAUTHORIZED, description = MSG_UNAUTHORIZED, content = @Content(schema = @Schema(implementation = Response.class))),
-			@ApiResponse(responseCode = HTTP_FORBIDDEN, description = MSG_FORBIDDEN, content = @Content(schema = @Schema(implementation = Response.class))) })
+			@ApiResponse(responseCode = HTTP_OK, description = MSG_OK, content = @Content(schema = @Schema(implementation = PreferenceMap.class))) })
 	@RequestMapping(value = "/preferences", method = RequestMethod.POST, consumes = { TYPE_APP_JSON }, produces = {
 			TYPE_APP_JSON })
 	public Map<String, String> updatePreferences(
@@ -85,10 +83,7 @@ public interface PreferenceApi extends Api {
 			API_TAG }, security = @SecurityRequirement(name = NAME_AUTH_TOKEN), extensions = {
 					@Extension(properties = @ExtensionProperty(name = CODE_GEN_REQ_BODY_NAME, value = "value")) })
 	@ApiResponses(value = {
-			@ApiResponse(responseCode = HTTP_OK, description = MSG_OK, content = @Content(schema = @Schema(implementation = String.class))),
-			@ApiResponse(responseCode = HTTP_BAD_REQUEST, description = MSG_BAD_REQUEST, content = @Content(schema = @Schema(implementation = Response.class))),
-			@ApiResponse(responseCode = HTTP_UNAUTHORIZED, description = MSG_UNAUTHORIZED, content = @Content(schema = @Schema(implementation = Response.class))),
-			@ApiResponse(responseCode = HTTP_FORBIDDEN, description = MSG_FORBIDDEN, content = @Content(schema = @Schema(implementation = Response.class))) })
+			@ApiResponse(responseCode = HTTP_OK, description = MSG_OK, content = @Content(schema = @Schema(implementation = String.class))) })
 	@RequestMapping(value = "/preference/{key}", method = RequestMethod.PUT, consumes = { TYPE_TEXT_PLAIN }, produces = {
 			TYPE_TEXT_PLAIN })
 	public String updatePreference(
@@ -100,10 +95,7 @@ public interface PreferenceApi extends Api {
 			API_TAG }, security = @SecurityRequirement(name = NAME_AUTH_TOKEN), extensions = {
 					@Extension(properties = @ExtensionProperty(name = CODE_GEN_REQ_BODY_NAME, value = "preferences")) })
 	@ApiResponses(value = {
-			@ApiResponse(responseCode = HTTP_OK, description = MSG_OK, content = @Content(schema = @Schema(implementation = PreferenceMap.class))),
-			@ApiResponse(responseCode = HTTP_BAD_REQUEST, description = MSG_BAD_REQUEST, content = @Content(schema = @Schema(implementation = Response.class))),
-			@ApiResponse(responseCode = HTTP_UNAUTHORIZED, description = MSG_UNAUTHORIZED, content = @Content(schema = @Schema(implementation = Response.class))),
-			@ApiResponse(responseCode = HTTP_FORBIDDEN, description = MSG_FORBIDDEN, content = @Content(schema = @Schema(implementation = Response.class))) })
+			@ApiResponse(responseCode = HTTP_OK, description = MSG_OK, content = @Content(schema = @Schema(implementation = PreferenceMap.class))) })
 	@RequestMapping(value = "/preferences", method = RequestMethod.PUT, consumes = { TYPE_APP_JSON }, produces = {
 			TYPE_APP_JSON })
 	public Map<String, String> resetPreferences(

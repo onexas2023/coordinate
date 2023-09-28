@@ -1461,6 +1461,26 @@
               }
             },
             "description" : "Require authentication"
+          },
+          "403" : {
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Response"
+                }
+              }
+            },
+            "description" : "Has no permission to access"
+          },
+          "404" : {
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Response"
+                }
+              }
+            },
+            "description" : "Resource not found"
           }
         },
         "summary" : "Create admin user and administrators role at the first time only",
@@ -1511,6 +1531,26 @@
               }
             },
             "description" : "Require authentication"
+          },
+          "403" : {
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Response"
+                }
+              }
+            },
+            "description" : "Has no permission to access"
+          },
+          "404" : {
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Response"
+                }
+              }
+            },
+            "description" : "Resource not found"
           }
         },
         "summary" : "Create demo data by given case",
@@ -6192,9 +6232,19 @@
             },
             "description" : "Query successfully"
           },
+          "400" : {
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Response"
+                }
+              }
+            },
+            "description" : "Has wrong request arguments"
+          },
           "401" : {
             "content" : {
-              "text/plain" : {
+              "application/json" : {
                 "schema" : {
                   "$ref" : "#/components/schemas/Response"
                 }
@@ -6204,13 +6254,23 @@
           },
           "403" : {
             "content" : {
-              "text/plain" : {
+              "application/json" : {
                 "schema" : {
                   "$ref" : "#/components/schemas/Response"
                 }
               }
             },
             "description" : "Has no permission to access"
+          },
+          "404" : {
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Response"
+                }
+              }
+            },
+            "description" : "Resource not found"
           }
         },
         "security" : [ {
@@ -6254,7 +6314,7 @@
           },
           "400" : {
             "content" : {
-              "text/plain" : {
+              "application/json" : {
                 "schema" : {
                   "$ref" : "#/components/schemas/Response"
                 }
@@ -6264,7 +6324,7 @@
           },
           "401" : {
             "content" : {
-              "text/plain" : {
+              "application/json" : {
                 "schema" : {
                   "$ref" : "#/components/schemas/Response"
                 }
@@ -6274,13 +6334,23 @@
           },
           "403" : {
             "content" : {
-              "text/plain" : {
+              "application/json" : {
                 "schema" : {
                   "$ref" : "#/components/schemas/Response"
                 }
               }
             },
             "description" : "Has no permission to access"
+          },
+          "404" : {
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Response"
+                }
+              }
+            },
+            "description" : "Resource not found"
           }
         },
         "security" : [ {
@@ -6305,6 +6375,16 @@
             },
             "description" : "Query successfully"
           },
+          "400" : {
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Response"
+                }
+              }
+            },
+            "description" : "Has wrong request arguments"
+          },
           "401" : {
             "content" : {
               "application/json" : {
@@ -6324,6 +6404,16 @@
               }
             },
             "description" : "Has no permission to access"
+          },
+          "404" : {
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Response"
+                }
+              }
+            },
+            "description" : "Resource not found"
           }
         },
         "security" : [ {
@@ -6388,6 +6478,16 @@
               }
             },
             "description" : "Has no permission to access"
+          },
+          "404" : {
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Response"
+                }
+              }
+            },
+            "description" : "Resource not found"
           }
         },
         "security" : [ {
@@ -6453,6 +6553,16 @@
               }
             },
             "description" : "Has no permission to access"
+          },
+          "404" : {
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Response"
+                }
+              }
+            },
+            "description" : "Resource not found"
           }
         },
         "security" : [ {
@@ -6516,6 +6626,16 @@
               }
             },
             "description" : "Has no permission to access"
+          },
+          "404" : {
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Response"
+                }
+              }
+            },
+            "description" : "Resource not found"
           }
         },
         "security" : [ {
@@ -6540,6 +6660,16 @@
             },
             "description" : "Query successfully"
           },
+          "400" : {
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Response"
+                }
+              }
+            },
+            "description" : "Has wrong request arguments"
+          },
           "401" : {
             "content" : {
               "application/json" : {
@@ -6559,6 +6689,16 @@
               }
             },
             "description" : "Has no permission to access"
+          },
+          "404" : {
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Response"
+                }
+              }
+            },
+            "description" : "Resource not found"
           }
         },
         "security" : [ {
@@ -6619,6 +6759,16 @@
               }
             },
             "description" : "Has no permission to access"
+          },
+          "404" : {
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Response"
+                }
+              }
+            },
+            "description" : "Resource not found"
           }
         },
         "security" : [ {

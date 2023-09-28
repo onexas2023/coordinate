@@ -36,6 +36,11 @@ import onexas.coordinate.web.api.model.Response;
 
 @RequestMapping(AdminInitApi.API_URI)
 @SecurityScheme(name = NAME_AUTH_TOKEN, type = SecuritySchemeType.APIKEY, paramName = NAME_AUTH_TOKEN, in = SecuritySchemeIn.HEADER)
+@ApiResponses(value = {
+		@ApiResponse(responseCode = Api.HTTP_BAD_REQUEST, description = Api.MSG_BAD_REQUEST, content = @Content(mediaType = Api.TYPE_APP_JSON, schema = @Schema(implementation = Response.class))),
+		@ApiResponse(responseCode = Api.HTTP_UNAUTHORIZED, description = Api.MSG_UNAUTHORIZED, content = @Content(mediaType = Api.TYPE_APP_JSON, schema = @Schema(implementation = Response.class))),
+		@ApiResponse(responseCode = Api.HTTP_FORBIDDEN, description = Api.MSG_FORBIDDEN, content = @Content(mediaType = Api.TYPE_APP_JSON, schema = @Schema(implementation = Response.class))),
+		@ApiResponse(responseCode = Api.HTTP_NOT_FOUND, description = Api.MSG_NOT_FOUND, content = @Content(mediaType = Api.TYPE_APP_JSON, schema = @Schema(implementation = Response.class))) })
 public interface AdminInitApi extends Api {
 
 	static public final String API_NAME = "coordinate-admin-init";
@@ -47,9 +52,7 @@ public interface AdminInitApi extends Api {
 			AdminInitApi.API_TAG }, extensions = {
 					@Extension(properties = @ExtensionProperty(name = CODE_GEN_REQ_BODY_NAME, value = "request")) })
 	@ApiResponses(value = {
-			@ApiResponse(responseCode = HTTP_OK, description = MSG_OK, content = @Content(schema = @Schema(implementation = AAdmin.class))),
-			@ApiResponse(responseCode = HTTP_BAD_REQUEST, description = MSG_BAD_REQUEST, content = @Content(schema = @Schema(implementation = Response.class))),
-			@ApiResponse(responseCode = HTTP_UNAUTHORIZED, description = MSG_UNAUTHORIZED, content = @Content(schema = @Schema(implementation = Response.class))) })
+			@ApiResponse(responseCode = HTTP_OK, description = MSG_OK, content = @Content(schema = @Schema(implementation = AAdmin.class))) })
 	@RequestMapping(value = "/admin", method = RequestMethod.POST, consumes = { TYPE_APP_JSON }, produces = {
 			TYPE_APP_JSON })
 	public AAdmin initAdmin(
@@ -58,9 +61,7 @@ public interface AdminInitApi extends Api {
 	@Operation(summary = "Create demo data by given case", tags = { AdminInitApi.API_TAG }, extensions = {
 			@Extension(properties = @ExtensionProperty(name = CODE_GEN_REQ_BODY_NAME, value = "request")) })
 	@ApiResponses(value = {
-			@ApiResponse(responseCode = HTTP_OK, description = MSG_OK, content = @Content(schema = @Schema(implementation = Response.class))),
-			@ApiResponse(responseCode = HTTP_BAD_REQUEST, description = MSG_BAD_REQUEST, content = @Content(schema = @Schema(implementation = Response.class))),
-			@ApiResponse(responseCode = HTTP_UNAUTHORIZED, description = MSG_UNAUTHORIZED, content = @Content(schema = @Schema(implementation = Response.class))) })
+			@ApiResponse(responseCode = HTTP_OK, description = MSG_OK, content = @Content(schema = @Schema(implementation = Response.class))) })
 	@RequestMapping(value = "/demo", method = RequestMethod.POST, consumes = { TYPE_APP_JSON }, produces = {
 			TYPE_APP_JSON })
 	public Response initDemo(
