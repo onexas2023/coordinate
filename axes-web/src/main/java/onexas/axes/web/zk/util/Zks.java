@@ -586,7 +586,7 @@ public class Zks {
 				if(!"_fi".equals(fi.getName()) || !FileItem.class.isAssignableFrom(fi.getType())) {
 					continue;
 				}
-				if (!fi.isAccessible()) {
+				if (!fi.canAccess(m)) {
 					fi.setAccessible(true);
 				}
 				Object fiObj = fi.get(m);

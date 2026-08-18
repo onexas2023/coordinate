@@ -366,8 +366,8 @@ public class GsonsTest extends CoordinateCommonTestBase {
 	@Test
 	public void testMapInteger() {
 		Map<String, Object> m = new LinkedHashMap<>();
-		m.put("a", new Integer(13));
-		m.put("b", new Float(99.9));
+		m.put("a", Integer.valueOf(13));
+		m.put("b", Float.valueOf(99.9F));
 		String j = Gsons.jsonify(m);
 		System.out.println(">>>>" + j);
 		Assert.assertEquals("{\"a\":13,\"b\":99.9}", j);
@@ -386,8 +386,8 @@ public class GsonsTest extends CoordinateCommonTestBase {
 	@Test
 	public void testListInteger() {
 		List<Object> m = new LinkedList<>();
-		m.add(new Integer(13));
-		m.add(new Float(99.9));
+		m.add(Integer.valueOf(13));
+		m.add(Float.valueOf(99.9F));
 		String j = Gsons.jsonify(m);
 		System.out.println(">>>>" + j);
 		Assert.assertEquals("[13,99.9]", j);

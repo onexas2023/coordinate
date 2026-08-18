@@ -57,11 +57,10 @@ public class Securitys {
 	static {
 		if (java.security.Security.getProvider(BC_RPOVIDER) == null) {
 			try {
-				@SuppressWarnings("rawtypes")
-				Class clz = Class.forName("org.bouncycastle.jce.provider.BouncyCastleProvider");
+				Class<?> clz = Class.forName("org.bouncycastle.jce.provider.BouncyCastleProvider");
 				//install bc provider if not found;
 				try{
-					java.security.Security.addProvider((Provider)clz.newInstance());
+					java.security.Security.addProvider((Provider)clz.getDeclaredConstructor().newInstance());
 				}catch(Exception x){
 					throw new IllegalStateException(x.getMessage(),x);
 				}

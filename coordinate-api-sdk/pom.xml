@@ -59,6 +59,12 @@
 			<scope>compile</scope>
 		</dependency>
 
+		<!-- for jdk 11-->		
+		<dependency>
+			<groupId>javax.annotation</groupId>
+			<artifactId>javax.annotation-api</artifactId>
+		</dependency>
+
 		<!-- @Nullable annotation -->
 		<dependency>
 			<groupId>com.google.code.findbugs</groupId>

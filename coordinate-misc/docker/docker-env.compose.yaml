@@ -1,14 +1,17 @@
-version: '3.1'
+# docker compose -f docker-env.compose.yaml up -d
+name: onexas
 services:
   activemq:
     image: webcenter/activemq:5.14.3
+    container_name: onesax-activemq
+    restart: unless-stopped
     ports:
       - 8161:8161
       - 61616:61616
       - 61613:61613
     volumes:
-      - /docker-volumes/activemq-data:/data
-      - /docker-volumes/activemq-log:/var/log/activemq
+      - ${PWD}/activemq-data:/data
+      - ${PWD}/activemq-log:/var/log/activemq
     environment:
       ACTIVEMQ_REMOVE_DEFAULT_ACCOUNT: 'true'
       ACTIVEMQ_ENABLED_AUTH: 'true'
@@ -16,13 +19,22 @@ services:
       ACTIVEMQ_ADMIN_PASSWORD: 1234
       ACTIVEMQ_OWNER_LOGIN: 'onexas'
       ACTIVEMQ_OWNER_PASSWORD: 1234
+    networks:
+      - onexas
   mariadb:
     image: mariadb:10.3.8
+    container_name: onesax-mariadb
+    restart: unless-stopped
     ports:
       - 3306:3306
     volumes:
-      - /docker-volumes/mariadb-data:/var/lib/mysql
+      - ${PWD}/mariadb-data:/var/lib/mysql
     environment:
       MYSQL_ROOT_PASSWORD: 1234
       MYSQL_ROOT_HOST: '%'
-      
+    networks:
+      - onexas
+networks:
+  onexas:
+    name: onexas-network
+    driver: bridge
