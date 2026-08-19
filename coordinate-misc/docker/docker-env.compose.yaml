@@ -10,8 +10,8 @@ services:
       - 61616:61616
       - 61613:61613
     volumes:
-      - ${PWD}/activemq-data:/data
-      - ${PWD}/activemq-log:/var/log/activemq
+      - activemq_data:/data
+      - activemq_log:/var/log/activemq
     environment:
       ACTIVEMQ_REMOVE_DEFAULT_ACCOUNT: 'true'
       ACTIVEMQ_ENABLED_AUTH: 'true'
@@ -28,7 +28,7 @@ services:
     ports:
       - 3306:3306
     volumes:
-      - ${PWD}/mariadb-data:/var/lib/mysql
+      - mariadb_data:/var/lib/mysql
     environment:
       MYSQL_ROOT_PASSWORD: 1234
       MYSQL_ROOT_HOST: '%'
@@ -38,3 +38,11 @@ networks:
   onexas:
     name: onexas-network
     driver: bridge
+# Define named volumes for reliable persistence across reboots
+volumes:
+  mariadb_data:
+    name: onexas-mariadb-data
+  activemq_data:
+    name: onexas-activemq-data
+  activemq_log:
+    name: onexas-activemq-log

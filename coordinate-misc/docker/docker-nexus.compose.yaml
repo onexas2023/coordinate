@@ -8,10 +8,14 @@ services:
     ports:
       - 8081:8081
     volumes:
-      - ${PWD}/nexus-data:/nexus-data # sudo chown -R 200:200 nexus-data
+      - nexus_data:/nexus-data
     networks:
       - nexus
 networks:
   nexus:
     name: nexus_network
     driver: bridge
+# Define named volumes for reliable persistence across reboots
+volumes:
+  nexus_data:
+    name: nexus-data	
