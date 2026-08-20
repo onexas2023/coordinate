@@ -7,15 +7,12 @@ services:
     restart: unless-stopped
     ports:
       - 8081:8081
+      - 8082:8082
     volumes:
-      - nexus_data:/nexus-data
+      - /data/nexus-data:/nexus-data # sudo chown -R 200:200 /data/nexus-data
     networks:
       - nexus
 networks:
   nexus:
     name: nexus_network
     driver: bridge
-# Define named volumes for reliable persistence across reboots
-volumes:
-  nexus_data:
-    name: nexus-data	
