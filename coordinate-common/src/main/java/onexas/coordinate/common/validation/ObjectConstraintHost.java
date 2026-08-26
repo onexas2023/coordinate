@@ -17,7 +17,7 @@ public class ObjectConstraintHost implements ConstraintValidator<ObjectConstrain
 	@Override
 	public void initialize(final ObjectConstraint constraintAnnotation) {
 		try {
-			validator = (ObjectConstraintValidator<Object>) constraintAnnotation.value().newInstance();
+			validator = (ObjectConstraintValidator<Object>) constraintAnnotation.value().getDeclaredConstructor().newInstance();
 		} catch (RuntimeException e) {
 			throw e;
 		} catch (Exception e) {

@@ -234,13 +234,13 @@ if $F_BUILD; then
 	TEMP=$DISTDIR/docker
 	echo '>>>> Copy docker config to '$TEMP
 	mkdir -p $TEMP
-	cp $BUILD_HOME/misc/docker/coordinate.allinone.compose.yaml $TEMP/.
+	cp $BUILD_HOME/coordinate-misc/docker/coordinate.allinone.compose.yaml $TEMP/.
 
 	#copy resources
 	TEMP=$DISTDIR/font
 	echo '>>>> Copy font to '$TEMP
 	mkdir -p $TEMP
-	cp $BUILD_HOME/misc/font/* $TEMP/
+	cp $BUILD_HOME/coordinate-misc/font/* $TEMP/
 
 	#copy distribution to last
 	echo '>>>> Copy distribution to '$LASTDIR
@@ -272,8 +272,8 @@ if $F_DEPLOY; then
 
 	#Use local setting
 	#The runtime should has token setting by 
-	#npm config set -- //nexus.mshome.net:8081/repository/npm-releases/:_auth base64(YOUR_NAME:PASSWORD)
-	echo '@onexas:registry=http://nexus.mshome.net:8081/repository/npm-releases/' > .npmrc
+	#npm config set -- //nexus.onexas2023.net:8081/repository/npm-releases/:_auth base64(YOUR_NAME:PASSWORD)
+	echo '@onexas:registry=http://nexus.onexas2023.net:8081/repository/npm-releases/' > .npmrc
 	npm publish
 fi
 
@@ -282,16 +282,16 @@ if $F_DOCKER; then
 
 	echo '>>>> Start to build docker image : '
 	cd $BUILD_HOME/coordinate-app
-	docker build . -t nexus.mshome.net:8082/repository/docker-releases/coordinate:latest
+	docker build . -t nexus.onexas2023.net:8082/repository/docker-releases/coordinate:latest
 
 	cd $BUILD_HOME/axes-app
-	docker build . -t nexus.mshome.net:8082/repository/docker-releases/axes:latest
+	docker build . -t nexus.onexas2023.net:8082/repository/docker-releases/axes:latest
 
 	if $F_OFFICIAL;then 
 		VER_DOCKER=$VER_FINAL
 
-		docker tag nexus.mshome.net:8082/repository/docker-releases/coordinate:latest nexus.mshome.net:8082/repository/docker-releases/coordinate:$VER_DOCKER
-		docker tag nexus.mshome.net:8082/repository/docker-releases/axes:latest nexus.mshome.net:8082/repository/docker-releases/axes:$VER_DOCKER
+		docker tag nexus.onexas2023.net:8082/repository/docker-releases/coordinate:latest nexus.onexas2023.net:8082/repository/docker-releases/coordinate:$VER_DOCKER
+		docker tag nexus.onexas2023.net:8082/repository/docker-releases/axes:latest nexus.onexas2023.net:8082/repository/docker-releases/axes:$VER_DOCKER
 
 	fi
 
@@ -301,18 +301,18 @@ fi
 if $F_DOCKER_PUSH; then
 
 	#The runtime should has token setting by 
-	#docker login -u YOUR_DEPLOY_TOKEN_USERNAME -p YOUR_DEPLOY_TOKEN nexus.mshome.net:8082
-	#you also need to add "insecure-registries" : ["nexus.mshome.net:8082"] to /etc/docker/daemon.json to avoid server gave HTTP response to HTTPS client
+	#docker login -u YOUR_DEPLOY_TOKEN_USERNAME -p YOUR_DEPLOY_TOKEN nexus.onexas2023.net:8082
+	#you also need to add "insecure-registries" : ["nexus.onexas2023.net:8082"] to /etc/docker/daemon.json to avoid server gave HTTP response to HTTPS client
 
 	echo '>>>> Start to push docker image : '
-	docker push nexus.mshome.net:8082/repository/docker-releases/coordinate:latest
-	docker push nexus.mshome.net:8082/repository/docker-releases/axes:latest
+	docker push nexus.onexas2023.net:8082/repository/docker-releases/coordinate:latest
+	docker push nexus.onexas2023.net:8082/repository/docker-releases/axes:latest
 
 	if $F_OFFICIAL;then 
 		VER_DOCKER=$VER_FINAL
 
-		docker push nexus.mshome.net:8082/repository/docker-releases/coordinate:$VER_DOCKER
-		docker push nexus.mshome.net:8082/repository/docker-releases/axes:$VER_DOCKER
+		docker push nexus.onexas2023.net:8082/repository/docker-releases/coordinate:$VER_DOCKER
+		docker push nexus.onexas2023.net:8082/repository/docker-releases/axes:$VER_DOCKER
 	fi
 
 fi

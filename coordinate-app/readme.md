@@ -1,9 +1,9 @@
 
 
 # Commands to release image 
- * docker build . -t nexus.mshome.net:8082/repository/docker-releases/coordinate
+ * docker build . -t nexus.onexas2023.net:8082/repository/docker-releases/coordinate
  * docker login registry.gitlab.com
- * docker push nexus.mshome.net:8082/repository/docker-releases/coordinate
+ * docker push nexus.onexas2023.net:8082/repository/docker-releases/coordinate
 
 # Schema conflict SOP 
  * Get the ready new version (e.g. 0.6.3,which is base on 0.5.1 and include change on 0.5.2)

@@ -173,7 +173,7 @@ public class ZkWebAppInitCleanupListener implements WebAppInit, WebAppCleanup {
 				@SuppressWarnings("rawtypes")
 				Class clz = Classes.forNameByThread(l);
 				if (WebAppInit.class.isAssignableFrom(clz)) {
-					WebAppInit init = (WebAppInit) clz.newInstance();
+					WebAppInit init = (WebAppInit) clz.getDeclaredConstructor().newInstance();
 					init.init(wapp);
 				}
 				if (WebAppCleanup.class.isAssignableFrom(clz)) {
@@ -221,7 +221,7 @@ public class ZkWebAppInitCleanupListener implements WebAppInit, WebAppCleanup {
 		}
 		for (Class<WebAppCleanup> clz : cleanUpList) {
 			try {
-				WebAppCleanup cleanup = (WebAppCleanup) clz.newInstance();
+				WebAppCleanup cleanup = (WebAppCleanup) clz.getDeclaredConstructor().newInstance();
 				cleanup.cleanup(webApp);
 			} catch (Exception e) {
 				throw new IllegalStateException();

@@ -48,12 +48,12 @@ public class CoordinateSchemaConfiguration {
 		for (String m : migratorClzs) {
 			try {
 				Class<?> clz = Classes.forNameByThread(m);
-				Object mc = clz.newInstance();
+				Object mc = clz.getDeclaredConstructor().newInstance();
 				if (!(mc instanceof SchemaMigrator)) {
 					throw new IllegalStateException("not a SchemaMigrator, is " + mc);
 				}
 				migrators.add((SchemaMigrator) mc);
-			} catch (ClassNotFoundException | InstantiationException | IllegalAccessException e) {
+			} catch (ReflectiveOperationException e) {
 				throw new IllegalStateException(e.getMessage(), e);
 			}
 		}
